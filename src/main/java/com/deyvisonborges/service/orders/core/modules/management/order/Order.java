@@ -5,8 +5,8 @@ import java.time.Instant;
 import java.util.Set;
 import java.util.UUID;
 
-import com.deyvisonborges.service.orders.core.AggregateRoot;
-import com.deyvisonborges.service.orders.core.primitives.Money;
+import com.deyvisonborges.service.orders.core.domain.AggregateRoot;
+import com.deyvisonborges.service.orders.core.domain.primitives.Money;
 
 public class Order extends AggregateRoot<OrderID> {
   private OrderStatus status;

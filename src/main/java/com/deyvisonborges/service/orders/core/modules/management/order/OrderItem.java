@@ -2,8 +2,8 @@ package com.deyvisonborges.service.orders.core.modules.management.order;
 
 import java.time.Instant;
 
-import com.deyvisonborges.service.orders.core.Entity;
-import com.deyvisonborges.service.orders.core.primitives.Money;
+import com.deyvisonborges.service.orders.core.domain.Entity;
+import com.deyvisonborges.service.orders.core.domain.primitives.Money;
 
 public class OrderItem extends Entity<OrderItemID> {
   private String productId;
