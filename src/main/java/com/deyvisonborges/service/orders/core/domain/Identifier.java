@@ -1,4 +1,4 @@
-package com.deyvisonborges.service.orders.core;
+package com.deyvisonborges.service.orders.core.domain;
 
 import java.util.Objects;
 import java.util.UUID;

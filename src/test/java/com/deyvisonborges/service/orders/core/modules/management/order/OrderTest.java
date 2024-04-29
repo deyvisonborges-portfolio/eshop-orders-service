@@ -8,7 +8,7 @@ import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import com.deyvisonborges.service.orders.core.primitives.Money;
+import com.deyvisonborges.service.orders.core.domain.primitives.Money;
 
 
 public class OrderTest {

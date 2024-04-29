@@ -1,4 +1,4 @@
-package com.deyvisonborges.service.orders.core.primitives;
+package com.deyvisonborges.service.orders.core.domain.primitives;
 
 import java.math.BigDecimal;
 
