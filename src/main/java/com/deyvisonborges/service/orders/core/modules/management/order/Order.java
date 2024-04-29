@@ -52,6 +52,19 @@ public class Order extends AggregateRoot<OrderID> {
     );
   }
 
+  public Order clone() {
+    return new Order(
+      this.status,
+      this.items,
+      this.customerId,
+      this.paymentsIds,
+      this.subTotal,
+      this.shippingFee,
+      this.discount,
+      this.total
+    );
+  }
+
   public OrderStatus getStatus() {
     return status;
   }
