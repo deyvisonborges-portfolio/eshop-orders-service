@@ -38,6 +38,28 @@ public class Order extends AggregateRoot<OrderID> {
     this.discount = discount;
     this.total = total;
   }
+  
+  public static Order factory(
+    final OrderStatus status,
+    final Set<OrderItem> items,
+    final String customerId,
+    final Set<String> paymentsIds,
+    final Money subTotal,
+    final Money shippingFee,
+    final Money discount,
+    final Money total
+  ){
+    return new Order(
+      status, 
+      items, 
+      customerId, 
+      paymentsIds, 
+      subTotal, 
+      shippingFee, 
+      discount, 
+      total
+    );
+  }
 
   public static Order emptyFactory() {
     return new Order(
@@ -45,10 +67,10 @@ public class Order extends AggregateRoot<OrderID> {
       Set.of(),
       UUID.randomUUID().toString(),
       Set.of(),
-      new Money(BigDecimal.valueOf(100.00), "BRL"),
-      new Money(BigDecimal.valueOf(15.00), "BRL"),
-      new Money(BigDecimal.valueOf(5.45), "BRL"),
-      new Money(BigDecimal.valueOf(230.00), "BRL")
+      new Money(BigDecimal.valueOf(0.00), "BRL"),
+      new Money(BigDecimal.valueOf(0.00), "BRL"),
+      new Money(BigDecimal.valueOf(0.00), "BRL"),
+      new Money(BigDecimal.valueOf(0.00), "BRL")
     );
   }
 
@@ -127,5 +149,9 @@ public class Order extends AggregateRoot<OrderID> {
 
   public void setTotal(Money total) {
     this.total = total;
+  }
+
+  public void setId(final OrderID id) {
+    this.id = id;
   }
 }

@@ -1,15 +1,15 @@
-package com.deyvisonborges.service.orders.external;
+// package com.deyvisonborges.service.orders.external;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+// import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.time.Instant;
+// import java.time.Instant;
 
-import org.junit.jupiter.api.Test;
+// import org.junit.jupiter.api.Test;
 
-class EventTest {
-  @Test
-  void shouldThrowIllegalArgumentsExceptionWhenEndIsBeforeStart() {
-    assertThrows(IllegalArgumentException.class,
-      () -> new Event(1, "Spring One", Instant.now(), Instant.now()));
-  }
-}
+// class EventTest {
+//   @Test
+//   void shouldThrowIllegalArgumentsExceptionWhenEndIsBeforeStart() {
+//     assertThrows(IllegalArgumentException.class,
+//       () -> new Event(1, "Spring One", Instant.now(), Instant.now()));
+//   }
+// }

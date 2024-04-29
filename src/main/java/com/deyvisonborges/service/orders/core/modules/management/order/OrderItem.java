@@ -50,4 +50,8 @@ public class OrderItem extends Entity<OrderItemID> {
   public void setMoney(final Money money) {
     this.price = money;
   }
+  
+  public void setId(final OrderItemID id) {
+    this.id = id;
+  }
 }

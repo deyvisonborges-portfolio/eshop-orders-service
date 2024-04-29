@@ -24,7 +24,7 @@ public abstract class Identifier<T extends Identifier<T>> extends ValueObject {
     }
   }
 
-  protected static <T extends Identifier<T>> T from(Class<T> identifierClass, final UUID id) {
+  public static <T extends Identifier<T>> T from(Class<T> identifierClass, final UUID id) {
     try {
       T instance = identifierClass.getDeclaredConstructor(String.class)
           .newInstance(id.toString().toLowerCase());
