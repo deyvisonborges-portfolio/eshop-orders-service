@@ -1,4 +1,4 @@
-package com.deyvisonborges.service.orders.core.modules.management.order.repository;
+package com.deyvisonborges.service.orders.tdd.core.modules.management.order.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -13,9 +13,9 @@ import org.junit.jupiter.api.Test;
 import com.deyvisonborges.service.orders.core.domain.primitives.Money;
 import com.deyvisonborges.service.orders.core.modules.management.order.Order;
 import com.deyvisonborges.service.orders.core.modules.management.order.OrderStatus;
+import com.deyvisonborges.service.orders.core.modules.management.order.repository.InMemoryOrderRepository;
 
 public class InMemoryOrderRepositoryTest {
-
   private InMemoryOrderRepository orderRepository;
 
   @BeforeEach

@@ -3,9 +3,12 @@ package com.deyvisonborges.service.orders.app.api.module.management.order.persis
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Repository;
+
 import com.deyvisonborges.service.orders.core.modules.management.order.Order;
 import com.deyvisonborges.service.orders.core.modules.management.order.repository.OrderRepositoryGateway;
 
+@Repository
 public class OrderRepository implements OrderRepositoryGateway {
   private final OrderJPARepository jpaRepository;
 

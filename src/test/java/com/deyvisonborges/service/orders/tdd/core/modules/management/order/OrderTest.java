@@ -1,4 +1,4 @@
-package com.deyvisonborges.service.orders.core.modules.management.order;
+package com.deyvisonborges.service.orders.tdd.core.modules.management.order;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -9,6 +9,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import com.deyvisonborges.service.orders.core.domain.primitives.Money;
+import com.deyvisonborges.service.orders.core.modules.management.order.Order;
+import com.deyvisonborges.service.orders.core.modules.management.order.OrderID;
+import com.deyvisonborges.service.orders.core.modules.management.order.OrderItem;
+import com.deyvisonborges.service.orders.core.modules.management.order.OrderStatus;
 
 
 public class OrderTest {
