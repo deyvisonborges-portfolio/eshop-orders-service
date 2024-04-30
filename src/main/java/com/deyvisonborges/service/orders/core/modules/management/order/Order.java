@@ -38,7 +38,7 @@ public class Order extends AggregateRoot<OrderID> {
     this.discount = discount;
     this.total = total;
   }
-  
+
   public static Order factory(
     final OrderStatus status,
     final Set<OrderItem> items,
@@ -59,6 +59,37 @@ public class Order extends AggregateRoot<OrderID> {
       discount, 
       total
     );
+  }
+
+  public static Order factory(
+    final String id,
+    final Boolean active,
+    final Instant createdAt,
+    final Instant updatedAt,
+    final OrderStatus status,
+    final Set<OrderItem> items,
+    final String customerId,
+    final Set<String> paymentsIds,
+    final Money subTotal,
+    final Money shippingFee,
+    final Money discount,
+    final Money total
+  ){
+    final var order = new Order(
+      status, 
+      items, 
+      customerId, 
+      paymentsIds, 
+      subTotal, 
+      shippingFee, 
+      discount, 
+      total
+    );
+    order.setId(OrderID.from(OrderID.class, UUID.fromString(id)));
+    order.setActive(active);
+    order.setCreatedAt(createdAt);
+    order.setUpdatedAt(updatedAt);
+    return order;
   }
 
   public static Order emptyFactory() {
@@ -153,5 +184,17 @@ public class Order extends AggregateRoot<OrderID> {
 
   public void setId(final OrderID id) {
     this.id = id;
+  }
+
+  public void setActive(final Boolean active) {
+    this.active = active;
+  }
+
+  public void setCreatedAt(final Instant createdAt) {
+    this.createdAt = createdAt;
+  }
+
+  public void setUpdatedAt(final Instant updatedAt) {
+    this.updatedAt = updatedAt;
   }
 }

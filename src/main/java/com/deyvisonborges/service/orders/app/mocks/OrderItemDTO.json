@@ -1,0 +1,12 @@
+{
+  "id": "123456",
+  "active": true,
+  "createdAt": "2024-04-29T12:00:00Z",
+  "updatedAt": "2024-04-29T13:00:00Z",
+  "productId": "789",
+  "quantity": 2,
+  "price": {
+    "amount": 50.0,
+    "currency": "USD"
+  }
+}

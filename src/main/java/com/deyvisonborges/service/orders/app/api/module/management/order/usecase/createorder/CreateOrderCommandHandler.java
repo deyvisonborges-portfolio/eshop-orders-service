@@ -1,4 +1,4 @@
-package com.deyvisonborges.service.orders.core.modules.management.order.usecase.createorder;
+package com.deyvisonborges.service.orders.app.api.module.management.order.usecase.createorder;
 
 import com.deyvisonborges.service.orders.core.domain.cqrs.CommandHandler;
 

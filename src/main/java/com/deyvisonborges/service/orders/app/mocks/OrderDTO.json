@@ -1,0 +1,51 @@
+{
+  "id": "123456",
+  "active": true,
+  "createdAt": "2024-04-29T12:00:00Z",
+  "updatedAt": "2024-04-29T13:00:00Z",
+  "status": "PENDING",
+  "items": [
+    {
+      "id": "item1",
+      "active": true,
+      "createdAt": "2024-04-29T12:00:00Z",
+      "updatedAt": "2024-04-29T12:30:00Z",
+      "productId": "789",
+      "quantity": 2,
+      "price": {
+        "amount": 50.0,
+        "currency": "USD"
+      }
+    },
+    {
+      "id": "item2",
+      "active": true,
+      "createdAt": "2024-04-29T12:00:00Z",
+      "updatedAt": "2024-04-29T12:30:00Z",
+      "productId": "987",
+      "quantity": 1,
+      "price": {
+        "amount": 30.0,
+        "currency": "USD"
+      }
+    }
+  ],
+  "customerId": "customer123",
+  "paymentsIds": ["payment123", "payment456"],
+  "subTotal": {
+    "amount": 130.0,
+    "currency": "USD"
+  },
+  "shippingFee": {
+    "amount": 10.0,
+    "currency": "USD"
+  },
+  "discount": {
+    "amount": 5.0,
+    "currency": "USD"
+  },
+  "total": {
+    "amount": 135.0,
+    "currency": "USD"
+  }
+}
