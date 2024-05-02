@@ -3,38 +3,46 @@ package com.deyvisonborges.service.orders.core.domain;
 import java.time.Instant;
 import java.util.UUID;
 
-public abstract class Event<T> {
+public abstract class EventMessage {
   private String id = UUID.randomUUID().toString();
   private int version = 1;
   private String title;
   private Instant start;
   private Instant end;
 
-  protected abstract void applyOn(T aggregate);
-
-  protected Event() {
-    if (end.isBefore(start)) {
-      throw new IllegalArgumentException("End date must be after start date");
-    }
-  }
-
   public String getId() {
-    return id;
+    return this.id;
   }
-
+ 
   public int getVersion() {
     return version;
+  }
+
+  public void setVersion(int version) {
+    this.version = version;
   }
 
   public String getTitle() {
     return title;
   }
 
+  public void setTitle(String title) {
+    this.title = title;
+  }
+
   public Instant getStart() {
     return start;
+  }
+
+  public void setStart(Instant start) {
+    this.start = start;
   }
 
   public Instant getEnd() {
     return end;
   }
+  
+  public void setEnd(Instant end) {
+    this.end = end;
+  }  
 }

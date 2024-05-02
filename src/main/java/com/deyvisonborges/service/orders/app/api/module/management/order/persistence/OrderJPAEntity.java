@@ -42,7 +42,7 @@ public class OrderJPAEntity {
   @Column(nullable = false)
   private OrderStatus status;
 
-  @OneToMany(mappedBy = "order", orphanRemoval = true, cascade = CascadeType.ALL)
+  @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
   private Set<OrderItemJPAEntity> items = new HashSet<>();
 
   @Column(name = "customer_id", nullable = false)
