@@ -1,0 +1,47 @@
+services:
+  postgres:
+    image: "postgres:latest"
+    environment:
+      - "POSTGRES_DB=payments_db"
+      - "POSTGRES_USER=root"
+      - "POSTGRES_PASSWORD=123456"
+    ports:
+      - "5440:5432"
+    networks:
+      - eshop-orders-service-network
+
+  rabbitmq:
+    image: 'rabbitmq:3.12-management'
+    environment:
+      - "RABBITMQ_DEFAULT_USER=local"
+      - "RABBITMQ_DEFAULT_PASS=local"
+    ports:
+      - "5672:5672"
+      - '15672:15672'
+    networks:
+      - eshop-orders-service-network
+
+  # keycloak:
+  #   image: quay.io/keycloak/keycloak
+  #   environment:
+  #     - KEYCLOAK_ADMIN=admin
+  #     - KEYCLOAK_ADMIN_PASSWORD=admin
+  #   ports:
+  #     - 8443:8080
+  #   command:
+  #     - start-dev
+  #   networks:
+  #     - eshop-orders-service-network
+
+  # wiremock:
+  #   image: "wiremock/wiremock:latest"
+  #   ports:
+  #     - 127.0.0.1:8080:8080
+  #   volumes:
+  #     - ./wiremock/__files:/home/wiremock/__files
+  #     - ./wiremock/mappings:/home/wiremock/mappings
+  #   entrypoint: ["/docker-entrypoint.sh", "--global-response-templating", "--disable-gzip", "--verbose"]
+
+networks:
+  eshop-orders-service-network:
+    name: eshop-orders-service-network

@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: eshop-orders-service
+  flyway:
+    enabled: false
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: local
+    password: local
+    virtual-host: /
