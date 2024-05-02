@@ -24,4 +24,9 @@ public class InMemoryOrderRepository implements OrderRepositoryGateway {
   public List<Order> findAll() {
     return new ArrayList<>(repository.values());
   }
+
+  @Override
+  public void deleteById(String id) {
+    repository.remove(id);
+  }
 }

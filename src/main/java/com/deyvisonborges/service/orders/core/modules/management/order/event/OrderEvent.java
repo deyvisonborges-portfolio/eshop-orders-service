@@ -7,8 +7,9 @@ import com.deyvisonborges.service.orders.core.modules.management.order.OrderStat
 
 public class OrderEvent extends EventMessage {
   private String orderId;
+
   private OrderStatus status;
-  
+
   public String getOrderId() {
     return orderId;
   }
@@ -33,5 +34,5 @@ public class OrderEvent extends EventMessage {
     orderEvent.setStart(Instant.now());
     orderEvent.setEnd(Instant.now());
     return orderEvent;
-  } 
+  }
 }

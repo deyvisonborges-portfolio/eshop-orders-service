@@ -48,4 +48,13 @@ public class OrderRepository implements OrderRepositoryGateway {
       throw new RuntimeException("Fail to return all orders from JPA Repository");
     }
   }
+
+  @Override
+  public void deleteById(String id) {
+    try {
+      this.jpaRepository.deleteById(id);
+    } catch (Exception e) {
+      throw new RuntimeException("Fail to DELETE ORDER BY ID in JPA Repository");
+    }
+  }
 }

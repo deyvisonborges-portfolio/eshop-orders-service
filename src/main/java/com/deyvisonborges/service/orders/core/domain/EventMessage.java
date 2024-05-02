@@ -14,6 +14,10 @@ public abstract class EventMessage {
     return this.id;
   }
  
+  public void setId(final String id) {
+    this.id = id;
+  }
+
   public int getVersion() {
     return version;
   }

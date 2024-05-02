@@ -8,4 +8,5 @@ public interface OrderRepositoryGateway {
   void save(Order order);
   void saveAll(List<Order> orders);
   List<Order> findAll();
+  void deleteById(String id);
 }

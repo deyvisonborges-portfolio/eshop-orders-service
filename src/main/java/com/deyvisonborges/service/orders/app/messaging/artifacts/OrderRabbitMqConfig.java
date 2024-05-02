@@ -16,6 +16,9 @@ public class OrderRabbitMqConfig {
     return new DirectExchange(OrderEventConstants.ORDER_EXCHANGE_NAME);
   }
 
+  /**
+   * Queue definition
+   */
   @Bean
   Queue orderQueue() {
     final var isDurable = true;
@@ -24,11 +27,22 @@ public class OrderRabbitMqConfig {
     return new Queue(OrderEventConstants.ORDER_QUEUE_NAME, isDurable, isExclusive, isAutoDelete);
   }
 
+  /**
+   * Events bidings
+   */
   @Bean
   Binding orderCreatedOrderEvent() {
     return BindingBuilder
       .bind(orderQueue())
       .to(orderDirectExchange())
       .with(OrderEventConstants.ORDER_CREATED_EVENT_ROUTING_KEY);
+  }
+
+  @Bean
+  Binding orderCancelledOrderEvent() {
+    return BindingBuilder
+      .bind(orderQueue())
+      .to(orderDirectExchange())
+      .with(OrderEventConstants.ORDER_CANCELLED_EVENT_ROUTING_KEY);
   }
 }

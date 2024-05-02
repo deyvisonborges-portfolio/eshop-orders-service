@@ -5,4 +5,5 @@ public final class OrderEventConstants {
   public static final String ORDER_QUEUE_NAME = "order.v1.queue";
   public static final String ORDER_HISTORY_QUEUE_NAME = "order.v1.queue.history";
   public static final String ORDER_CREATED_EVENT_ROUTING_KEY = "order.v1.event.order-created";
+  public static final String ORDER_CANCELLED_EVENT_ROUTING_KEY = "order.v1.event.order-cancelled";
 }
