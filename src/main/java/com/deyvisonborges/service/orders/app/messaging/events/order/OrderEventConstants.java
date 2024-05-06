@@ -1,4 +1,4 @@
-package com.deyvisonborges.service.orders.app.messaging.artifacts.events;
+package com.deyvisonborges.service.orders.app.messaging.events.order;
 
 public final class OrderEventConstants {
   public static final String ORDER_EXCHANGE_NAME = "order.v1.direct";

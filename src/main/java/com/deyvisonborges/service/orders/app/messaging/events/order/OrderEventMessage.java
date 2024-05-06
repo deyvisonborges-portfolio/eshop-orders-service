@@ -1,4 +1,4 @@
-package com.deyvisonborges.service.orders.app.messaging.artifacts.events;
+package com.deyvisonborges.service.orders.app.messaging.events.order;
 
 import java.time.Instant;
 

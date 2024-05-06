@@ -2,20 +2,19 @@ package com.deyvisonborges.service.orders.app.api.module.management.order.usecas
 
 import org.springframework.stereotype.Service;
 
-// import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.OrderRepository;
-import com.deyvisonborges.service.orders.app.messaging.artifacts.events.CreateOrderEvent;
-import com.deyvisonborges.service.orders.app.messaging.artifacts.events.OrderEvent;
-import com.deyvisonborges.service.orders.app.messaging.artifacts.events.OrderEventMessage;
+import com.deyvisonborges.service.orders.app.messaging.events.order.OrderEvent;
+import com.deyvisonborges.service.orders.app.messaging.events.order.OrderEventMessage;
+import com.deyvisonborges.service.orders.app.messaging.events.order.publishers.CreateOrderEventPublisher;
 import com.deyvisonborges.service.orders.core.domain.cqrs.CommandHandler;
 
 @Service
 public class CreateOrderCommandHandler implements CommandHandler<Void, CreateOrderCommand> {
 
-  private final CreateOrderEvent createOrderEvent;
+  private final CreateOrderEventPublisher createOrderEvent;
   // private final OrderRepository orderRepository;
 
   public CreateOrderCommandHandler(
-      final CreateOrderEvent createOrderEvent
+      final CreateOrderEventPublisher createOrderEvent
   // final OrderRepository orderRepository
   ) {
     this.createOrderEvent = createOrderEvent;
