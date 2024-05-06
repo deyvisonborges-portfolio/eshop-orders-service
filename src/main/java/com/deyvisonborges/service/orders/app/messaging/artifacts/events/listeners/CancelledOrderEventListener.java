@@ -11,10 +11,10 @@ import com.deyvisonborges.service.orders.app.messaging.artifacts.events.OrderEve
 import com.deyvisonborges.service.orders.app.messaging.artifacts.events.OrderEventMessage;
 
 @Component
-public class DeleteOrderEventListener {
+public class CancelledOrderEventListener {
   private final OrderRepository orderRepository;
 
-  public DeleteOrderEventListener(final OrderRepository orderRepository) {
+  public CancelledOrderEventListener(final OrderRepository orderRepository) {
     this.orderRepository = orderRepository;
   }
   @RabbitListener(bindings = @QueueBinding(
