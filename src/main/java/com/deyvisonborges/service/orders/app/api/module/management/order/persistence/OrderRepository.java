@@ -1,6 +1,7 @@
 package com.deyvisonborges.service.orders.app.api.module.management.order.persistence;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
@@ -56,5 +57,12 @@ public class OrderRepository implements OrderRepositoryGateway {
     } catch (Exception e) {
       throw new RuntimeException("Fail to DELETE ORDER BY ID in JPA Repository");
     }
+  }
+
+  @Override
+  public Optional<Order> findById(String id) {
+    final var order = this.jpaRepository.findById(id)
+      .orElseThrow(() -> new RuntimeException("Not found order with id " + id));
+    return Optional.of(OrderJPAEntity.toAggregate(order));
   }
 }

@@ -7,7 +7,7 @@ import org.springframework.amqp.core.Queue;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.deyvisonborges.service.orders.core.modules.management.order.event.OrderEventConstants;
+import com.deyvisonborges.service.orders.app.messaging.artifacts.events.OrderEventConstants;
 
 @Configuration
 public class OrderRabbitMqConfig {
@@ -36,6 +36,14 @@ public class OrderRabbitMqConfig {
       .bind(orderQueue())
       .to(orderDirectExchange())
       .with(OrderEventConstants.ORDER_CREATED_EVENT_ROUTING_KEY);
+  }
+
+  @Bean
+  Binding orderUpdateOrderEvent() {
+    return BindingBuilder
+      .bind(orderQueue())
+      .to(orderDirectExchange())
+      .with(OrderEventConstants.ORDER_UPDATED_EVENT_ROUTING_KEY);
   }
 
   @Bean

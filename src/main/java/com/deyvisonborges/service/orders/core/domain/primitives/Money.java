@@ -3,8 +3,10 @@ package com.deyvisonborges.service.orders.core.domain.primitives;
 import java.math.BigDecimal;
 
 public class Money {
-  private final BigDecimal amount;
-  private final String currency;
+  private BigDecimal amount;
+  private String currency;
+
+  public Money() {}
 
   public Money(final BigDecimal amount, final String currency) {
     this.amount = amount;

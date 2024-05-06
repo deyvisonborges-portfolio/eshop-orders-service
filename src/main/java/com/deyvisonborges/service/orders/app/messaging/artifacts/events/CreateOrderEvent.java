@@ -4,8 +4,6 @@ import org.springframework.stereotype.Component;
 
 import com.deyvisonborges.service.orders.app.messaging.client.rabbitmq.RabbitmqEventEmitter;
 import com.deyvisonborges.service.orders.core.domain.EventEmitter;
-import com.deyvisonborges.service.orders.core.modules.management.order.event.OrderEvent;
-import com.deyvisonborges.service.orders.core.modules.management.order.event.OrderEventConstants;
 
 @Component
 public class CreateOrderEvent extends EventEmitter<OrderEvent> {

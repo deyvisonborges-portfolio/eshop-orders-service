@@ -22,7 +22,7 @@ class ObjectMapperConfig {
   }
 
   @Bean
-  Jackson2JsonMessageConverter jackson2JsonMessageConverter(ObjectMapper objectMapper) {
+  Jackson2JsonMessageConverter jackson2JsonMessageConverter(final ObjectMapper objectMapper) {
     return new Jackson2JsonMessageConverter(objectMapper);
   }
 }
