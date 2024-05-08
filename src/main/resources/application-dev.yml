@@ -1,0 +1,12 @@
+datasource:
+  url: jdbc:postgresql://${postgres.host}:${postgres.port}/${postgres.database}
+  username: ${postgres.username}
+  password: ${postgres.password}
+  driver-class-name: org.postgresql.Driver
+
+postgres:
+  username: local
+  password: local
+  database: orders_db
+  host: localhost
+  port: 5440
