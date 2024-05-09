@@ -19,7 +19,7 @@ public record CreateOrderCommand(
   Money discount,
   Money total
 ) {
-  public static Order mapper(final CreateOrderCommand command) {
+  public static Order toAggregate(final CreateOrderCommand command) {
     Set<OrderItem> orderItems = command.items().stream()
       .map(OrderItemDTO::toAggregate)
       .collect(Collectors.toSet());

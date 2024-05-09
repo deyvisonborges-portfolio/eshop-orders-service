@@ -1,9 +1,7 @@
 package com.deyvisonborges.service.orders.core.modules.management.order;
 
-import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Set;
-import java.util.UUID;
 
 import com.deyvisonborges.service.orders.core.domain.AggregateRoot;
 import com.deyvisonborges.service.orders.core.domain.primitives.Money;
@@ -61,140 +59,59 @@ public class Order extends AggregateRoot<OrderID> {
     );
   }
 
-  public static Order factory(
-    final String id,
-    final Boolean active,
-    final Instant createdAt,
-    final Instant updatedAt,
-    final OrderStatus status,
-    final Set<OrderItem> items,
-    final String customerId,
-    final Set<String> paymentsIds,
-    final Money subTotal,
-    final Money shippingFee,
-    final Money discount,
-    final Money total
-  ){
-    final var order = new Order(
-      status, 
-      items, 
-      customerId, 
-      paymentsIds, 
-      subTotal, 
-      shippingFee, 
-      discount, 
-      total
-    );
-    order.setId(OrderID.from(OrderID.class, UUID.fromString(id)));
-    order.setActive(active);
-    order.setCreatedAt(createdAt);
-    order.setUpdatedAt(updatedAt);
-    return order;
+  @Override
+  public OrderID getId() {
+    return super.getId();
   }
 
-  public static Order emptyFactory() {
-    return new Order(
-      OrderStatus.CREATED, 
-      Set.of(),
-      UUID.randomUUID().toString(),
-      Set.of(),
-      new Money(BigDecimal.valueOf(0.00), "BRL"),
-      new Money(BigDecimal.valueOf(0.00), "BRL"),
-      new Money(BigDecimal.valueOf(0.00), "BRL"),
-      new Money(BigDecimal.valueOf(0.00), "BRL")
-    );
+  @Override
+  public Boolean getActive() {
+    return super.getActive();
   }
 
-  public Order clone() {
-    return new Order(
-      this.status,
-      this.items,
-      this.customerId,
-      this.paymentsIds,
-      this.subTotal,
-      this.shippingFee,
-      this.discount,
-      this.total
-    );
+  @Override
+  public Instant getCreatedAt() {
+    return super.getCreatedAt();
+  }
+
+  @Override
+  public Instant getUpdatedAt() {
+    return super.getUpdatedAt();
   }
 
   public OrderStatus getStatus() {
     return status;
   }
 
-  public void setStatus(OrderStatus status) {
-    this.status = status;
-  }
-
   public Set<OrderItem> getItems() {
     return items;
-  }
-
-  public void setItems(Set<OrderItem> items) {
-    this.items = items;
   }
 
   public String getCustomerId() {
     return customerId;
   }
 
-  public void setCustomerId(String customerId) {
-    this.customerId = customerId;
-  }
-
   public Set<String> getPaymentsIds() {
     return paymentsIds;
-  }
-
-  public void setPaymentsIds(Set<String> paymentsIds) {
-    this.paymentsIds = paymentsIds;
   }
 
   public Money getSubTotal() {
     return subTotal;
   }
 
-  public void setSubTotal(Money subTotal) {
-    this.subTotal = subTotal;
-  }
-
   public Money getShippingFee() {
     return shippingFee;
-  }
-
-  public void setShippingFee(Money shippingFee) {
-    this.shippingFee = shippingFee;
   }
 
   public Money getDiscount() {
     return discount;
   }
 
-  public void setDiscount(Money discount) {
-    this.discount = discount;
-  }
-
   public Money getTotal() {
     return total;
   }
 
-  public void setTotal(Money total) {
-    this.total = total;
-  }
-
-  public void setId(final OrderID id) {
-    this.id = id;
-  }
-
-  public void setActive(final Boolean active) {
-    this.active = active;
-  }
-
-  public void setCreatedAt(final Instant createdAt) {
-    this.createdAt = createdAt;
-  }
-
-  public void setUpdatedAt(final Instant updatedAt) {
-    this.updatedAt = updatedAt;
+  public void setStatus(OrderStatus status) {
+    this.status = status;
   }
 }

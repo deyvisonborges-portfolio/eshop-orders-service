@@ -2,6 +2,7 @@ package com.deyvisonborges.service.orders.app.api.module.management.order.persis
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
@@ -20,9 +21,12 @@ public class OrderRepository implements OrderRepositoryGateway {
   @Override
   public void save(Order order) {
     try {
-      this.jpaRepository.save(OrderJPAEntity.from(order));
+      final var orderToSave = OrderJPAEntity.toJPAEntity(order);
+      System.out.println("===> OLD: " + orderToSave.getId());
+      final var after = this.jpaRepository.save(orderToSave);
+      System.out.println("===> NEW: " + after.getId());
     } catch (Exception e) {
-      throw new RuntimeException("Fail to save Order on JPA Repository");
+      throw new RuntimeException("Fail to save Order on JPA Repository: " + e.getMessage());
     }
   }
 
@@ -30,7 +34,7 @@ public class OrderRepository implements OrderRepositoryGateway {
   public void saveAll(List<Order> orders) {
     try {
       List<OrderJPAEntity> entities = orders.stream()
-      .map(OrderJPAEntity::from)
+      .map(OrderJPAEntity::toJPAEntity)
       .collect(Collectors.toList());
     this.jpaRepository.saveAll(entities);
     } catch (Exception e) {
@@ -53,7 +57,7 @@ public class OrderRepository implements OrderRepositoryGateway {
   @Override
   public void deleteById(String id) {
     try {
-      this.jpaRepository.deleteById(id);
+      this.jpaRepository.deleteById(UUID.fromString(id));
     } catch (Exception e) {
       throw new RuntimeException("Fail to DELETE ORDER BY ID in JPA Repository");
     }
@@ -61,7 +65,7 @@ public class OrderRepository implements OrderRepositoryGateway {
 
   @Override
   public Optional<Order> findById(String id) {
-    final var order = this.jpaRepository.findById(id)
+    final var order = this.jpaRepository.findById(UUID.fromString(id))
       .orElseThrow(() -> new RuntimeException("Not found order with id " + id));
     return Optional.of(OrderJPAEntity.toAggregate(order));
   }

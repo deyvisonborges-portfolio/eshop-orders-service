@@ -5,17 +5,17 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class RabbitmqEventEmitter {
-    private final AmqpTemplate template;
+  private final AmqpTemplate template;
 
-    public RabbitmqEventEmitter(AmqpTemplate template) {
-        this.template = template;
-    }
+  public RabbitmqEventEmitter(AmqpTemplate template) {
+    this.template = template;
+  }
 
-    public void emit(final String queueName, final Object message) {
-        this.template.convertAndSend(queueName, message);
-    }
+  public void emit(final String queueName, final Object message) {
+    this.template.convertAndSend(queueName, message);
+  }
 
-    public void emit(final String exchange, final String routingKey, final Object message) {
-        this.template.convertAndSend(exchange, routingKey, message);
-    }
+  public void emit(final String exchange, final String routingKey, final Object message) {
+    this.template.convertAndSend(exchange, routingKey, message);
+  }
 }
