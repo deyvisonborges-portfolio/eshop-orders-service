@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 
 @Configuration
-public class RabbitMqConfig {
+ class RabbitMqConfig {
   private final RabbitMqConstants rabbitMqConstants;
 
   public RabbitMqConfig(final RabbitMqConstants rabbitMqConstants) {

@@ -11,10 +11,6 @@ public class RabbitmqEventEmitter {
     this.template = template;
   }
 
-  public void emit(final String queueName, final Object message) {
-    this.template.convertAndSend(queueName, message);
-  }
-
   public void emit(final String exchange, final String routingKey, final Object message) {
     this.template.convertAndSend(exchange, routingKey, message);
   }
