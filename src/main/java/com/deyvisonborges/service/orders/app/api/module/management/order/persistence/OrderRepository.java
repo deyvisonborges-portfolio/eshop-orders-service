@@ -2,13 +2,14 @@ package com.deyvisonborges.service.orders.app.api.module.management.order.persis
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 
 import com.deyvisonborges.service.orders.core.modules.management.order.Order;
 import com.deyvisonborges.service.orders.core.modules.management.order.repository.OrderRepositoryGateway;
+
+import jakarta.transaction.Transactional;
 
 @Repository
 public class OrderRepository implements OrderRepositoryGateway {
@@ -19,12 +20,28 @@ public class OrderRepository implements OrderRepositoryGateway {
   }
 
   @Override
+  @Transactional
   public void save(Order order) {
     try {
       final var orderToSave = OrderJPAEntity.toJPAEntity(order);
-      System.out.println("===> OLD: " + orderToSave.getId());
-      final var after = this.jpaRepository.save(orderToSave);
-      System.out.println("===> NEW: " + after.getId());
+      // Salvar o pedido e obter o pedido salvo
+      final var savedOrder = this.jpaRepository.save(orderToSave);
+
+      // Atualizar cada item de pedido com o pedido salvo
+      for (OrderItemJPAEntity item : savedOrder.getItems()) {
+        item.setOrder(savedOrder);
+      }
+
+      // // Atribuir manualmente um ID para cada pagamento antes de salvar
+      // for (OrderPaymentJPAEntity payment : savedOrder.getPayments()) {
+      //   if(payment.getId() == null) {
+      //     payment.setId(UUID.randomUUID().toString()); // Atribuir um novo ID apenas se o ID estiver nulo
+      //   }
+      //   payment.setOrder(savedOrder);
+      // }
+      
+      // Salvar o pedido novamente com os itens e pagamentos atualizados
+      this.jpaRepository.save(savedOrder);
     } catch (Exception e) {
       throw new RuntimeException("Fail to save Order on JPA Repository: " + e.getMessage());
     }
@@ -57,7 +74,7 @@ public class OrderRepository implements OrderRepositoryGateway {
   @Override
   public void deleteById(String id) {
     try {
-      this.jpaRepository.deleteById(UUID.fromString(id));
+      this.jpaRepository.deleteById(id);
     } catch (Exception e) {
       throw new RuntimeException("Fail to DELETE ORDER BY ID in JPA Repository");
     }
@@ -65,7 +82,7 @@ public class OrderRepository implements OrderRepositoryGateway {
 
   @Override
   public Optional<Order> findById(String id) {
-    final var order = this.jpaRepository.findById(UUID.fromString(id))
+    final var order = this.jpaRepository.findById(id)
       .orElseThrow(() -> new RuntimeException("Not found order with id " + id));
     return Optional.of(OrderJPAEntity.toAggregate(order));
   }

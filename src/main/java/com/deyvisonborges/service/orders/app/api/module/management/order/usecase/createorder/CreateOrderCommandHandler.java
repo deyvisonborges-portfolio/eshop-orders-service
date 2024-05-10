@@ -30,14 +30,14 @@ public class CreateOrderCommandHandler implements CommandHandler<Void, CreateOrd
   public Void handle(final CreateOrderCommand command) {
     final var orderAggregate = CreateOrderCommand.toAggregate(command);
     this.orderRepository.save(orderAggregate);
-    OrderEventMessage eventMessage = OrderEvent.produce(
-      orderAggregate.getId().getValue(),
-      orderAggregate.getStatus()
-    );
+    // OrderEventMessage eventMessage = OrderEvent.produce(
+    //   orderAggregate.getId().getValue(),
+    //   orderAggregate.getStatus()
+    // );
 
-    OrderEvent event = OrderEvent.fromOrderEventMessage(eventMessage);
+    // OrderEvent event = OrderEvent.fromOrderEventMessage(eventMessage);
 
-    this.createOrderEvent.applyOn(event);
+    // this.createOrderEvent.applyOn(event);
 
     return null;
   }

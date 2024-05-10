@@ -5,7 +5,6 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import com.deyvisonborges.service.orders.core.domain.primitives.Money;
@@ -16,8 +15,8 @@ import com.deyvisonborges.service.orders.core.modules.management.order.OrderStat
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -26,9 +25,8 @@ import jakarta.persistence.Table;
 @Table(name = "orders")
 public class OrderJPAEntity implements Serializable {
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(nullable = false)
-  private UUID id;
+  private String id;
 
   private Boolean active;
 
@@ -39,6 +37,7 @@ public class OrderJPAEntity implements Serializable {
   private Instant updatedAt;
 
   @Column(nullable = false)
+  @Enumerated(EnumType.STRING)
   private OrderStatus status;
 
   @OneToMany(mappedBy = "order",orphanRemoval = true, cascade = CascadeType.ALL)
@@ -47,8 +46,8 @@ public class OrderJPAEntity implements Serializable {
   @Column(name = "customer_id", nullable = false)
   private String customerId;
 
-  @OneToMany(mappedBy = "order", orphanRemoval = true, cascade = CascadeType.ALL)
-  private Set<OrderPaymentJPAEntity> payments = new HashSet<>();
+  // @OneToMany(mappedBy = "order", orphanRemoval = true, cascade = CascadeType.ALL)
+  // private Set<OrderPaymentJPAEntity> payments = new HashSet<>();
 
   @Column(name = "shipping_fee_amount", nullable = false)
   private BigDecimal shippingFeeAmount;
@@ -74,11 +73,11 @@ public class OrderJPAEntity implements Serializable {
   @Column(name = "total_currency", nullable = false)
   private String totalCurrency;
 
-  public UUID getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(UUID id) {
+  public void setId(String id) {
     this.id = id;
   }
 
@@ -130,13 +129,13 @@ public class OrderJPAEntity implements Serializable {
     this.customerId = customerId;
   }
 
-  public Set<OrderPaymentJPAEntity> getPayments() {
-    return payments;
-  }
+  // public Set<OrderPaymentJPAEntity> getPayments() {
+  //   return payments;
+  // }
 
-  public void setPayments(Set<OrderPaymentJPAEntity> payments) {
-    this.payments = payments;
-  }
+  // public void setPayments(Set<OrderPaymentJPAEntity> payments) {
+  //   this.payments = payments;
+  // }
 
   public BigDecimal getShippingFeeAmount() {
     return shippingFeeAmount;
@@ -205,14 +204,14 @@ public class OrderJPAEntity implements Serializable {
   public OrderJPAEntity() {}
 
   public OrderJPAEntity(
-    final UUID id,
+    final String id,
     final Boolean active,
     final Instant createdAt,
     final Instant updatedAt,
     final OrderStatus status,
     final Set<OrderItemJPAEntity> items,
     final String customerId,
-    final Set<OrderPaymentJPAEntity> payments,
+    // final Set<OrderPaymentJPAEntity> payments,
     final BigDecimal subTotalAmount,
     final String subTotalCurrency,
     final BigDecimal shippingFeeAmount,
@@ -229,7 +228,7 @@ public class OrderJPAEntity implements Serializable {
     this.status = status;
     this.items = items;
     this.customerId = customerId;
-    this.payments = payments;
+    // this.payments = payments;
     this.subTotalAmount = subTotalAmount;
     this.subTotalCurrency = subTotalCurrency;
     this.shippingFeeAmount = shippingFeeAmount;
@@ -249,21 +248,21 @@ public class OrderJPAEntity implements Serializable {
       .map(OrderItemJPAEntity::toJPAEntity)
       .collect(Collectors.toSet());
       
-    // Converte o Domain Composition Entity (Set<String>) para o JPA Entity (OrderPaymentJPAEntity)
-    Set<OrderPaymentJPAEntity> payments = order.getPaymentsIds().stream()
-      .map(OrderPaymentJPAEntity::from)
-      .collect(Collectors.toSet());
+    // // Converte o Domain Composition Entity (Set<String>) para o JPA Entity (OrderPaymentJPAEntity)
+    // Set<OrderPaymentJPAEntity> payments = order.getPaymentsIds().stream()
+    //   .map(OrderPaymentJPAEntity::from)
+    //   .collect(Collectors.toSet());
 
     // Gera o objeto OrderJPA
     final var orderJpa = new OrderJPAEntity(
-      UUID.fromString(order.getId().getValue()),
+      order.getId().getValue(),
       order.getActive(),
       order.getCreatedAt(),
       order.getUpdatedAt(),
       order.getStatus(),
       orderItems,
       order.getCustomerId(),
-      payments,
+      // payments,
       order.getSubTotal().getAmount(),
       order.getSubTotal().getCurrency(),
       order.getShippingFee().getAmount(),
@@ -277,8 +276,8 @@ public class OrderJPAEntity implements Serializable {
     // Insere o id do pedido para cada item de pedido
     orderItems.forEach(item -> item.setOrder(orderJpa));
 
-    // Insere o id do pedido para cada pagamento
-    payments.forEach(payment -> payment.setOrder(orderJpa));
+    // // Insere o id do pedido para cada pagamento
+    // payments.forEach(payment -> payment.setOrder(orderJpa));
 
     return orderJpa;
   }
@@ -292,17 +291,17 @@ public class OrderJPAEntity implements Serializable {
       .map(OrderItemJPAEntity::toAggregate)
       .collect(Collectors.toSet());
 
-    // Converte o JPA Entity (OrderPaymentJPAEntity) para o Domain Composition Entity (Set<String>)
-    Set<String> paymentIds = entity.payments.stream()
-      .map(payment -> payment.getId().toString())
-      .collect(Collectors.toSet());
+    // // Converte o JPA Entity (OrderPaymentJPAEntity) para o Domain Composition Entity (Set<String>)
+    // Set<String> paymentIds = entity.payments.stream()
+    //   .map(payment -> payment.getId().toString())
+    //   .collect(Collectors.toSet());
 
     // Gera o objeto OrderJPA
     final var order = Order.factory(
       entity.status,
       orderItems,
       entity.customerId,
-      paymentIds,
+      null,
       new Money(entity.subTotalAmount, entity.subTotalCurrency),
       new Money(entity.shippingFeeAmount, entity.shippingFeeCurrency),
       new Money(entity.discountAmount, entity.discountCurrency),
