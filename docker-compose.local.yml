@@ -11,13 +11,14 @@ services:
       - eshop-orders-service-network
 
   rabbitmq:
-    image: 'rabbitmq:3.12-management'
+    image: "rabbitmq:3-management"
     environment:
-      - "RABBITMQ_DEFAULT_USER=local"
-      - "RABBITMQ_DEFAULT_PASS=local"
+      RABBITMQ_DEFAULT_USER: local
+      RABBITMQ_DEFAULT_PASS: local
+      RABBITMQ_DEFAULT_VHOST: / 
     ports:
+      - "15672:15672"
       - "5672:5672"
-      - '15672:15672'
     networks:
       - eshop-orders-service-network
 
