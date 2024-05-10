@@ -3,26 +3,24 @@ package com.deyvisonborges.service.orders.app.api.module.management.order.persis
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.UUID;
 
 import com.deyvisonborges.service.orders.core.domain.primitives.Money;
 import com.deyvisonborges.service.orders.core.modules.management.order.OrderItem;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+@Entity
 @Table(name = "order_items")
 public class OrderItemJPAEntity implements Serializable {
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(nullable = false)
-  private UUID id;
+  private String id;
 
   private Boolean active;
 
@@ -44,11 +42,11 @@ public class OrderItemJPAEntity implements Serializable {
   @Column(nullable = false)
   private int quantity;
 
-  @ManyToOne
-  @JoinColumn(name = "order_id", nullable = false)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "order_id")
   private OrderJPAEntity order;
 
-  public UUID getId() {
+  public String getId() {
     return id;
   }
 
@@ -87,7 +85,7 @@ public class OrderItemJPAEntity implements Serializable {
   public OrderItemJPAEntity() {}
 
   public OrderItemJPAEntity(
-    final UUID id, 
+    final String id, 
     final Boolean active, 
     final Instant createdAt, 
     final Instant updatedAt,
@@ -108,7 +106,7 @@ public class OrderItemJPAEntity implements Serializable {
 
   public static OrderItemJPAEntity toJPAEntity(final OrderItem orderItem) {
     return new OrderItemJPAEntity(
-      UUID.fromString(orderItem.getId().getValue()),
+      orderItem.getId().getValue(),
       orderItem.getActive(),
       orderItem.getCreatedAt(),
       orderItem.getUpdatedAt(),
