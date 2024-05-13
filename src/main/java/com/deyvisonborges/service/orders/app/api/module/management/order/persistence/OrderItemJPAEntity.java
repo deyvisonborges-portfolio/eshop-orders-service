@@ -42,9 +42,9 @@ public class OrderItemJPAEntity implements Serializable {
   @Column(nullable = false)
   private int quantity;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "order_id")
-  private OrderJPAEntity order;
+  private OrderJPAEntity order = new OrderJPAEntity();
 
   public String getId() {
     return id;

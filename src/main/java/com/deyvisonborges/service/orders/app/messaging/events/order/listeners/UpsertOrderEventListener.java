@@ -21,7 +21,7 @@ public class UpsertOrderEventListener {
   }
 
   @RabbitListener(bindings = @QueueBinding(
-    value = @Queue(value = OrderEventConstants.ORDER_QUEUE_NAME),
+    value = @Queue(value = OrderEventConstants.ORDER_QUEUE_UPSERT_NAME),
     exchange = @Exchange(value = OrderEventConstants.ORDER_EXCHANGE_NAME, type = "direct"),
     key = {
       OrderEventConstants.ORDER_CREATED_EVENT_ROUTING_KEY,

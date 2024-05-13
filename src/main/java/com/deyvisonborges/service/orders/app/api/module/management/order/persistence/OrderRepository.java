@@ -80,7 +80,12 @@ public class OrderRepository implements OrderRepositoryGateway {
     }
   }
 
-  @Override
+  @Transactional
+  /**************************************************
+   * Iniciar uma transação antes de acessar a coleção: 
+   * Isso garante que a sessão do Hibernate 
+   * esteja aberta durante o acesso à coleção.
+   * ************************************************/
   public Optional<Order> findById(String id) {
     final var order = this.jpaRepository.findById(id)
       .orElseThrow(() -> new RuntimeException("Not found order with id " + id));

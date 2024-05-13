@@ -15,17 +15,27 @@ public class OrderRabbitMqConfig {
   }
 
   @Bean
-  Queue orderQueue() {
+  Queue orderUpsertQueue() {
     final var isDurable = true;
     final var isExclusive = false;
     final var isAutoDelete = false;
-    return new Queue(OrderEventConstants.ORDER_QUEUE_NAME, isDurable, isExclusive, isAutoDelete);
+    return new Queue(OrderEventConstants.ORDER_QUEUE_UPSERT_NAME, isDurable, isExclusive, isAutoDelete);
+  }
+
+  @Bean
+  Queue orderCancelledQueue() {
+    final var isDurable = true;
+    final var isExclusive = false;
+    final var isAutoDelete = false;
+    return new Queue(
+      OrderEventConstants.ORDER_QUEUE_CANCELLED_NAME, 
+      isDurable, isExclusive, isAutoDelete);
   }
 
   @Bean
   Binding orderCreatedOrderEvent() {
     return BindingBuilder
-      .bind(orderQueue())
+      .bind(orderUpsertQueue())
       .to(orderDirectExchange())
       .with(OrderEventConstants.ORDER_CREATED_EVENT_ROUTING_KEY);
   }
@@ -33,7 +43,7 @@ public class OrderRabbitMqConfig {
   @Bean
   Binding orderCancelledOrderEvent() {
     return BindingBuilder
-      .bind(orderQueue())
+      .bind(orderCancelledQueue())
       .to(orderDirectExchange())
       .with(OrderEventConstants.ORDER_CANCELLED_EVENT_ROUTING_KEY);
   }

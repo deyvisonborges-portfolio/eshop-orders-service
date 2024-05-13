@@ -13,7 +13,7 @@ public class CreateOrderEventPublisher extends EventEmitter<OrderEvent> {
 
   public CreateOrderEventPublisher(final RabbitmqEventEmitter emitter) {
     this.emitter = emitter;
-  }
+  } 
 
   @Override
   public void applyOn(final OrderEvent command) {
