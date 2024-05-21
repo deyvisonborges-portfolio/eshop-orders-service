@@ -1,7 +1,5 @@
 package com.deyvisonborges.service.orders.app.api.module.management.order.usecase.createorder;
 
-import java.util.UUID;
-
 import org.springframework.stereotype.Service;
 
 import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.OrderRepository;
@@ -11,7 +9,6 @@ import com.deyvisonborges.service.orders.app.messaging.events.order.OrderEventCo
 import com.deyvisonborges.service.orders.app.messaging.events.order.OrderEventMessage;
 import com.deyvisonborges.service.orders.app.messaging.events.order.publishers.CreateOrderEventPublisher;
 import com.deyvisonborges.service.orders.core.domain.cqrs.CommandHandler;
-import com.deyvisonborges.service.orders.core.modules.management.order.OrderID;
 
 import jakarta.transaction.Transactional;
 
@@ -33,6 +30,9 @@ public class CreateOrderCommandHandler implements CommandHandler<Void, CreateOrd
   @Override
   @Transactional
   public Void handle(final CreateOrderCommand command) {
+    final var createOrderCommandValidation = new CreateOrderValidation();
+    createOrderCommandValidation.validate(command);
+
     final var orderAggregate = CreateOrderCommand.toAggregate(command);
     this.orderRepository.save(orderAggregate);
     OrderEventMessage eventMessage = OrderEvent.produce(
