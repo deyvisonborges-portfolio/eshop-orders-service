@@ -1,11 +1,14 @@
 package com.deyvisonborges.service.orders.app.api.module.management.order.persistence;
 
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Repository;
 
+import com.deyvisonborges.service.orders.app.exception.NotFoundException;
 import com.deyvisonborges.service.orders.core.modules.management.order.Order;
 import com.deyvisonborges.service.orders.core.modules.management.order.repository.OrderRepositoryGateway;
 
@@ -23,6 +26,9 @@ public class OrderRepository implements OrderRepositoryGateway {
   @Transactional
   public void save(Order order) {
     try {
+      if (this.jpaRepository.existsById(order.getId().getValue()))
+        throw new BadRequestException("Order already exists");
+
       final var orderToSave = OrderJPAEntity.toJPAEntity(order);
       // Salvar o pedido e obter o pedido salvo
       final var savedOrder = this.jpaRepository.save(orderToSave);
@@ -88,7 +94,9 @@ public class OrderRepository implements OrderRepositoryGateway {
    * ************************************************/
   public Optional<Order> findById(String id) {
     final var order = this.jpaRepository.findById(id)
-      .orElseThrow(() -> new RuntimeException("Not found order with id " + id));
-    return Optional.of(OrderJPAEntity.toAggregate(order));
+      .orElseThrow(() -> new NotFoundException(
+        MessageFormat.format("Not found order with id: {0}", id))
+      );
+      return Optional.of(OrderJPAEntity.toAggregate(order));
   }
 }

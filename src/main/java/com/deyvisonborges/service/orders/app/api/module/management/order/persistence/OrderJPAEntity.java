@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import com.deyvisonborges.service.orders.core.domain.primitives.Money;
 import com.deyvisonborges.service.orders.core.modules.management.order.Order;
+import com.deyvisonborges.service.orders.core.modules.management.order.OrderID;
 import com.deyvisonborges.service.orders.core.modules.management.order.OrderItem;
 import com.deyvisonborges.service.orders.core.modules.management.order.OrderStatus;
 
@@ -288,7 +289,9 @@ public class OrderJPAEntity implements Serializable {
   public static Order toAggregate(final OrderJPAEntity entity) {
     // Converte o JPA Entity (OrderItemJPAEntity) para o Domain Entity (OrderItem) 
     Set<OrderItem> orderItems = entity.items.stream()
-      .map(OrderItemJPAEntity::toAggregate)
+      .map((orderItem) -> {
+        return OrderItemJPAEntity.toAggregate(orderItem);
+      })
       .collect(Collectors.toSet());
 
     // // Converte o JPA Entity (OrderPaymentJPAEntity) para o Domain Composition Entity (Set<String>)
@@ -297,7 +300,8 @@ public class OrderJPAEntity implements Serializable {
     //   .collect(Collectors.toSet());
 
     // Gera o objeto OrderJPA
-    final var order = Order.factory(
+    final var order = new Order(
+      new OrderID(entity.id),
       entity.status,
       orderItems,
       entity.customerId,
@@ -307,7 +311,6 @@ public class OrderJPAEntity implements Serializable {
       new Money(entity.discountAmount, entity.discountCurrency),
       new Money(entity.totalAmount, entity.totalCurrency)
     );
-
     return order;
   }
 }

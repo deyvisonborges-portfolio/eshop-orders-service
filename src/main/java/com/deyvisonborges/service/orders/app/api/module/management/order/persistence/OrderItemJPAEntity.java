@@ -6,6 +6,7 @@ import java.time.Instant;
 
 import com.deyvisonborges.service.orders.core.domain.primitives.Money;
 import com.deyvisonborges.service.orders.core.modules.management.order.OrderItem;
+import com.deyvisonborges.service.orders.core.modules.management.order.OrderItemID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -118,6 +119,7 @@ public class OrderItemJPAEntity implements Serializable {
 
   public static OrderItem toAggregate(final OrderItemJPAEntity entity) {
     return new OrderItem(
+      new OrderItemID(entity.id),
       entity.productId,
       entity.quantity,
       new Money(entity.priceAmount, entity.priceCurrency)

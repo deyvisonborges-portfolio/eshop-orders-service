@@ -27,6 +27,24 @@ public class OrderItem extends Entity<OrderItemID> {
     this.price = price;
   }
 
+  public OrderItem(
+    final OrderItemID id,
+    final String productId,
+    final int quantity,
+    final Money price
+  ) {
+    super(
+      new OrderItemID(id.getValue()), 
+      true, 
+      Instant.now(), 
+      Instant.now()
+    );
+
+    this.productId = productId;
+    this.quantity = quantity;
+    this.price = price;
+  }
+
   @Override
   public OrderItemID getId() {
     return super.getId();
