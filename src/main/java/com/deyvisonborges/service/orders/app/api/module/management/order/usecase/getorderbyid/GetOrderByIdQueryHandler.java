@@ -5,6 +5,7 @@ import java.text.MessageFormat;
 import org.springframework.stereotype.Service;
 
 import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.OrderRepository;
+import com.deyvisonborges.service.orders.app.exception.NotFoundException;
 import com.deyvisonborges.service.orders.core.domain.cqrs.QueryHandler;
 
 @Service
@@ -20,8 +21,7 @@ public class GetOrderByIdQueryHandler implements QueryHandler<GetOrderByIdOutput
     final var orderId = id;
     return this.repository.findById(id)
       .map(GetOrderByIdOutput::from)
-      // TODO: Convert to NotFoundException
-      .orElseThrow(() -> new RuntimeException(
+      .orElseThrow(() -> new NotFoundException(
         MessageFormat.format("Not found Order with id: {0}", orderId))
       );
   }
