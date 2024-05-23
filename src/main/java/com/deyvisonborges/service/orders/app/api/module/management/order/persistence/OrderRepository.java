@@ -6,10 +6,16 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.coyote.BadRequestException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 
 import com.deyvisonborges.service.orders.app.exception.NotFoundException;
+import com.deyvisonborges.service.orders.core.domain.pagination.Pagination;
+import com.deyvisonborges.service.orders.core.domain.pagination.SpecificationUtils;
 import com.deyvisonborges.service.orders.core.modules.management.order.Order;
+import com.deyvisonborges.service.orders.core.modules.management.order.OrderPaginationQuery;
 import com.deyvisonborges.service.orders.core.modules.management.order.repository.OrderRepositoryGateway;
 
 import jakarta.transaction.Transactional;
@@ -98,5 +104,42 @@ public class OrderRepository implements OrderRepositoryGateway {
         MessageFormat.format("Not found order with id: {0}", id))
       );
       return Optional.of(OrderJPAEntity.toAggregate(order));
+  }
+
+  @Override
+  public Pagination<Order> findAll(OrderPaginationQuery query) {
+    try {
+      /*
+    * Pagination
+    * */
+    final var page = PageRequest.of(
+      query.page(),
+      query.perPage(),
+      Sort.by(Sort.Direction.fromString(String.valueOf(query.direction())), query.sort())
+    );
+
+    /*
+    * Dynamic Query
+    * */
+    final var specifications = Optional.ofNullable(query.terms())
+      .filter(str -> str.isBlank())
+      .map(str ->
+        SpecificationUtils.<OrderJPAEntity>like("value", str)
+          .or(SpecificationUtils.like("status", str))
+          .or(SpecificationUtils.like("method", str))
+      )
+      .orElseGet(null);
+
+    final var pageResult = this.jpaRepository.findAll(Specification.where(specifications), page);
+
+    return new Pagination<>(
+      pageResult.getNumber(),
+      pageResult.getSize(),
+      pageResult.getTotalElements(),
+      pageResult.map(OrderJPAEntity::toAggregate).toList()
+    );
+    } catch (Exception e) {
+      throw new RuntimeException(e.getMessage());
+    }
   }
 }
