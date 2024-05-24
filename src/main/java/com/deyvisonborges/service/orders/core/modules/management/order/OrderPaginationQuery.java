@@ -1,6 +1,6 @@
 package com.deyvisonborges.service.orders.core.modules.management.order;
 
-import com.deyvisonborges.service.orders.core.domain.pagination.old.SearchDirection;
+import com.deyvisonborges.service.orders.core.domain.pagination.SearchDirection;
 
 public record OrderPaginationQuery(
   int page,

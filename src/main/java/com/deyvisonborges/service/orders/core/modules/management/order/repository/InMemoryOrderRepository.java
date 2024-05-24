@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.deyvisonborges.service.orders.core.domain.pagination.old.Pagination;
+import com.deyvisonborges.service.orders.core.domain.pagination.Pagination;
 import com.deyvisonborges.service.orders.core.modules.management.order.Order;
 import com.deyvisonborges.service.orders.core.modules.management.order.OrderPaginationQuery;
 

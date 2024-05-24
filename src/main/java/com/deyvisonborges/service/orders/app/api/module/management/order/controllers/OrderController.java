@@ -7,8 +7,8 @@ import com.deyvisonborges.service.orders.app.api.module.management.order.usecase
 import com.deyvisonborges.service.orders.app.api.module.management.order.usecase.getorderbyid.GetOrderByIdOutput;
 import com.deyvisonborges.service.orders.app.api.module.management.order.usecase.getorderbyid.GetOrderByIdQueryHandler;
 import com.deyvisonborges.service.orders.app.api.module.management.order.usecase.listorders.ListOrdersQueryHandler;
-import com.deyvisonborges.service.orders.core.domain.pagination.old.Pagination;
-import com.deyvisonborges.service.orders.core.domain.pagination.old.SearchDirection;
+import com.deyvisonborges.service.orders.core.domain.pagination.Pagination;
+import com.deyvisonborges.service.orders.core.domain.pagination.SearchDirection;
 import com.deyvisonborges.service.orders.core.modules.management.order.OrderPaginationQuery;
 
 import org.springframework.http.HttpStatus;

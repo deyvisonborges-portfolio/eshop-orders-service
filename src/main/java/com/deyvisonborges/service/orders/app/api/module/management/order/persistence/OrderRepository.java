@@ -12,8 +12,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 
 import com.deyvisonborges.service.orders.app.exception.NotFoundException;
-import com.deyvisonborges.service.orders.core.domain.pagination.old.Pagination;
-import com.deyvisonborges.service.orders.core.domain.pagination.old.SpecificationUtils;
+import com.deyvisonborges.service.orders.core.domain.pagination.Pagination;
+import com.deyvisonborges.service.orders.core.domain.pagination.SpecificationUtils;
 import com.deyvisonborges.service.orders.core.modules.management.order.Order;
 import com.deyvisonborges.service.orders.core.modules.management.order.OrderPaginationQuery;
 import com.deyvisonborges.service.orders.core.modules.management.order.repository.OrderRepositoryGateway;

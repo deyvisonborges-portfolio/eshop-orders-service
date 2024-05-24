@@ -3,7 +3,7 @@ package com.deyvisonborges.service.orders.core.modules.management.order.reposito
 import java.util.List;
 import java.util.Optional;
 
-import com.deyvisonborges.service.orders.core.domain.pagination.old.Pagination;
+import com.deyvisonborges.service.orders.core.domain.pagination.Pagination;
 import com.deyvisonborges.service.orders.core.modules.management.order.Order;
 import com.deyvisonborges.service.orders.core.modules.management.order.OrderPaginationQuery;
 

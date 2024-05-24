@@ -1,4 +1,4 @@
-package com.deyvisonborges.service.orders.core.domain.pagination.old;
+package com.deyvisonborges.service.orders.core.domain.pagination;
 
 public enum SearchDirection {
   ASC,
