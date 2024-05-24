@@ -1,4 +1,4 @@
-package com.deyvisonborges.service.orders.core.domain.pagination;
+package com.deyvisonborges.service.orders.core.domain.pagination.old;
 
 import org.springframework.data.jpa.domain.Specification;
 

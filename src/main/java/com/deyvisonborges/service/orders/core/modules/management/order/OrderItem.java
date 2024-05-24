@@ -80,4 +80,8 @@ public class OrderItem extends Entity<OrderItemID> {
   public void setId(final OrderItemID id) {
     this.id = id;
   }
+
+  public void setUpdatedAt(final Instant value) {
+    this.updatedAt = value;
+  }
 }

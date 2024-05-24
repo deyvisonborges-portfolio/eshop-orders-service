@@ -16,9 +16,8 @@ public abstract class Identifier<T extends Identifier<T>> extends ValueObject {
 
   public static <T extends Identifier<T>> T generate(Class<T> identifierClass) {
     try {
-      T instance = identifierClass.getDeclaredConstructor(String.class)
-          .newInstance(UUID.randomUUID().toString());
-      return instance;
+      return identifierClass.getDeclaredConstructor(String.class)
+        .newInstance(UUID.randomUUID().toString());
     } catch (Exception e) {
       throw new RuntimeException("Error generating identifier", e);
     }

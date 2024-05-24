@@ -1,4 +1,4 @@
-package com.deyvisonborges.service.orders.core.domain.pagination;
+package com.deyvisonborges.service.orders.core.domain.pagination.old;
 
 import java.util.List;
 import java.util.function.Function;

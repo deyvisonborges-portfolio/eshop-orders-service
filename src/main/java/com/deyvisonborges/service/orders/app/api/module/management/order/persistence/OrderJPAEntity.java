@@ -18,6 +18,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -41,7 +42,7 @@ public class OrderJPAEntity implements Serializable {
   @Enumerated(EnumType.STRING)
   private OrderStatus status;
 
-  @OneToMany(mappedBy = "order",orphanRemoval = true, cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "order",orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   private Set<OrderItemJPAEntity> items = new HashSet<>();
 
   @Column(name = "customer_id", nullable = false)

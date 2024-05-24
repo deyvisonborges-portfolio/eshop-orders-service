@@ -7,8 +7,8 @@ import com.deyvisonborges.service.orders.app.api.module.management.order.usecase
 import com.deyvisonborges.service.orders.app.api.module.management.order.usecase.getorderbyid.GetOrderByIdOutput;
 import com.deyvisonborges.service.orders.app.api.module.management.order.usecase.getorderbyid.GetOrderByIdQueryHandler;
 import com.deyvisonborges.service.orders.app.api.module.management.order.usecase.listorders.ListOrdersQueryHandler;
-import com.deyvisonborges.service.orders.core.domain.pagination.Pagination;
-import com.deyvisonborges.service.orders.core.domain.pagination.SearchDirection;
+import com.deyvisonborges.service.orders.core.domain.pagination.old.Pagination;
+import com.deyvisonborges.service.orders.core.domain.pagination.old.SearchDirection;
 import com.deyvisonborges.service.orders.core.modules.management.order.OrderPaginationQuery;
 
 import org.springframework.http.HttpStatus;
@@ -77,12 +77,13 @@ public class OrderController {
    * @param direction
    * @return
    */
+  @GetMapping
   public Pagination<?> listOrders(
     @RequestParam(name = "search", required = false, defaultValue = "") final String search,
     @RequestParam(name = "page", required = false, defaultValue = "0") final int page,
     @RequestParam(name = "perPage", required = false, defaultValue = "10") final int perPage,
-    @RequestParam(name = "sort", required = false, defaultValue = "status") final String sort,
-    @RequestParam(name = "direction", required = false, defaultValue = "ascendant") final String direction
+    @RequestParam(name = "sort", required = false, defaultValue = "id") final String sort,
+    @RequestParam(name = "direction", required = false, defaultValue = "ASCENDANT") final String direction
   ) {
     return this.listOrdersQueryHandler.handle(
       new OrderPaginationQuery(
