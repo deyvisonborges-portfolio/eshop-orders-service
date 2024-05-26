@@ -5,8 +5,8 @@ import java.util.Set;
 
 import com.deyvisonborges.service.orders.core.domain.primitives.Money;
 import com.deyvisonborges.service.orders.core.modules.management.order.Order;
-import com.deyvisonborges.service.orders.core.modules.management.order.OrderItem;
 import com.deyvisonborges.service.orders.core.modules.management.order.OrderStatus;
+import com.deyvisonborges.service.orders.core.modules.management.order.dto.OrderItemDTO;
 
 public record GetOrderByIdOutput(
   String id,
@@ -14,7 +14,7 @@ public record GetOrderByIdOutput(
   Instant createdAt,
   Instant updatedAt,
   OrderStatus status,
-  Set<OrderItem> items,
+  Set<OrderItemDTO> items,
   String customerId,
   Set<String> paymentsIds,
   Money subTotal,
@@ -29,7 +29,7 @@ public record GetOrderByIdOutput(
       order.getCreatedAt(),
       order.getUpdatedAt(),
       order.getStatus(),
-      order.getItems(), 
+      OrderItemDTO.fromSet(order.getItems()), 
       order.getCustomerId(), 
       order.getPaymentsIds(), 
       order.getSubTotal(), 

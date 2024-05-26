@@ -1,6 +1,8 @@
 package com.deyvisonborges.service.orders.core.modules.management.order.dto;
 
 import java.time.Instant;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.deyvisonborges.service.orders.core.domain.primitives.Money;
 import com.deyvisonborges.service.orders.core.domain.primitives.MoneyDTO;
@@ -35,5 +37,14 @@ public record OrderItemDTO(
       item.getQuantity(),
       new MoneyDTO(item.getPrice().getAmount(), item.getPrice().getCurrency())
     );
+  }
+
+  public static Set<OrderItemDTO> fromSet(final Set<OrderItem> items) {
+    return items.stream()
+      .map((orderItem) -> {
+        orderItem.setUpdatedAt(null);
+        return OrderItemDTO.from(orderItem);
+      })
+      .collect(Collectors.toSet());
   }
 }

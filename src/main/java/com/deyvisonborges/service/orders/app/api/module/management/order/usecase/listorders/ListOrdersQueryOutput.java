@@ -2,7 +2,6 @@ package com.deyvisonborges.service.orders.app.api.module.management.order.usecas
 
 import java.time.Instant;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import com.deyvisonborges.service.orders.core.domain.primitives.Money;
 import com.deyvisonborges.service.orders.core.modules.management.order.Order;
@@ -23,19 +22,12 @@ public record ListOrdersQueryOutput(
   Money total
 ) {
   public static ListOrdersQueryOutput from(final Order order) {
-    Set<OrderItemDTO> itemDTOs = order.getItems().stream()
-      .map((orderItem) -> {
-        orderItem.setUpdatedAt(null);
-        return OrderItemDTO.from(orderItem);
-      })
-      .collect(Collectors.toSet());
-
     return new ListOrdersQueryOutput(
       order.getId().getValue(),
       order.getActive(),
       order.getCreatedAt(),
       order.getStatus(),
-      itemDTOs, 
+      OrderItemDTO.fromSet(order.getItems()), 
       order.getCustomerId(), 
       order.getPaymentsIds(), 
       order.getSubTotal(), 
