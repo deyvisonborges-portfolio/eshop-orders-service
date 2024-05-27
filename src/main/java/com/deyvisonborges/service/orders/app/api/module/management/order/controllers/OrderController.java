@@ -11,6 +11,10 @@ import com.deyvisonborges.service.orders.core.domain.pagination.Pagination;
 import com.deyvisonborges.service.orders.core.domain.pagination.SearchDirection;
 import com.deyvisonborges.service.orders.core.modules.management.order.OrderPaginationQuery;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -75,6 +79,8 @@ public class OrderController {
    * @param perPage
    * @param sort
    * @param direction
+   * @implNote
+   * GET /orders?search=term1,term2,term3&page=0&perPage=10&sort=id&direction=ASCENDANT
    * @return
    */
   @GetMapping
@@ -85,9 +91,14 @@ public class OrderController {
     @RequestParam(name = "sort", required = false, defaultValue = "id") final String sort,
     @RequestParam(name = "direction", required = false, defaultValue = "ASCENDANT") final String direction
   ) {
+    List<String> terms = search.isEmpty() ? List.of() : Arrays.stream(search.split(","))
+      .map(String::trim) // Remova espaços em branco adicionais.
+      .filter(term -> !term.isEmpty() && term.matches("^[a-zA-Z0-9]+$")) // Ignore termos vazio e Aceite apenas termos que correspondam a uma expressão regular, por exemplo, contendo apenas caracteres alfanuméricos.
+      .collect(Collectors.toList());
+      
     return this.listOrdersQueryHandler.handle(
       new OrderPaginationQuery(
-        page, perPage, search, sort, SearchDirection.from(direction)
+        page, perPage, terms, sort, SearchDirection.from(direction)
       )
     );
   }

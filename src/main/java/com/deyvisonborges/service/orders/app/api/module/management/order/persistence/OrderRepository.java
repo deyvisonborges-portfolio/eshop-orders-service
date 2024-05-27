@@ -102,16 +102,19 @@ public class OrderRepository implements OrderRepositoryGateway {
         Sort.by(Sort.Direction.fromString(query.direction().name()), query.sort())
       );
 
-      /*
-       * Dynamic Query
-       */
-      final var specifications = Optional.ofNullable(query.terms())
-        .filter(str -> !str.isBlank())
-        .map(str -> 
-          SpecificationUtils.<OrderJPAEntity>like("id", str)
-            .or(SpecificationUtils.like("status", str))
-          )
-        .orElse(null);
+      // Configurar especificação de consulta dinâmica
+      final var specifications = query.terms().stream()
+      .filter(term -> term != null && !term.isBlank())
+      .map(term -> {
+        String[] fieldsToSearch = {"id", "status", "customerId"};
+        Specification<OrderJPAEntity> spec = Specification.where(null);
+        for (String field : fieldsToSearch) {
+            spec = spec.or(SpecificationUtils.like(field, term));
+        }
+        return spec;
+      })
+      .reduce(Specification::and)
+      .orElse(null);
 
       final var pageResult = this.jpaRepository.findAll(Specification.where(specifications), pageRequest);
 
