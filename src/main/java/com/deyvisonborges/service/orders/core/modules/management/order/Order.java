@@ -136,4 +136,32 @@ public class Order extends AggregateRoot<OrderID> {
   public void setStatus(OrderStatus status) {
     this.status = status;
   }
+
+  public void setItems(Set<OrderItem> items) {
+    this.items = items;
+  }
+
+  public void setCustomerId(String customerId) {
+    this.customerId = customerId;
+  }
+
+  public void setPaymentsIds(Set<String> paymentsIds) {
+    this.paymentsIds = paymentsIds;
+  }
+
+  public void setSubTotal(Money subTotal) {
+    this.subTotal = subTotal;
+  }
+
+  public void setShippingFee(Money shippingFee) {
+    this.shippingFee = shippingFee;
+  }
+
+  public void setDiscount(Money discount) {
+    this.discount = discount;
+  }
+
+  public void setTotal(Money total) {
+    this.total = total;
+  }
 }
