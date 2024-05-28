@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.deyvisonborges.service.orders.app.api.module.management.order.usecase.createorder.CreateOrderCommand;
 import com.deyvisonborges.service.orders.app.api.module.management.order.usecase.createorder.CreateOrderCommandHandler;
+import com.deyvisonborges.service.orders.app.api.module.management.order.usecase.deleteorder.DeleteOrderCommandHandler;
 import com.deyvisonborges.service.orders.app.api.module.management.order.usecase.getorderbyid.GetOrderByIdOutput;
 import com.deyvisonborges.service.orders.app.api.module.management.order.usecase.getorderbyid.GetOrderByIdQueryHandler;
 import com.deyvisonborges.service.orders.app.api.module.management.order.usecase.listorders.ListOrdersQueryHandler;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -34,17 +36,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class OrderController {
   private final CreateOrderCommandHandler createOrderCommandHandler;
   private final UpdateOrderCommandHandler updateOrderCommandHandler;
+  private final DeleteOrderCommandHandler deleteOrderCommandHandler;
   private final GetOrderByIdQueryHandler getOrderByIdQueryHandler;
   private final ListOrdersQueryHandler listOrdersQueryHandler;
 
   public OrderController(
     final CreateOrderCommandHandler createOrderCommandHandler,
     final UpdateOrderCommandHandler updateOrderCommandHandler,
+    final DeleteOrderCommandHandler deleteOrderCommandHandler,
     final GetOrderByIdQueryHandler getOrderByIdQueryHandler, 
     final ListOrdersQueryHandler listOrdersQueryHandler
   ) {
     this.createOrderCommandHandler = createOrderCommandHandler;
     this.updateOrderCommandHandler = updateOrderCommandHandler;
+    this.deleteOrderCommandHandler = deleteOrderCommandHandler;
     this.getOrderByIdQueryHandler = getOrderByIdQueryHandler;
     this.listOrdersQueryHandler = listOrdersQueryHandler;
   }
@@ -76,6 +81,12 @@ public class OrderController {
   @PutMapping(value = "{id}")
   public void updateOrder(@PathVariable("id") String orderId, @RequestBody UpdateOrderCommand command) {
     this.updateOrderCommandHandler.handle(orderId, command);
+  }
+
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @DeleteMapping
+  public void deleteOrder(@PathVariable("id") String orderId) {
+    this.deleteOrderCommandHandler.handle(orderId);
   }
 
   /**
