@@ -43,4 +43,10 @@ public class InMemoryOrderRepository implements OrderRepositoryGateway {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'findAll'");
   }
+
+  @Override
+  public void update(Order order) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'update'");
+  }
 }

@@ -14,7 +14,7 @@ spring:
   application:
     name: eshop-orders-service
   flyway:
-    enabled: false
+    enabled: true
   rabbitmq:
     host: localhost
     port: 5672

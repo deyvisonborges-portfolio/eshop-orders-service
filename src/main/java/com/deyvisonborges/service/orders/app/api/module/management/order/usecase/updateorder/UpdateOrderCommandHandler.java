@@ -2,12 +2,15 @@ package com.deyvisonborges.service.orders.app.api.module.management.order.usecas
 
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Service;
+
 import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.OrderRepository;
 import com.deyvisonborges.service.orders.app.exception.NotFoundException;
 import com.deyvisonborges.service.orders.core.domain.primitives.Money;
 import com.deyvisonborges.service.orders.core.modules.management.order.Order;
 import com.deyvisonborges.service.orders.core.modules.management.order.dto.OrderItemDTO;
 
+@Service
 public class UpdateOrderCommandHandler {
   private final OrderRepository orderRepository;
 
@@ -28,8 +31,6 @@ public class UpdateOrderCommandHandler {
     }
     if (command.customerId() != null)
       order.setCustomerId(command.customerId());
-    if (command.paymentsIds() != null)
-      order.setPaymentsIds(command.paymentsIds());
     if (command.subTotal() != null)
       order.setSubTotal(new Money(command.subTotal().amount(), command.subTotal().currency()));
     if (command.shippingFee() != null)

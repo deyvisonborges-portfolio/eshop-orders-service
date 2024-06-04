@@ -14,8 +14,6 @@ public class CreateOrderValidation {
     validation.isRequired("status", command.status() != null ? command.status().name() : null);
     validation.isRequired("items", command.items() != null ? Integer.toString(command.items().size()) : null);
     validation.isRequired("customerId", command.customerId());
-    validation.isRequired("paymentsIds",
-      command.paymentsIds() != null ? Integer.toString(command.paymentsIds().size()) : null);
 
     validateMoneyField(command.subTotal(), "subTotal");
     validateMoneyField(command.shippingFee(), "shippingFee");

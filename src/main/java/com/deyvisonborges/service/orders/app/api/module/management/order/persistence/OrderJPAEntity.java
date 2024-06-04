@@ -48,9 +48,6 @@ public class OrderJPAEntity implements Serializable {
   @Column(name = "customer_id", nullable = false)
   private String customerId;
 
-  // @OneToMany(mappedBy = "order", orphanRemoval = true, cascade = CascadeType.ALL)
-  // private Set<OrderPaymentJPAEntity> payments = new HashSet<>();
-
   @Column(name = "shipping_fee_amount", nullable = false)
   private BigDecimal shippingFeeAmount;
 
@@ -131,14 +128,6 @@ public class OrderJPAEntity implements Serializable {
     this.customerId = customerId;
   }
 
-  // public Set<OrderPaymentJPAEntity> getPayments() {
-  //   return payments;
-  // }
-
-  // public void setPayments(Set<OrderPaymentJPAEntity> payments) {
-  //   this.payments = payments;
-  // }
-
   public BigDecimal getShippingFeeAmount() {
     return shippingFeeAmount;
   }
@@ -213,7 +202,6 @@ public class OrderJPAEntity implements Serializable {
     final OrderStatus status,
     final Set<OrderItemJPAEntity> items,
     final String customerId,
-    // final Set<OrderPaymentJPAEntity> payments,
     final BigDecimal subTotalAmount,
     final String subTotalCurrency,
     final BigDecimal shippingFeeAmount,
@@ -230,7 +218,6 @@ public class OrderJPAEntity implements Serializable {
     this.status = status;
     this.items = items;
     this.customerId = customerId;
-    // this.payments = payments;
     this.subTotalAmount = subTotalAmount;
     this.subTotalCurrency = subTotalCurrency;
     this.shippingFeeAmount = shippingFeeAmount;
@@ -249,11 +236,6 @@ public class OrderJPAEntity implements Serializable {
     Set<OrderItemJPAEntity> orderItems = order.getItems().stream()
       .map(OrderItemJPAEntity::toJPAEntity)
       .collect(Collectors.toSet());
-      
-    // // Converte o Domain Composition Entity (Set<String>) para o JPA Entity (OrderPaymentJPAEntity)
-    // Set<OrderPaymentJPAEntity> payments = order.getPaymentsIds().stream()
-    //   .map(OrderPaymentJPAEntity::from)
-    //   .collect(Collectors.toSet());
 
     // Gera o objeto OrderJPA
     final var orderJpa = new OrderJPAEntity(
@@ -264,7 +246,6 @@ public class OrderJPAEntity implements Serializable {
       order.getStatus(),
       orderItems,
       order.getCustomerId(),
-      // payments,
       order.getSubTotal().getAmount(),
       order.getSubTotal().getCurrency(),
       order.getShippingFee().getAmount(),
@@ -306,7 +287,6 @@ public class OrderJPAEntity implements Serializable {
       entity.status,
       orderItems,
       entity.customerId,
-      null,
       new Money(entity.subTotalAmount, entity.subTotalCurrency),
       new Money(entity.shippingFeeAmount, entity.shippingFeeCurrency),
       new Money(entity.discountAmount, entity.discountCurrency),

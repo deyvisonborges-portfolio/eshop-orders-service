@@ -1,17 +1,14 @@
 package com.deyvisonborges.service.orders.app.api.module.management.order.persistence;
 
-import java.text.MessageFormat;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 
-import com.deyvisonborges.service.orders.app.exception.NotFoundException;
 import com.deyvisonborges.service.orders.core.domain.pagination.Pagination;
 import com.deyvisonborges.service.orders.core.domain.pagination.SpecificationUtils;
 import com.deyvisonborges.service.orders.core.modules.management.order.Order;
@@ -32,8 +29,9 @@ public class OrderRepository implements OrderRepositoryGateway {
   @Transactional
   public void save(Order order) {
     try {
-      if (this.jpaRepository.existsById(order.getId().getValue()))
-        throw new BadRequestException("Order already exists");
+      if (this.findById(order.getId().getValue()).isPresent()) {
+        throw new RuntimeException("Order already exists");
+      }
 
       final var orderToSave = OrderJPAEntity.toJPAEntity(order);
       final var savedOrder = this.jpaRepository.save(orderToSave);
@@ -83,11 +81,8 @@ public class OrderRepository implements OrderRepositoryGateway {
 
   @Transactional
   public Optional<Order> findById(String id) {
-    final var order = this.jpaRepository.findById(id)
-      .orElseThrow(() -> new NotFoundException(
-        MessageFormat.format("Not found order with id: {0}", id))
-      );
-    return Optional.of(OrderJPAEntity.toAggregate(order));
+    return this.jpaRepository.findById(id)
+      .map(OrderJPAEntity::toAggregate);
   }
 
   @Override
@@ -126,6 +121,15 @@ public class OrderRepository implements OrderRepositoryGateway {
       );
     } catch (Exception e) {
       throw new RuntimeException(e.getMessage());
+    }
+  }
+
+  @Override
+  public void update(Order order) {
+    try {
+      this.jpaRepository.saveAndFlush(OrderJPAEntity.toJPAEntity(order));
+    } catch (Exception e) {
+      throw new RuntimeException("Fail to UPDATE ORDER in JPA Repository");
     }
   }
 }

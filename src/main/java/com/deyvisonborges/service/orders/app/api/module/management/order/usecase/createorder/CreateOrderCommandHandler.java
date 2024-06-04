@@ -35,6 +35,7 @@ public class CreateOrderCommandHandler implements CommandHandler<Void, CreateOrd
 
     final var orderAggregate = CreateOrderCommand.toAggregate(command);
     this.orderRepository.save(orderAggregate);
+    
     OrderEventMessage eventMessage = OrderEvent.produce(
       orderAggregate.getId().getValue(),
       orderAggregate.getStatus()

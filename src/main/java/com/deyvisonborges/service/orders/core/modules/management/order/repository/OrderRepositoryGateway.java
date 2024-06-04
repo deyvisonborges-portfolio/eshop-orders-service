@@ -14,4 +14,5 @@ public interface OrderRepositoryGateway {
   Pagination<Order> findAll(OrderPaginationQuery query);
   void deleteById(String id);
   Optional<Order> findById(String id);
+  void update(Order order);
 }

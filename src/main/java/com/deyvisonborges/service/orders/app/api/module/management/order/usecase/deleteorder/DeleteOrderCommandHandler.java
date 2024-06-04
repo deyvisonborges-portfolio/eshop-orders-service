@@ -2,9 +2,12 @@ package com.deyvisonborges.service.orders.app.api.module.management.order.usecas
 
 import java.util.UUID;
 
+import org.springframework.stereotype.Service;
+
 import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.OrderRepository;
 import com.deyvisonborges.service.orders.core.domain.cqrs.CommandHandler;
 
+@Service
 public class DeleteOrderCommandHandler implements CommandHandler<Void, String> {
   private final OrderRepository repository;
 

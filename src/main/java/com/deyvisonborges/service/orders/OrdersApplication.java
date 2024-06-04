@@ -9,7 +9,7 @@ import org.springframework.core.env.AbstractEnvironment;
 @SpringBootApplication
 public class OrdersApplication {
   public static void main(String[] args) {
-    System.setProperty(AbstractEnvironment.DEFAULT_PROFILES_PROPERTY_NAME, "dev");
+    System.setProperty(AbstractEnvironment.DEFAULT_PROFILES_PROPERTY_NAME, "test");
     SpringApplication.run(OrdersApplication.class, args);
   }
 }

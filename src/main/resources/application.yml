@@ -25,3 +25,11 @@ spring:
     username: local
     password: local
     virtual-host: /
+    listener:
+      simple:
+        default-requeue-rejected: false
+        retry:
+          enabled: true
+          max-attempts: '3'
+          initial-interval: 5s
+          multiplier: '2'

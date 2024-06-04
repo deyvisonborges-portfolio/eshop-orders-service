@@ -10,7 +10,6 @@ public class Order extends AggregateRoot<OrderID> {
   private OrderStatus status;
   private Set<OrderItem> items;
   private String customerId;
-  private Set<String> paymentsIds;
   private Money subTotal;
   private Money shippingFee;
   private Money discount;
@@ -20,7 +19,6 @@ public class Order extends AggregateRoot<OrderID> {
     final OrderStatus status,
     final Set<OrderItem> items,
     final String customerId,
-    final Set<String> paymentsIds,
     final Money subTotal,
     final Money shippingFee,
     final Money discount,
@@ -30,7 +28,6 @@ public class Order extends AggregateRoot<OrderID> {
     this.status = status;
     this.items = items;
     this.customerId = customerId;
-    this.paymentsIds = paymentsIds;
     this.subTotal = subTotal;
     this.shippingFee = shippingFee;
     this.discount = discount;
@@ -42,7 +39,6 @@ public class Order extends AggregateRoot<OrderID> {
     final OrderStatus status,
     final Set<OrderItem> items,
     final String customerId,
-    final Set<String> paymentsIds,
     final Money subTotal,
     final Money shippingFee,
     final Money discount,
@@ -52,7 +48,6 @@ public class Order extends AggregateRoot<OrderID> {
     this.status = status;
     this.items = items;
     this.customerId = customerId;
-    this.paymentsIds = paymentsIds;
     this.subTotal = subTotal;
     this.shippingFee = shippingFee;
     this.discount = discount;
@@ -63,7 +58,6 @@ public class Order extends AggregateRoot<OrderID> {
     final OrderStatus status,
     final Set<OrderItem> items,
     final String customerId,
-    final Set<String> paymentsIds,
     final Money subTotal,
     final Money shippingFee,
     final Money discount,
@@ -73,7 +67,6 @@ public class Order extends AggregateRoot<OrderID> {
       status, 
       items, 
       customerId, 
-      paymentsIds, 
       subTotal, 
       shippingFee, 
       discount, 
@@ -113,10 +106,6 @@ public class Order extends AggregateRoot<OrderID> {
     return customerId;
   }
 
-  public Set<String> getPaymentsIds() {
-    return paymentsIds;
-  }
-
   public Money getSubTotal() {
     return subTotal;
   }
@@ -143,10 +132,6 @@ public class Order extends AggregateRoot<OrderID> {
 
   public void setCustomerId(String customerId) {
     this.customerId = customerId;
-  }
-
-  public void setPaymentsIds(Set<String> paymentsIds) {
-    this.paymentsIds = paymentsIds;
   }
 
   public void setSubTotal(Money subTotal) {
