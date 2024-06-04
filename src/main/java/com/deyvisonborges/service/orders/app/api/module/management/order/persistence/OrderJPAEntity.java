@@ -256,12 +256,7 @@ public class OrderJPAEntity implements Serializable {
       order.getTotal().getCurrency()
     );
 
-    // Insere o id do pedido para cada item de pedido
     orderItems.forEach(item -> item.setOrder(orderJpa));
-
-    // // Insere o id do pedido para cada pagamento
-    // payments.forEach(payment -> payment.setOrder(orderJpa));
-
     return orderJpa;
   }
 
@@ -269,19 +264,12 @@ public class OrderJPAEntity implements Serializable {
    * Converte a entidade de domínio para entidade JPA
    */
   public static Order toAggregate(final OrderJPAEntity entity) {
-    // Converte o JPA Entity (OrderItemJPAEntity) para o Domain Entity (OrderItem) 
     Set<OrderItem> orderItems = entity.items.stream()
       .map((orderItem) -> {
         return OrderItemJPAEntity.toAggregate(orderItem);
       })
       .collect(Collectors.toSet());
 
-    // // Converte o JPA Entity (OrderPaymentJPAEntity) para o Domain Composition Entity (Set<String>)
-    // Set<String> paymentIds = entity.payments.stream()
-    //   .map(payment -> payment.getId().toString())
-    //   .collect(Collectors.toSet());
-
-    // Gera o objeto OrderJPA
     final var order = new Order(
       new OrderID(entity.id),
       entity.status,
