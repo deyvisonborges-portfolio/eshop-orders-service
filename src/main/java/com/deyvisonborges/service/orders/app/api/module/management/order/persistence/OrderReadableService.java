@@ -1,11 +1,11 @@
 package com.deyvisonborges.service.orders.app.api.module.management.order.persistence;
 
-// import java.util.Optional;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-// import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.read.OrderRedisEntity;
-// import com.deyvisonborges.service.orders.core.modules.management.order.Order;
+import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.read.entities.OrderRedisEntity;
+import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.read.repositories.OrderReadableRepository;
 
 @Service
 public class OrderReadableService {
@@ -15,13 +15,12 @@ public class OrderReadableService {
     this.repository = repository;
   }
 
-  // public Order getOrderById(final String id) {
-  //   Optional<OrderRedisEntity> order = repository.findById(id);
-  //   if (order.isPresent()) return order.get();
-  //   if (order != null) {
-  //     OrderRedisEntity redisEntity = new OrderRedisEntity();
-  //     repository.save(redisEntity);
-  //   }
-  //   return order;
-  // }
+  public void save() {
+    final var order = new OrderRedisEntity();
+    this.repository.save(order);
+  }
+
+  public List<OrderRedisEntity> findAll() {
+    return (List<OrderRedisEntity>) this.repository.findAll();
+  }
 }

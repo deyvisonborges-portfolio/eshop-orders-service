@@ -1,4 +1,4 @@
-package com.deyvisonborges.service.orders.app.api.module.management.order.persistence.read;
+package com.deyvisonborges.service.orders.app.api.module.management.order.persistence.read.entities;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

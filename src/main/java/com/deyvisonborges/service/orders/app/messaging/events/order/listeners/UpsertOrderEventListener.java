@@ -7,20 +7,17 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.OrderRepository;
-import com.deyvisonborges.service.orders.app.exception.NotFoundException;
+import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.OrderReadableService;
 import com.deyvisonborges.service.orders.app.messaging.events.order.OrderEventConstants;
 import com.deyvisonborges.service.orders.app.messaging.events.order.OrderEventMessage;
-import com.deyvisonborges.service.orders.core.modules.management.order.Order;
-import com.deyvisonborges.service.orders.core.modules.management.order.OrderStatus;
 
 @Component
 @Transactional
 public class UpsertOrderEventListener {
-  private final OrderRepository orderRepository;
+  private final OrderReadableService orderReadableService;
 
-  public UpsertOrderEventListener(final OrderRepository orderRepository) {
-    this.orderRepository = orderRepository;
+  public UpsertOrderEventListener(final OrderReadableService orderReadableService) {
+    this.orderReadableService = orderReadableService;
   }
 
   @RabbitListener(bindings = @QueueBinding(
@@ -33,16 +30,7 @@ public class UpsertOrderEventListener {
   ))
   public void onMessage(final OrderEventMessage message) {
     try {
-      // Order order = orderRepository.findById(message.getOrderId())
-      //   .orElseThrow(() -> new NotFoundException("Not found order with id: " + message.getOrderId()));
-
-      final var order = new Order(null, null, null, null, null, null, null);
-      order.setStatus(
-        message.getStatus() == OrderStatus.CREATED.getValue() 
-          ? OrderStatus.CREATED 
-          :  OrderStatus.UPDATED
-      );
-      orderRepository.reply(order);
+     this.orderReadableService.save();
     } catch (Exception e) {
       throw new InternalError(e.getMessage());
     }

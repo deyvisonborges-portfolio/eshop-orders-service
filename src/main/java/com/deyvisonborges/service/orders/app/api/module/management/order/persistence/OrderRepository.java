@@ -9,8 +9,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 
-import com.deyvisonborges.service.orders.app.annotations.Readable;
-import com.deyvisonborges.service.orders.app.annotations.Writable;
+import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.write.entities.OrderItemJPAEntity;
+import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.write.entities.OrderJPAEntity;
+import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.write.repositories.OrderJPARepository;
 import com.deyvisonborges.service.orders.core.domain.pagination.Pagination;
 import com.deyvisonborges.service.orders.core.domain.pagination.SpecificationUtils;
 import com.deyvisonborges.service.orders.core.modules.management.order.Order;
@@ -28,7 +29,7 @@ public class OrderRepository implements OrderRepositoryGateway {
   }
 
   @Override
-  @Writable
+  @Transactional
   public void save(Order order) {
     try {
       if (this.findById(order.getId().getValue()).isPresent()) {
@@ -48,7 +49,6 @@ public class OrderRepository implements OrderRepositoryGateway {
     }
   }
 
-  @Readable
   public void reply(Order order) {
     try {
       if (this.findById(order.getId().getValue()).isPresent()) {
@@ -69,7 +69,6 @@ public class OrderRepository implements OrderRepositoryGateway {
   }
 
   @Override
-  @Writable
   public void saveAll(List<Order> orders) {
     try {
       List<OrderJPAEntity> entities = orders.stream()
@@ -82,7 +81,6 @@ public class OrderRepository implements OrderRepositoryGateway {
   }
 
   @Override
-  @Readable
   public List<Order> findAll() {
     try {
       return this.jpaRepository.findAll()
@@ -95,7 +93,6 @@ public class OrderRepository implements OrderRepositoryGateway {
   }
 
   @Override
-  @Writable
   public void deleteById(String id) {
     try {
       this.jpaRepository.deleteById(id);
@@ -105,14 +102,12 @@ public class OrderRepository implements OrderRepositoryGateway {
   }
 
   @Transactional
-  @Readable
   public Optional<Order> findById(String id) {
     return this.jpaRepository.findById(id)
       .map(OrderJPAEntity::toAggregate);
   }
 
   @Override
-  @Readable
   public Pagination<Order> findAll(OrderPaginationQuery query) {
     try {
       /*
@@ -152,7 +147,6 @@ public class OrderRepository implements OrderRepositoryGateway {
   }
 
   @Override
-  @Writable
   public void update(Order order) {
     try {
       this.jpaRepository.saveAndFlush(OrderJPAEntity.toJPAEntity(order));
