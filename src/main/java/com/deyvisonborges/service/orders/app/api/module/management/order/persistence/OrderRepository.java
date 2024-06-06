@@ -9,13 +9,15 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 
+import com.deyvisonborges.service.orders.app.annotations.Readable;
+import com.deyvisonborges.service.orders.app.annotations.Writable;
 import com.deyvisonborges.service.orders.core.domain.pagination.Pagination;
 import com.deyvisonborges.service.orders.core.domain.pagination.SpecificationUtils;
 import com.deyvisonborges.service.orders.core.modules.management.order.Order;
 import com.deyvisonborges.service.orders.core.modules.management.order.OrderPaginationQuery;
 import com.deyvisonborges.service.orders.core.modules.management.order.repository.OrderRepositoryGateway;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class OrderRepository implements OrderRepositoryGateway {
@@ -26,7 +28,7 @@ public class OrderRepository implements OrderRepositoryGateway {
   }
 
   @Override
-  @Transactional
+  @Writable
   public void save(Order order) {
     try {
       if (this.findById(order.getId().getValue()).isPresent()) {
@@ -46,7 +48,28 @@ public class OrderRepository implements OrderRepositoryGateway {
     }
   }
 
+  @Readable
+  public void reply(Order order) {
+    try {
+      if (this.findById(order.getId().getValue()).isPresent()) {
+        throw new RuntimeException("Order already exists");
+      }
+
+      final var orderToSave = OrderJPAEntity.toJPAEntity(order);
+      final var savedOrder = this.jpaRepository.save(orderToSave);
+
+      for (OrderItemJPAEntity item : savedOrder.getItems()) {
+        item.setOrder(savedOrder);
+      }
+      
+      this.jpaRepository.save(savedOrder);
+    } catch (Exception e) {
+      throw new RuntimeException("Fail to save Order on JPA Repository: " + e.getMessage());
+    }
+  }
+
   @Override
+  @Writable
   public void saveAll(List<Order> orders) {
     try {
       List<OrderJPAEntity> entities = orders.stream()
@@ -59,6 +82,7 @@ public class OrderRepository implements OrderRepositoryGateway {
   }
 
   @Override
+  @Readable
   public List<Order> findAll() {
     try {
       return this.jpaRepository.findAll()
@@ -71,6 +95,7 @@ public class OrderRepository implements OrderRepositoryGateway {
   }
 
   @Override
+  @Writable
   public void deleteById(String id) {
     try {
       this.jpaRepository.deleteById(id);
@@ -80,12 +105,14 @@ public class OrderRepository implements OrderRepositoryGateway {
   }
 
   @Transactional
+  @Readable
   public Optional<Order> findById(String id) {
     return this.jpaRepository.findById(id)
       .map(OrderJPAEntity::toAggregate);
   }
 
   @Override
+  @Readable
   public Pagination<Order> findAll(OrderPaginationQuery query) {
     try {
       /*
@@ -125,6 +152,7 @@ public class OrderRepository implements OrderRepositoryGateway {
   }
 
   @Override
+  @Writable
   public void update(Order order) {
     try {
       this.jpaRepository.saveAndFlush(OrderJPAEntity.toJPAEntity(order));

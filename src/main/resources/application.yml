@@ -1,3 +1,10 @@
+persistence:
+  order:
+    readable-datasource: 
+      url: jdbc:h2:mem:orders_readable;MODE=MYSQL;DATABASE_TO_LOWER=TRUE
+    writable-datasource: 
+      url: jdbc:postgresql://${postgres.host}:${postgres.port}/${postgres.database}
+
 h2:
   url: jdbc:h2:mem:orders_db;MODE=MYSQL;DATABASE_TO_LOWER=TRUE
 
@@ -6,6 +13,10 @@ spring:
     name: eshop-orders-service
   flyway:
     enabled: true
+  data:
+    redis:
+      host: localhost
+      port: 6379
   jpa:
     properties:
       hibernate:
@@ -15,7 +26,7 @@ spring:
     hibernate:
       ddl-auto: none
   datasource:
-    url: jdbc:postgresql://${postgres.host}:${postgres.port}/${postgres.database}
+    url: ${persistence.order.writable-datasource}
     username: ${postgres.username}
     password: ${postgres.password}
     driver-class-name: org.postgresql.Driver
@@ -31,5 +42,5 @@ spring:
         retry:
           enabled: true
           max-attempts: '3'
-          initial-interval: 5s
+          initial-interval: 2s
           multiplier: '2'

@@ -1,3 +1,10 @@
+persistence:
+  order:
+    readable-datasource: 
+      url: jdbc:h2:mem:orders_readable;MODE=MYSQL;DATABASE_TO_LOWER=TRUE
+    writable-datasource: 
+      url: jdbc:h2:mem:orders_writable;MODE=MYSQL;DATABASE_TO_LOWER=TRUE
+
 h2:
   url: jdbc:h2:mem:orders_db;MODE=MYSQL;DATABASE_TO_LOWER=TRUE
 
