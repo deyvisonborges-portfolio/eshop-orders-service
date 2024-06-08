@@ -9,13 +9,16 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 
+import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.write.entities.OrderItemJPAEntity;
+import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.write.entities.OrderJPAEntity;
+import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.write.repositories.OrderJPARepository;
 import com.deyvisonborges.service.orders.core.domain.pagination.Pagination;
 import com.deyvisonborges.service.orders.core.domain.pagination.SpecificationUtils;
 import com.deyvisonborges.service.orders.core.modules.management.order.Order;
 import com.deyvisonborges.service.orders.core.modules.management.order.OrderPaginationQuery;
 import com.deyvisonborges.service.orders.core.modules.management.order.repository.OrderRepositoryGateway;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class OrderRepository implements OrderRepositoryGateway {
@@ -28,6 +31,25 @@ public class OrderRepository implements OrderRepositoryGateway {
   @Override
   @Transactional
   public void save(Order order) {
+    try {
+      if (this.findById(order.getId().getValue()).isPresent()) {
+        throw new RuntimeException("Order already exists");
+      }
+
+      final var orderToSave = OrderJPAEntity.toJPAEntity(order);
+      final var savedOrder = this.jpaRepository.save(orderToSave);
+
+      for (OrderItemJPAEntity item : savedOrder.getItems()) {
+        item.setOrder(savedOrder);
+      }
+      
+      this.jpaRepository.save(savedOrder);
+    } catch (Exception e) {
+      throw new RuntimeException("Fail to save Order on JPA Repository: " + e.getMessage());
+    }
+  }
+
+  public void reply(Order order) {
     try {
       if (this.findById(order.getId().getValue()).isPresent()) {
         throw new RuntimeException("Order already exists");
