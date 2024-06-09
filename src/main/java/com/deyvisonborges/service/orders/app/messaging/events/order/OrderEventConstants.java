@@ -9,13 +9,7 @@ public final class OrderEventConstants {
   public static final String ORDER_CREATED_EVENT_ROUTING_KEY = "order.v1.event.order-created";
   public static final String ORDER_UPDATED_EVENT_ROUTING_KEY = "order.v1.event.order-updated";
   public static final String ORDER_CANCELLED_EVENT_ROUTING_KEY = "order.v1.event.order-cancelled";
-<<<<<<< Updated upstream
-  
-  public static final String ORDER_DLX_NAME = "order.v1.dlx";
-  public static final String ORDER_QUEUE_DQL_UPSERT_NAME = "order.v1.queue-dlq";
-=======
 
   public static final String ORDER_DLX_EXCHANGE = "order.dlx.direct";
   public static final String ORDER_DQL_QUEUE = "order.dlq.queue";
->>>>>>> Stashed changes
 }
