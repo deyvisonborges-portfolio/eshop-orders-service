@@ -18,7 +18,7 @@ import jakarta.persistence.Id;
 public class OrderItemRedisEntity {
   @Id
   @Column(nullable = false)
-  private String id;
+  private String id;  
 
   private Boolean active;
 

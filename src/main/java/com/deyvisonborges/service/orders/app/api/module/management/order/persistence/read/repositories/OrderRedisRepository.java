@@ -6,8 +6,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.repository.CrudRepository;
 
 import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.read.entities.OrderRedisEntity;
-import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.write.entities.OrderJPAEntity;
 
 public interface OrderRedisRepository extends CrudRepository<OrderRedisEntity, String> {
-  Page<OrderRedisEntity> findAll(Specification<OrderJPAEntity> whereClause, Pageable page);
+  Page<OrderRedisEntity> findAll(Specification<OrderRedisEntity> whereClause, Pageable page);
 }

@@ -265,9 +265,7 @@ public class OrderJPAEntity implements Serializable {
    */
   public static Order toAggregate(final OrderJPAEntity entity) {
     Set<OrderItem> orderItems = entity.items.stream()
-      .map((orderItem) -> {
-        return OrderItemJPAEntity.toAggregate(orderItem);
-      })
+      .map((orderItem) -> OrderItemJPAEntity.toAggregate(orderItem))
       .collect(Collectors.toSet());
 
     final var order = new Order(

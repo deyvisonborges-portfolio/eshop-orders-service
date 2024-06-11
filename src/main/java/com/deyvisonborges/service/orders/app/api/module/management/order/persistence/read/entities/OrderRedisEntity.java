@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.data.annotation.Reference;
 import org.springframework.data.redis.core.RedisHash;
@@ -113,6 +114,31 @@ public class OrderRedisEntity implements Serializable{
       new Money(entity.discountAmount, entity.discountCurrency),
       new Money(entity.totalAmount, entity.totalCurrency)
     );
+  }
+
+  public static OrderRedisEntity toJPAEntity(final Order order) {
+    Set<OrderItemRedisEntity> orderItems = order.getItems().stream()
+      .map(OrderItemRedisEntity::toRedisEntity)
+      .collect(Collectors.toSet());
+
+    final var orderJpa = new OrderRedisEntity(
+      order.getId().getValue(),
+      order.getActive(),
+      order.getCreatedAt(),
+      order.getUpdatedAt(),
+      order.getStatus(),
+      orderItems,
+      order.getCustomerId(),
+      order.getSubTotal().getAmount(),
+      order.getSubTotal().getCurrency(),
+      order.getShippingFee().getAmount(),
+      order.getShippingFee().getCurrency(),
+      order.getDiscount().getAmount(),
+      order.getDiscount().getCurrency(),
+      order.getTotal().getAmount(),
+      order.getTotal().getCurrency()
+    );
+    return orderJpa;
   }
 
   public String getId() {

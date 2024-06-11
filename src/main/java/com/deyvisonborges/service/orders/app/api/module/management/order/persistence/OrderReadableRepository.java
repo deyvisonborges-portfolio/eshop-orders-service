@@ -11,13 +11,10 @@ import org.springframework.stereotype.Repository;
 
 import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.read.entities.OrderRedisEntity;
 import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.read.repositories.OrderRedisRepository;
-import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.write.entities.OrderJPAEntity;
 import com.deyvisonborges.service.orders.core.domain.pagination.Pagination;
 import com.deyvisonborges.service.orders.core.domain.pagination.SpecificationUtils;
 import com.deyvisonborges.service.orders.core.modules.management.order.Order;
 import com.deyvisonborges.service.orders.core.modules.management.order.OrderPaginationQuery;
-
-import jakarta.transaction.Transactional;
 
 @Repository
 public class OrderReadableRepository {
@@ -27,12 +24,18 @@ public class OrderReadableRepository {
     this.repository = repository;
   }
 
-  @Transactional
-  public void save() {
-    final var order = new OrderRedisEntity();
-    this.repository.save(order);
+  // SAVE
+  public void save(final Order order) {
+    try {
+      if (this.findById(order.getId().getValue()).isPresent())
+        throw new RuntimeException("Order already exists");     
+      this.repository.save(OrderRedisEntity.toJPAEntity(order));
+    } catch (Exception e) {
+      throw new RuntimeException("Fail to save Order on redis repository: " + e.getMessage());
+    }
   }
 
+  // FIND BY ID
   public Optional<Order> findById(String id) {
     try {
       return this.repository.findById(id)
@@ -42,6 +45,17 @@ public class OrderReadableRepository {
     }
   }
 
+
+  // DELETE BY ID
+  public void deleteById(String id) {
+    try {
+      this.repository.deleteById(id);
+    } catch (Exception e) {
+      throw new RuntimeException("Fail to DELETE ORDER BY ID in Redis Repository");
+    }
+  }
+
+  // FIND ALL
   public Pagination<Order> findAll(final OrderPaginationQuery query) {
     try {
       final var pageRequest = PageRequest.of(
@@ -54,7 +68,7 @@ public class OrderReadableRepository {
         .filter(term -> term != null && !term.isBlank())
         .map(term -> {
           String[] fieldsToSearch = {"id", "status", "customerId"};
-          Specification<OrderJPAEntity> spec = Specification.where(null);
+          Specification<OrderRedisEntity> spec = Specification.where(null);
           for (String field : fieldsToSearch) {
             spec = spec.or(SpecificationUtils.like(field, term));
           }

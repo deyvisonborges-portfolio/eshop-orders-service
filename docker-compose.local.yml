@@ -26,6 +26,8 @@ services:
       - "5672:5672"
     networks:
       - eshop-orders-service-network
+    volumes:
+      - ./enabled_plugins:/etc/rabbitmq/enabled_plugins
 
   # keycloak:
   #   image: quay.io/keycloak/keycloak

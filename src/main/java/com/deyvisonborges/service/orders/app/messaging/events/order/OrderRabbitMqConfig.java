@@ -7,6 +7,8 @@ import org.springframework.amqp.core.Queue;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.deyvisonborges.service.orders.app.messaging.client.rabbitmq.RabbitMqUtil;
+
 @Configuration
 public class OrderRabbitMqConfig {
   @Bean
@@ -16,10 +18,11 @@ public class OrderRabbitMqConfig {
 
   @Bean
   Queue orderUpsertQueue() {
-    final var isDurable = true;
-    final var isExclusive = false;
-    final var isAutoDelete = false;
-    return new Queue(OrderEventConstants.ORDER_QUEUE_UPSERT_NAME, isDurable, isExclusive, isAutoDelete);
+    return RabbitMqUtil.createQueueWithDLQ(
+      OrderEventConstants.ORDER_QUEUE_UPSERT_NAME,
+      OrderEventConstants.ORDER_DLX_EXCHANGE,
+      OrderEventConstants.ORDER_DQL_QUEUE
+    );
   }
 
   @Bean
