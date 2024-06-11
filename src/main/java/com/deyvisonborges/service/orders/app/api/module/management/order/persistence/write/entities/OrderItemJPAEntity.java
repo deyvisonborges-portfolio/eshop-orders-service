@@ -3,6 +3,8 @@ package com.deyvisonborges.service.orders.app.api.module.management.order.persis
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.deyvisonborges.service.orders.core.domain.primitives.Money;
 import com.deyvisonborges.service.orders.core.modules.management.order.OrderItem;
@@ -124,6 +126,12 @@ public class OrderItemJPAEntity implements Serializable {
       entity.quantity,
       new Money(entity.priceAmount, entity.priceCurrency)
     );
+  }
+
+  public static Set<OrderItem> toAggregateSet(final Set<OrderItemJPAEntity> items) {
+    return items.stream()
+      .map((orderItem) -> OrderItemJPAEntity.toAggregate(orderItem))
+      .collect(Collectors.toSet());
   }
 
   /**

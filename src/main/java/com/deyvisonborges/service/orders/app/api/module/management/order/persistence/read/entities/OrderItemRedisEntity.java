@@ -2,8 +2,14 @@ package com.deyvisonborges.service.orders.app.api.module.management.order.persis
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.data.redis.core.RedisHash;
+
+import com.deyvisonborges.service.orders.core.domain.primitives.Money;
+import com.deyvisonborges.service.orders.core.modules.management.order.OrderItem;
+import com.deyvisonborges.service.orders.core.modules.management.order.OrderItemID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
@@ -54,6 +60,33 @@ public class OrderItemRedisEntity {
     this.priceAmount = priceAmount;
     this.priceCurrency = priceCurrency;
     this.quantity = quantity;
+  }
+
+  public static OrderItemRedisEntity toRedisEntity(final OrderItem orderItem) {
+    return new OrderItemRedisEntity(
+      orderItem.getId().getValue(),
+      orderItem.getActive(),
+      orderItem.getCreatedAt(),
+      orderItem.getUpdatedAt(),
+      orderItem.getProductId(),
+      orderItem.getPrice().getAmount(),
+      orderItem.getPrice().getCurrency(),
+      orderItem.getQuantity());
+  }
+
+  public static OrderItem toAggregate(final OrderItemRedisEntity entity) {
+    return new OrderItem(
+      new OrderItemID(entity.id),
+      entity.productId,
+      entity.quantity,
+      new Money(entity.priceAmount, entity.priceCurrency)
+    );
+  }
+
+  public static Set<OrderItem> toAggregateSet(final Set<OrderItemRedisEntity> items) {
+    return items.stream()
+      .map((orderItem) -> OrderItemRedisEntity.toAggregate(orderItem))
+      .collect(Collectors.toSet());
   }
 
   public String getId() {

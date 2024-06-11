@@ -1,9 +1,12 @@
 package com.deyvisonborges.service.orders.core.modules.management.order;
 
 import java.time.Instant;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.deyvisonborges.service.orders.core.domain.Entity;
 import com.deyvisonborges.service.orders.core.domain.primitives.Money;
+import com.deyvisonborges.service.orders.core.modules.management.order.dto.OrderItemDTO;
 
 public class OrderItem extends Entity<OrderItemID> {
   private String productId;

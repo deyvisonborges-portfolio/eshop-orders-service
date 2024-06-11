@@ -21,10 +21,10 @@ import com.deyvisonborges.service.orders.core.modules.management.order.repositor
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-public class OrderRepository implements OrderRepositoryGateway {
+public class OrderWritableRepository implements OrderRepositoryGateway {
   private final OrderJPARepository jpaRepository;
 
-  public OrderRepository(final OrderJPARepository jpaRepository) {
+  public OrderWritableRepository(final OrderJPARepository jpaRepository) {
     this.jpaRepository = jpaRepository;
   }
 

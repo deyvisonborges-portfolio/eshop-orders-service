@@ -9,6 +9,9 @@ import org.springframework.data.annotation.Reference;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.index.Indexed;
 
+import com.deyvisonborges.service.orders.core.domain.primitives.Money;
+import com.deyvisonborges.service.orders.core.modules.management.order.Order;
+import com.deyvisonborges.service.orders.core.modules.management.order.OrderID;
 import com.deyvisonborges.service.orders.core.modules.management.order.OrderStatus;
 
 import jakarta.persistence.Column;
@@ -97,6 +100,19 @@ public class OrderRedisEntity implements Serializable{
     this.discountCurrency = discountCurrency;
     this.totalAmount = totalAmount;
     this.totalCurrency = totalCurrency;
+  }
+
+  public static Order toAggregate(final OrderRedisEntity entity) {
+    return new Order(
+      new OrderID(entity.id),
+      entity.status,
+      OrderItemRedisEntity.toAggregateSet(entity.items),
+      entity.customerId,
+      new Money(entity.subTotalAmount, entity.subTotalCurrency),
+      new Money(entity.shippingFeeAmount, entity.shippingFeeCurrency),
+      new Money(entity.discountAmount, entity.discountCurrency),
+      new Money(entity.totalAmount, entity.totalCurrency)
+    );
   }
 
   public String getId() {

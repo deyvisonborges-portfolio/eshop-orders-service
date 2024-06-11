@@ -2,15 +2,15 @@ package com.deyvisonborges.service.orders.app.api.module.management.order.usecas
 
 import org.springframework.stereotype.Service;
 
-import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.OrderRepository;
+import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.OrderWritableRepository;
 import com.deyvisonborges.service.orders.core.domain.pagination.Pagination;
 import com.deyvisonborges.service.orders.core.modules.management.order.OrderPaginationQuery;
 
 @Service
 public class ListOrdersQueryHandler {
-  private final OrderRepository repository;
+  private final OrderWritableRepository repository;
 
-  public ListOrdersQueryHandler(final OrderRepository repository) {
+  public ListOrdersQueryHandler(final OrderWritableRepository repository) {
     this.repository = repository;
   }
   

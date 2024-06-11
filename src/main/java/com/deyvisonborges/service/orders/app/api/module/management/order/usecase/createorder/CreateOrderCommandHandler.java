@@ -2,7 +2,7 @@ package com.deyvisonborges.service.orders.app.api.module.management.order.usecas
 
 import org.springframework.stereotype.Service;
 
-import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.OrderRepository;
+import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.OrderWritableRepository;
 import com.deyvisonborges.service.orders.app.messaging.client.rabbitmq.RabbitmqEventEmitter;
 import com.deyvisonborges.service.orders.app.messaging.events.order.OrderEvent;
 import com.deyvisonborges.service.orders.app.messaging.events.order.OrderEventConstants;
@@ -16,11 +16,11 @@ import jakarta.transaction.Transactional;
 public class CreateOrderCommandHandler implements CommandHandler<Void, CreateOrderCommand> {
   private final RabbitmqEventEmitter emitter;
   private final CreateOrderEventPublisher createOrderEvent;
-  private final OrderRepository orderRepository;
+  private final OrderWritableRepository orderRepository;
 
   public CreateOrderCommandHandler(
     final CreateOrderEventPublisher createOrderEvent,
-    final OrderRepository orderRepository, RabbitmqEventEmitter emitter
+    final OrderWritableRepository orderRepository, RabbitmqEventEmitter emitter
   ) {
     this.emitter = emitter;
     this.createOrderEvent = createOrderEvent;

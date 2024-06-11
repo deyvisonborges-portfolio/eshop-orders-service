@@ -7,16 +7,16 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.OrderReadableService;
+import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.OrderReadableRespository;
 import com.deyvisonborges.service.orders.app.messaging.events.order.OrderEventConstants;
 import com.deyvisonborges.service.orders.app.messaging.events.order.OrderEventMessage;
 
 @Component
 @Transactional
 public class UpsertOrderEventListener {
-  private final OrderReadableService orderReadableService;
+  private final OrderReadableRespository orderReadableService;
 
-  public UpsertOrderEventListener(final OrderReadableService orderReadableService) {
+  public UpsertOrderEventListener(final OrderReadableRespository orderReadableService) {
     this.orderReadableService = orderReadableService;
   }
 

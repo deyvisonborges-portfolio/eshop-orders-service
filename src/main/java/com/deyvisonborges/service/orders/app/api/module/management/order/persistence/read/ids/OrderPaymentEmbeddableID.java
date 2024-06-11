@@ -1,4 +1,4 @@
-package com.deyvisonborges.service.orders.app.api.module.management.order.persistence.ids;
+package com.deyvisonborges.service.orders.app.api.module.management.order.persistence.read.ids;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
