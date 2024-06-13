@@ -48,9 +48,7 @@ public class CreateOrderCommandHandler implements CommandHandler<Void, CreateOrd
       OrderEventConstants.ORDER_CREATED_EVENT_ROUTING_KEY, 
       event
     );
-
-    this.createOrderEvent.applyOn(event);
-
+    // this.createOrderEvent.applyOn(event);
     return null;
   }
 }

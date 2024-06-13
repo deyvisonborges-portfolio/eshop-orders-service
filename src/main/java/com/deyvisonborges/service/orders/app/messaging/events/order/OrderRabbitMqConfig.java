@@ -4,6 +4,7 @@ import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.TopicExchange;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -33,6 +34,18 @@ public class OrderRabbitMqConfig {
     return new Queue(
       OrderEventConstants.ORDER_QUEUE_CANCELLED_NAME, 
       isDurable, isExclusive, isAutoDelete);
+  }
+
+  @Bean
+  Queue orderCompensationQueue() {
+    return new Queue(OrderEventConstants.ORDER_COMPENSATION_QUEUE, true);
+  }
+
+  @Bean
+  Binding orderCompensationEventBinding(Queue orderCompensationQueue, TopicExchange orderExchange) {
+    return BindingBuilder.bind(orderCompensationQueue)
+      .to(orderExchange)
+        .with(OrderEventConstants.ORDER_COMPENSATION_ROUTING_KEY);
   }
 
   @Bean

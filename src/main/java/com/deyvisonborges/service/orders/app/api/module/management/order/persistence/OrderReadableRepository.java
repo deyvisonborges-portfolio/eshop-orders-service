@@ -37,14 +37,9 @@ public class OrderReadableRepository {
 
   // FIND BY ID
   public Optional<Order> findById(String id) {
-    try {
-      return this.repository.findById(id)
-        .map(OrderRedisEntity::toAggregate);
-    } catch (Exception e) {
-      throw new RuntimeException("Fail to return order with id: " + id, e);
-    }
+    return this.repository.findById(id)
+      .map(OrderRedisEntity::toAggregate);
   }
-
 
   // DELETE BY ID
   public void deleteById(String id) {
