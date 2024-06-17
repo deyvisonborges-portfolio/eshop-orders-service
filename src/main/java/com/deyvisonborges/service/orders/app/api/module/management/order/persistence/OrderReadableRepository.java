@@ -1,10 +1,13 @@
 package com.deyvisonborges.service.orders.app.api.module.management.order.persistence;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.read.entities.OrderItemMongoEntity;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
 
 import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.read.entities.OrderMongoEntity;
@@ -22,11 +25,12 @@ public class OrderReadableRepository {
     }
 
     // SAVE
+  @Transactional
     public void save(final Order order) {
         try {
             if (this.findById(order.getId().getValue()).isPresent())
                 throw new RuntimeException("Order already exists");
-            this.repository.save(OrderMongoEntity.toJPAEntity(order));
+            this.repository.save(OrderMongoEntity.toMongoEntity(order));
         } catch (Exception e) {
             throw new RuntimeException("Fail to save Order on redis repository: " + e.getMessage());
         }
@@ -35,7 +39,7 @@ public class OrderReadableRepository {
     // FIND BY ID
     public Optional<Order> findById(String id) {
         return this.repository.findById(id)
-                .map(OrderMongoEntity::toAggregate);
+            .map(OrderMongoEntity::toAggregate);
     }
 
     // DELETE BY ID

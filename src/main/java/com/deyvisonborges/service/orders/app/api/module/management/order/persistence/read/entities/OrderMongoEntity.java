@@ -3,24 +3,20 @@ package com.deyvisonborges.service.orders.app.api.module.management.order.persis
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.springframework.data.annotation.Reference;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.redis.core.RedisHash;
-import org.springframework.data.redis.core.index.Indexed;
 
 import com.deyvisonborges.service.orders.core.domain.primitives.Money;
 import com.deyvisonborges.service.orders.core.modules.management.order.Order;
 import com.deyvisonborges.service.orders.core.modules.management.order.OrderID;
 import com.deyvisonborges.service.orders.core.modules.management.order.OrderStatus;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 @Document(collection = "orders")
 public class OrderMongoEntity implements Serializable{
@@ -28,44 +24,41 @@ public class OrderMongoEntity implements Serializable{
   private String id;
   private Boolean active;
 
-  @Column(name = "created_at")
+  @Field(name = "created_at")
   private Instant createdAt;
 
-  @Column(name = "updated_at")
+  @Field(name = "updated_at")
   private Instant updatedAt;
 
-  @Column(nullable = false)
-  @Enumerated(EnumType.STRING)
   private OrderStatus status;
 
-  @DBRef
-  private Set<OrderItemMongoEntity> items;
+  private Set<OrderItemMongoEntity> items = new HashSet<>();
 
-  @Column(name = "customer_id")
+  @Field(name = "customer_id")
   private String customerId;
 
-  @Column(name = "shipping_fee_amount")
+  @Field(name = "shipping_fee_amount")
   private BigDecimal shippingFeeAmount;
 
-  @Column(name = "shipping_fee_currency")
+  @Field(name = "shipping_fee_currency")
   private String shippingFeeCurrency;
 
-  @Column(name = "subtotal_amount")
+  @Field(name = "subtotal_amount")
   private BigDecimal subTotalAmount;
 
-  @Column(name = "subtotal_currency")
+  @Field(name = "subtotal_currency")
   private String subTotalCurrency;
 
-  @Column(name = "discount_amount")
+  @Field(name = "discount_amount")
   private BigDecimal discountAmount;
 
-  @Column(name = "discount_currency")
+  @Field(name = "discount_currency")
   private String discountCurrency;
 
-  @Column(name = "total_amount")
+  @Field(name = "total_amount")
   private BigDecimal totalAmount;
 
-  @Column(name = "total_currency")
+  @Field(name = "total_currency")
   private String totalCurrency;
 
   public OrderMongoEntity() {}
@@ -117,12 +110,12 @@ public class OrderMongoEntity implements Serializable{
     );
   }
 
-  public static OrderMongoEntity toJPAEntity(final Order order) {
+  public static OrderMongoEntity toMongoEntity(final Order order) {
     Set<OrderItemMongoEntity> orderItems = order.getItems().stream()
-      .map(OrderItemMongoEntity::toRedisEntity)
+      .map(OrderItemMongoEntity::toMongoEntity)
       .collect(Collectors.toSet());
 
-    final var orderJpa = new OrderMongoEntity(
+    return new OrderMongoEntity(
       order.getId().getValue(),
       order.getActive(),
       order.getCreatedAt(),
@@ -139,7 +132,6 @@ public class OrderMongoEntity implements Serializable{
       order.getTotal().getAmount(),
       order.getTotal().getCurrency()
     );
-    return orderJpa;
   }
 
   public String getId() {
@@ -196,69 +188,5 @@ public class OrderMongoEntity implements Serializable{
 
   public void setCustomerId(String customerId) {
     this.customerId = customerId;
-  }
-
-  public BigDecimal getShippingFeeAmount() {
-    return shippingFeeAmount;
-  }
-
-  public void setShippingFeeAmount(BigDecimal shippingFeeAmount) {
-    this.shippingFeeAmount = shippingFeeAmount;
-  }
-
-  public String getShippingFeeCurrency() {
-    return shippingFeeCurrency;
-  }
-
-  public void setShippingFeeCurrency(String shippingFeeCurrency) {
-    this.shippingFeeCurrency = shippingFeeCurrency;
-  }
-
-  public BigDecimal getSubTotalAmount() {
-    return subTotalAmount;
-  }
-
-  public void setSubTotalAmount(BigDecimal subTotalAmount) {
-    this.subTotalAmount = subTotalAmount;
-  }
-
-  public String getSubTotalCurrency() {
-    return subTotalCurrency;
-  }
-
-  public void setSubTotalCurrency(String subTotalCurrency) {
-    this.subTotalCurrency = subTotalCurrency;
-  }
-
-  public BigDecimal getDiscountAmount() {
-    return discountAmount;
-  }
-
-  public void setDiscountAmount(BigDecimal discountAmount) {
-    this.discountAmount = discountAmount;
-  }
-
-  public String getDiscountCurrency() {
-    return discountCurrency;
-  }
-
-  public void setDiscountCurrency(String discountCurrency) {
-    this.discountCurrency = discountCurrency;
-  }
-
-  public BigDecimal getTotalAmount() {
-    return totalAmount;
-  }
-
-  public void setTotalAmount(BigDecimal totalAmount) {
-    this.totalAmount = totalAmount;
-  }
-
-  public String getTotalCurrency() {
-    return totalCurrency;
-  }
-
-  public void setTotalCurrency(String totalCurrency) {
-    this.totalCurrency = totalCurrency;
   }
 }

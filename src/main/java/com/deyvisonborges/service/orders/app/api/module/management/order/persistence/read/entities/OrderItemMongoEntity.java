@@ -11,33 +11,31 @@ import com.deyvisonborges.service.orders.core.domain.primitives.Money;
 import com.deyvisonborges.service.orders.core.modules.management.order.OrderItem;
 import com.deyvisonborges.service.orders.core.modules.management.order.OrderItemID;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Id;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 @Document(collection = "order_items")
 public class OrderItemMongoEntity {
   @Id
-  @Column(nullable = false)
   private String id;  
 
   private Boolean active;
 
-  @Column(name = "created_at")
+  @Field(name = "created_at")
   private Instant createdAt;
 
-  @Column(name = "updated_at")
+  @Field(name = "updated_at")
   private Instant updatedAt;
 
-  @Column(name = "product_id", nullable = false)
+  @Field(name = "product_id")
   private String productId;
 
-  @Column(name = "price_amount", nullable = false)
+  @Field(name = "price_amount")
   private BigDecimal priceAmount;
 
-  @Column(name = "price_currency", nullable = false)
+  @Field(name = "price_currency")
   private String priceCurrency;
 
-  @Column(nullable = false)
   private int quantity;
 
   public OrderItemMongoEntity() {}
@@ -62,7 +60,7 @@ public class OrderItemMongoEntity {
     this.quantity = quantity;
   }
 
-  public static OrderItemMongoEntity toRedisEntity(final OrderItem orderItem) {
+  public static OrderItemMongoEntity toMongoEntity(final OrderItem orderItem) {
     return new OrderItemMongoEntity(
       orderItem.getId().getValue(),
       orderItem.getActive(),
@@ -85,7 +83,7 @@ public class OrderItemMongoEntity {
 
   public static Set<OrderItem> toAggregateSet(final Set<OrderItemMongoEntity> items) {
     return items.stream()
-      .map((orderItem) -> OrderItemMongoEntity.toAggregate(orderItem))
+      .map(OrderItemMongoEntity::toAggregate)
       .collect(Collectors.toSet());
   }
 
@@ -119,37 +117,5 @@ public class OrderItemMongoEntity {
 
   public void setUpdatedAt(Instant updatedAt) {
     this.updatedAt = updatedAt;
-  }
-
-  public String getProductId() {
-    return productId;
-  }
-
-  public void setProductId(String productId) {
-    this.productId = productId;
-  }
-
-  public BigDecimal getPriceAmount() {
-    return priceAmount;
-  }
-
-  public void setPriceAmount(BigDecimal priceAmount) {
-    this.priceAmount = priceAmount;
-  }
-
-  public String getPriceCurrency() {
-    return priceCurrency;
-  }
-
-  public void setPriceCurrency(String priceCurrency) {
-    this.priceCurrency = priceCurrency;
-  }
-
-  public int getQuantity() {
-    return quantity;
-  }
-
-  public void setQuantity(int quantity) {
-    this.quantity = quantity;
   }
 }
