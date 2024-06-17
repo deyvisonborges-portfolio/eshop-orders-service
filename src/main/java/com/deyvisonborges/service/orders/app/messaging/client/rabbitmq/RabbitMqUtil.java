@@ -10,7 +10,6 @@ public class RabbitMqUtil {
     Map<String, Object> args = new HashMap<>();
     args.put("x-dead-letter-exchange", dlxExchange);
     args.put("x-dead-letter-routing-key", dlqRoutingKey);
-
     return new Queue(queueName, true, false, false, args);
   }
 }

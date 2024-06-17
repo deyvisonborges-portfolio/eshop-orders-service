@@ -3,7 +3,7 @@ JAR_FILE=target/orders-application.jar
 
 # Tarefa para compilar o projeto
 build:
-	mvn clean package
+	gradle clean package
 
 # Tarefa para executar a aplicação com um perfil específico
 run:

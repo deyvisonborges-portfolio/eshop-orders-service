@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.OrderReadableRepository;
 import com.deyvisonborges.service.orders.core.domain.pagination.Pagination;
+import com.deyvisonborges.service.orders.core.modules.management.order.Order;
 import com.deyvisonborges.service.orders.core.modules.management.order.OrderPaginationQuery;
 
 @Service
@@ -14,8 +15,7 @@ public class ListOrdersQueryHandler {
     this.repository = repository;
   }
   
-  public Pagination<ListOrdersQueryOutput> handle(final OrderPaginationQuery query) {
-    return this.repository.findAll(query)
-      .map(ListOrdersQueryOutput::from);
+  public Pagination<Order> handle(final OrderPaginationQuery query) {
+    return this.repository.findAll(query);
   }
 }

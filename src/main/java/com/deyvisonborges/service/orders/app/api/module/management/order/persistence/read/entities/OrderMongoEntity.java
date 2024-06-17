@@ -7,6 +7,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.data.annotation.Reference;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.index.Indexed;
 
@@ -20,10 +22,9 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 
-@RedisHash("orders")
-public class OrderRedisEntity implements Serializable{
+@Document(collection = "orders")
+public class OrderMongoEntity implements Serializable{
   @Id
-  @Indexed
   private String id;
   private Boolean active;
 
@@ -37,8 +38,8 @@ public class OrderRedisEntity implements Serializable{
   @Enumerated(EnumType.STRING)
   private OrderStatus status;
 
-  @Reference
-  private Set<OrderItemRedisEntity> items;
+  @DBRef
+  private Set<OrderItemMongoEntity> items;
 
   @Column(name = "customer_id")
   private String customerId;
@@ -67,15 +68,15 @@ public class OrderRedisEntity implements Serializable{
   @Column(name = "total_currency")
   private String totalCurrency;
 
-  public OrderRedisEntity() {}
+  public OrderMongoEntity() {}
 
-  public OrderRedisEntity(
+  public OrderMongoEntity(
     final String id, 
     final Boolean active, 
     final Instant createdAt, 
     final Instant updatedAt, 
     final OrderStatus status,
-    final Set<OrderItemRedisEntity> items, 
+    final Set<OrderItemMongoEntity> items, 
     final String customerId, 
     final BigDecimal shippingFeeAmount, 
     final String shippingFeeCurrency,
@@ -103,11 +104,11 @@ public class OrderRedisEntity implements Serializable{
     this.totalCurrency = totalCurrency;
   }
 
-  public static Order toAggregate(final OrderRedisEntity entity) {
+  public static Order toAggregate(final OrderMongoEntity entity) {
     return new Order(
       new OrderID(entity.id),
       entity.status,
-      OrderItemRedisEntity.toAggregateSet(entity.items),
+      OrderItemMongoEntity.toAggregateSet(entity.items),
       entity.customerId,
       new Money(entity.subTotalAmount, entity.subTotalCurrency),
       new Money(entity.shippingFeeAmount, entity.shippingFeeCurrency),
@@ -116,12 +117,12 @@ public class OrderRedisEntity implements Serializable{
     );
   }
 
-  public static OrderRedisEntity toJPAEntity(final Order order) {
-    Set<OrderItemRedisEntity> orderItems = order.getItems().stream()
-      .map(OrderItemRedisEntity::toRedisEntity)
+  public static OrderMongoEntity toJPAEntity(final Order order) {
+    Set<OrderItemMongoEntity> orderItems = order.getItems().stream()
+      .map(OrderItemMongoEntity::toRedisEntity)
       .collect(Collectors.toSet());
 
-    final var orderJpa = new OrderRedisEntity(
+    final var orderJpa = new OrderMongoEntity(
       order.getId().getValue(),
       order.getActive(),
       order.getCreatedAt(),
@@ -181,11 +182,11 @@ public class OrderRedisEntity implements Serializable{
     this.status = status;
   }
 
-  public Set<OrderItemRedisEntity> getItems() {
+  public Set<OrderItemMongoEntity> getItems() {
     return items;
   }
 
-  public void setItems(Set<OrderItemRedisEntity> items) {
+  public void setItems(Set<OrderItemMongoEntity> items) {
     this.items = items;
   }
 

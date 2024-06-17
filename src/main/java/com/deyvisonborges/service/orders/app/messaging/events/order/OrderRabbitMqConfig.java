@@ -4,7 +4,6 @@ import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.core.TopicExchange;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -19,11 +18,10 @@ public class OrderRabbitMqConfig {
 
   @Bean
   Queue orderUpsertQueue() {
-    return RabbitMqUtil.createQueueWithDLQ(
-      OrderEventConstants.ORDER_QUEUE_UPSERT_NAME,
-      OrderEventConstants.ORDER_DLX_EXCHANGE,
-      OrderEventConstants.ORDER_DQL_QUEUE
-    );
+    final var isDurable = true;
+    final var isExclusive = false;
+    final var isAutoDelete = false;
+    return new Queue(OrderEventConstants.ORDER_QUEUE_UPSERT_NAME, isDurable, isExclusive, isAutoDelete);
   }
 
   @Bean
@@ -31,9 +29,7 @@ public class OrderRabbitMqConfig {
     final var isDurable = true;
     final var isExclusive = false;
     final var isAutoDelete = false;
-    return new Queue(
-      OrderEventConstants.ORDER_QUEUE_CANCELLED_NAME, 
-      isDurable, isExclusive, isAutoDelete);
+    return new Queue(OrderEventConstants.ORDER_QUEUE_CANCELLED_NAME, isDurable, isExclusive, isAutoDelete);
   }
 
   @Bean
@@ -42,10 +38,11 @@ public class OrderRabbitMqConfig {
   }
 
   @Bean
-  Binding orderCompensationEventBinding(Queue orderCompensationQueue, TopicExchange orderExchange) {
-    return BindingBuilder.bind(orderCompensationQueue)
-      .to(orderExchange)
-        .with(OrderEventConstants.ORDER_COMPENSATION_ROUTING_KEY);
+  Binding orderCompensationEventBinding() {
+    return BindingBuilder
+      .bind(orderCompensationQueue())
+      .to(orderDirectExchange())
+      .with(OrderEventConstants.ORDER_COMPENSATION_ROUTING_KEY);
   }
 
   @Bean

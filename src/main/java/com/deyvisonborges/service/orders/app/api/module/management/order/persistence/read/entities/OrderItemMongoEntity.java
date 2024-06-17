@@ -5,7 +5,7 @@ import java.time.Instant;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.deyvisonborges.service.orders.core.domain.primitives.Money;
 import com.deyvisonborges.service.orders.core.modules.management.order.OrderItem;
@@ -14,8 +14,8 @@ import com.deyvisonborges.service.orders.core.modules.management.order.OrderItem
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 
-@RedisHash("order_items")
-public class OrderItemRedisEntity {
+@Document(collection = "order_items")
+public class OrderItemMongoEntity {
   @Id
   @Column(nullable = false)
   private String id;  
@@ -40,9 +40,9 @@ public class OrderItemRedisEntity {
   @Column(nullable = false)
   private int quantity;
 
-  public OrderItemRedisEntity() {}
+  public OrderItemMongoEntity() {}
 
-  public OrderItemRedisEntity(
+  public OrderItemMongoEntity(
     final String id, 
     final Boolean active, 
     final Instant createdAt, 
@@ -62,8 +62,8 @@ public class OrderItemRedisEntity {
     this.quantity = quantity;
   }
 
-  public static OrderItemRedisEntity toRedisEntity(final OrderItem orderItem) {
-    return new OrderItemRedisEntity(
+  public static OrderItemMongoEntity toRedisEntity(final OrderItem orderItem) {
+    return new OrderItemMongoEntity(
       orderItem.getId().getValue(),
       orderItem.getActive(),
       orderItem.getCreatedAt(),
@@ -74,7 +74,7 @@ public class OrderItemRedisEntity {
       orderItem.getQuantity());
   }
 
-  public static OrderItem toAggregate(final OrderItemRedisEntity entity) {
+  public static OrderItem toAggregate(final OrderItemMongoEntity entity) {
     return new OrderItem(
       new OrderItemID(entity.id),
       entity.productId,
@@ -83,9 +83,9 @@ public class OrderItemRedisEntity {
     );
   }
 
-  public static Set<OrderItem> toAggregateSet(final Set<OrderItemRedisEntity> items) {
+  public static Set<OrderItem> toAggregateSet(final Set<OrderItemMongoEntity> items) {
     return items.stream()
-      .map((orderItem) -> OrderItemRedisEntity.toAggregate(orderItem))
+      .map((orderItem) -> OrderItemMongoEntity.toAggregate(orderItem))
       .collect(Collectors.toSet());
   }
 

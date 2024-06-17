@@ -14,9 +14,13 @@ spring:
   flyway:
     enabled: true
   data:
-    redis:
+    mongodb:
       host: localhost
-      port: 6379
+      port: 27017
+      database: orders_readable_db
+    # redis:
+    #   host: localhost
+    #   port: 6379
   jpa:
     properties:
       hibernate:

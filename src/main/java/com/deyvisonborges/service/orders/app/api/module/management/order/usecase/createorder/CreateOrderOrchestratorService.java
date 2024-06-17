@@ -1,13 +1,11 @@
-package com.deyvisonborges.service.orders.app.api.module.management.order.saga;
+package com.deyvisonborges.service.orders.app.api.module.management.order.usecase.createorder;
 
 import org.springframework.stereotype.Service;
 
-import com.deyvisonborges.service.orders.app.api.module.management.order.usecase.createorder.CreateOrderCommand;
 import com.deyvisonborges.service.orders.app.messaging.client.rabbitmq.RabbitmqEventEmitter;
+import com.deyvisonborges.service.orders.app.messaging.events.order.OrderEvent;
 import com.deyvisonborges.service.orders.app.messaging.events.order.OrderEventConstants;
 import com.deyvisonborges.service.orders.app.messaging.events.order.OrderEventMessage;
-
-import jakarta.transaction.Transactional;
 
 @Service
 public class CreateOrderOrchestratorService {
@@ -22,7 +20,7 @@ public class CreateOrderOrchestratorService {
     eventEmitter.emit(
       OrderEventConstants.ORDER_EXCHANGE_NAME, 
       OrderEventConstants.ORDER_CREATED_EVENT_ROUTING_KEY,
-      orderEventMessage
+      OrderEvent.fromOrderEventMessage(orderEventMessage)
     );
   }
 
@@ -31,7 +29,7 @@ public class CreateOrderOrchestratorService {
     eventEmitter.emit(
       OrderEventConstants.ORDER_EXCHANGE_NAME, 
       OrderEventConstants.ORDER_COMPENSATION_ROUTING_KEY,
-      orderEventMessage
+      OrderEvent.fromOrderEventMessage(orderEventMessage)
     );
   }
 }

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.OrderReadableRepository;
 import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.OrderWritableRepository;
-import com.deyvisonborges.service.orders.app.api.module.management.order.saga.CreateOrderOrchestratorService;
+import com.deyvisonborges.service.orders.app.api.module.management.order.usecase.createorder.CreateOrderOrchestratorService;
 import com.deyvisonborges.service.orders.app.exception.NotFoundException;
 import com.deyvisonborges.service.orders.app.messaging.events.order.OrderEventConstants;
 import com.deyvisonborges.service.orders.app.messaging.events.order.OrderEventMessage;
@@ -42,6 +42,7 @@ public class OrderCreatedEventHandler {
       final var orderId = orderEventMessage.getOrderId();
       final var order = this.orderWritableRepository.findById(orderId)
         .orElseThrow(() -> new NotFoundException("Order not found in writable repository"));
+        
       this.orderReadableService.save(order);
     } catch (Exception e) {
       this.createOrderOrchestratorService.onOrderCreationFailed(orderEventMessage);
