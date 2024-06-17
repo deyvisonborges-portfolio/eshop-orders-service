@@ -3,28 +3,23 @@ package com.deyvisonborges.service.orders.app.api.module.management.order.usecas
 import org.springframework.stereotype.Service;
 
 import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.OrderWritableRepository;
-import com.deyvisonborges.service.orders.app.messaging.client.rabbitmq.RabbitmqEventEmitter;
 import com.deyvisonborges.service.orders.app.messaging.events.order.OrderEvent;
-import com.deyvisonborges.service.orders.app.messaging.events.order.OrderEventConstants;
 import com.deyvisonborges.service.orders.app.messaging.events.order.OrderEventMessage;
-import com.deyvisonborges.service.orders.app.messaging.events.order.publishers.CreateOrderEventPublisher;
 import com.deyvisonborges.service.orders.core.domain.cqrs.CommandHandler;
 
 import jakarta.transaction.Transactional;
 
 @Service
 public class CreateOrderCommandHandler implements CommandHandler<Void, CreateOrderCommand> {
-  private final RabbitmqEventEmitter emitter;
-  private final CreateOrderEventPublisher createOrderEvent;
   private final OrderWritableRepository orderRepository;
+  private final CreateOrderOrchestratorService createOrderOrchestratorService;
 
   public CreateOrderCommandHandler(
-    final CreateOrderEventPublisher createOrderEvent,
-    final OrderWritableRepository orderRepository, RabbitmqEventEmitter emitter
+    final OrderWritableRepository orderRepository,
+    final CreateOrderOrchestratorService createOrderOrchestratorService
   ) {
-    this.emitter = emitter;
-    this.createOrderEvent = createOrderEvent;
     this.orderRepository = orderRepository;
+    this.createOrderOrchestratorService = createOrderOrchestratorService;
   }
 
   @Override
@@ -41,16 +36,7 @@ public class CreateOrderCommandHandler implements CommandHandler<Void, CreateOrd
       orderAggregate.getStatus()
     );
 
-    OrderEvent event = OrderEvent.fromOrderEventMessage(eventMessage);
-
-    emitter.emit(
-      OrderEventConstants.ORDER_EXCHANGE_NAME,
-      OrderEventConstants.ORDER_CREATED_EVENT_ROUTING_KEY, 
-      event
-    );
-
-    this.createOrderEvent.applyOn(event);
-
+    this.createOrderOrchestratorService.initiateOrderCreation(eventMessage);
     return null;
   }
 }

@@ -4,6 +4,20 @@ services:
     restart: always
     ports:
       - '6379:6379'
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - eshop-orders-service-network
+    environment:
+      - MONGO_INITDB_DATABASE=orders_readable_db 
+#      - MONGO_INITDB_ROOT_USERNAME=admin
+#      - MONGO_INITDB_ROOT_PASSWORD=password
+  
   postgres:
     image: "postgres:latest"
     environment:
@@ -26,8 +40,8 @@ services:
       - "5672:5672"
     networks:
       - eshop-orders-service-network
-    volumes:
-      - ./enabled_plugins:/etc/rabbitmq/enabled_plugins
+    # volumes:
+    #   - ./enabled_plugins:/etc/rabbitmq/enabled_plugins
 
   # keycloak:
   #   image: quay.io/keycloak/keycloak
@@ -49,6 +63,9 @@ services:
   #     - ./wiremock/__files:/home/wiremock/__files
   #     - ./wiremock/mappings:/home/wiremock/mappings
   #   entrypoint: ["/docker-entrypoint.sh", "--global-response-templating", "--disable-gzip", "--verbose"]
+volumes: 
+  mongo-data:
+    driver: local
 
 networks:
   eshop-orders-service-network:
