@@ -44,7 +44,7 @@ public class OrderController {
     final CreateOrderCommandHandler createOrderCommandHandler,
     final UpdateOrderCommandHandler updateOrderCommandHandler,
     final DeleteOrderCommandHandler deleteOrderCommandHandler,
-    final GetOrderByIdQueryHandler getOrderByIdQueryHandler, 
+    final GetOrderByIdQueryHandler getOrderByIdQueryHandler,
     final ListOrdersQueryHandler listOrdersQueryHandler
   ) {
     this.createOrderCommandHandler = createOrderCommandHandler;
@@ -56,6 +56,7 @@ public class OrderController {
 
   /**
    * Check endpoint state
+   *
    * @return
    */
   public ResponseEntity<?> health() {
@@ -64,6 +65,7 @@ public class OrderController {
 
   /**
    * Create a single order
+   *
    * @param command
    */
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -74,6 +76,7 @@ public class OrderController {
 
   /**
    * Update order
+   *
    * @param orderId
    * @param command
    */
@@ -91,6 +94,7 @@ public class OrderController {
 
   /**
    * Return a single order by id
+   *
    * @param id
    * @return
    */
@@ -102,31 +106,30 @@ public class OrderController {
 
   /**
    * Return all orders with pagination
-   * @param search
+   * <p>
+   * * @param search
    * @param page
-   * @param perPage
-   * @param sort
+   * @param size      //   * @param sort
    * @param direction
-   * @implNote
-   * GET /orders?search=term1,term2,term3&page=0&perPage=10&sort=id&direction=ASCENDANT
-   * @return
+   * @implNote GET /orders?search=term1,term2,term3&page=0&perPage=10&sort=id&direction=ASCENDANT
    */
   @GetMapping
-  public Pagination<?> listOrders(
-    @RequestParam(name = "search", required = false, defaultValue = "") final String search,
+  public List<?> listOrders(
     @RequestParam(name = "page", required = false, defaultValue = "0") final int page,
-    @RequestParam(name = "perPage", required = false, defaultValue = "10") final int perPage,
-    @RequestParam(name = "sort", required = false, defaultValue = "id") final String sort,
+    @RequestParam(name = "size", required = false, defaultValue = "10") final int size,
     @RequestParam(name = "direction", required = false, defaultValue = "ASCENDANT") final String direction
+//    @RequestParam(name = "search", required = false, defaultValue = "") final String search
+//    @RequestParam(name = "sort", required = false, defaultValue = "id") final String sort,
   ) {
-    List<String> terms = search.isEmpty() ? List.of() : Arrays.stream(search.split(","))
-      .map(String::trim) // Remova espaços em branco adicionais.
-      .filter(term -> !term.isEmpty() && term.matches("^[a-zA-Z0-9]+$")) // Ignore termos vazio e Aceite apenas termos que correspondam a uma expressão regular, por exemplo, contendo apenas caracteres alfanuméricos.
-      .collect(Collectors.toList());
-      
+//    List<String> terms = search.isEmpty() ? List.of() : Arrays.stream(search.split(","))
+//      .map(String::trim) // Remova espaços em branco adicionais.
+//      .filter(term -> !term.isEmpty() && term.matches("^[a-zA-Z0-9]+$")) // Ignore termos vazio e Aceite apenas termos que correspondam a uma expressão regular, por exemplo, contendo apenas caracteres alfanuméricos.
+//      .collect(Collectors.toList());
+
     return this.listOrdersQueryHandler.handle(
       new OrderPaginationQuery(
-        page, perPage, terms, sort, SearchDirection.from(direction)
+        // o sort ta null temporally
+        page, size, null, null, SearchDirection.from(direction)
       )
     );
   }

@@ -7,7 +7,11 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.read.entities.OrderItemMongoEntity;
+import com.deyvisonborges.service.orders.core.domain.pagination.SpecificationUtils;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.read.entities.OrderMongoEntity;
@@ -51,59 +55,59 @@ public class OrderReadableRepository {
         }
     }
 
-    // FIND ALL
-    public Pagination<Order> findAll(final OrderPaginationQuery query) {
-        try {
-            // final var pageRequest = PageRequest.of(
-            //         query.page(),
-            //         query.perPage(),
-            //         Sort.by(Sort.Direction.fromString(query.direction().name()), query.sort())
-            // );
-
-            // Obter todos os dados do Redis
-            System.out.println("========> 01");
-            Iterable<OrderMongoEntity> allEntities = this.repository.findAll();
-            System.out.println("========> 02");
-
-            // Filtrar os dados manualmente
-            List<OrderMongoEntity> filteredEntities = StreamSupport.stream(allEntities.spliterator(), false)
-                    .filter(entity -> matchesQuery(entity, query))
-                    .collect(Collectors.toList());
-
-            // // Paginar os dados manualmente
-            // int total = filteredEntities.size();
-            // int start = Math.min((int) pageRequest.getOffset(), total);
-            // int end = Math.min((start + pageRequest.getPageSize()), total);
-            // List<Order> orders = filteredEntities.subList(start, end).stream()
-            //         .map(OrderRedisEntity::toAggregate)
-            //         .collect(Collectors.toList());
-
-            return new Pagination(0, 0, 0, filteredEntities);
+    public List<Order> findAll(final OrderPaginationQuery query) {
+      try {
+         final var pageRequest = PageRequest.of(
+           query.page(),
+           query.perPage(),
+           Sort.by(Sort.Direction.fromString(query.direction().name()), query.sort())
+         );
+         
+        final var allEntities = this.repository.findAll(pageRequest);
+        return allEntities
+          .stream()
+          .map(OrderMongoEntity::toAggregate)
+          .toList();
+//         return StreamSupport.stream(allEntities.spliterator(), false)
+//           .map(OrderMongoEntity::toAggregate)
+//           .collect(Collectors.toList());
+//         
+//         List<OrderMongoEntity> filteredEntities = StreamSupport.stream(allEntities.spliterator(), false)
+//           .filter(entity -> matchesQuery(entity, query))
+//           .collect(Collectors.toList());
+//
+//         int total = filteredEntities.size();
+//         int start = Math.min((int) pageRequest.getOffset(), total);
+//         int end = Math.min((start + pageRequest.getPageSize()), total);
+//         List<Order> orders = filteredEntities.subList(start, end).stream()
+//           .map(OrderMongoEntity::toAggregate)
+//           .toList();
+//
+//            return new Pagination(end, start, total, orders);
         } catch (Exception e) {
-            System.out.println(e.getSuppressed());
-            throw new RuntimeException(e.getMessage());
+          throw new RuntimeException(e.getMessage());
         }
     }
 
-    // Método auxiliar para verificar se uma entidade corresponde à consulta
-    private boolean matchesQuery(OrderMongoEntity entity, OrderPaginationQuery query) {
-        for (String term : query.terms()) {
-            if (term != null && !term.isBlank()) {
-                boolean matches = false;
-                if (entity.getId() != null && entity.getId().contains(term)) {
-                    matches = true;
-                }
-                if (entity.getStatus() != null && entity.getStatus().toString().contains(term)) {
-                    matches = true;
-                }
-                if (entity.getCustomerId() != null && entity.getCustomerId().contains(term)) {
-                    matches = true;
-                }
-                if (!matches) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
+//    // Método auxiliar para verificar se uma entidade corresponde à consulta
+//    private boolean matchesQuery(OrderMongoEntity entity, OrderPaginationQuery query) {
+//        for (String term : query.terms()) {
+//            if (term != null && !term.isBlank()) {
+//                boolean matches = false;
+//                if (entity.getId() != null && entity.getId().contains(term)) {
+//                    matches = true;
+//                }
+//                if (entity.getStatus() != null && entity.getStatus().toString().contains(term)) {
+//                    matches = true;
+//                }
+//                if (entity.getCustomerId() != null && entity.getCustomerId().contains(term)) {
+//                    matches = true;
+//                }
+//                if (!matches) {
+//                    return false;
+//                }
+//            }
+//        }
+//        return true;
+//    }
 }

@@ -128,70 +128,6 @@ public class OrderJPAEntity implements Serializable {
     this.customerId = customerId;
   }
 
-  public BigDecimal getShippingFeeAmount() {
-    return shippingFeeAmount;
-  }
-
-  public void setShippingFeeAmount(BigDecimal shippingFeeAmount) {
-    this.shippingFeeAmount = shippingFeeAmount;
-  }
-
-  public String getShippingFeeCurrency() {
-    return shippingFeeCurrency;
-  }
-
-  public void setShippingFeeCurrency(String shippingFeeCurrency) {
-    this.shippingFeeCurrency = shippingFeeCurrency;
-  }
-
-  public BigDecimal getSubTotalAmount() {
-    return subTotalAmount;
-  }
-
-  public void setSubTotalAmount(BigDecimal subTotalAmount) {
-    this.subTotalAmount = subTotalAmount;
-  }
-
-  public String getSubTotalCurrency() {
-    return subTotalCurrency;
-  }
-
-  public void setSubTotalCurrency(String subTotalCurrency) {
-    this.subTotalCurrency = subTotalCurrency;
-  }
-
-  public BigDecimal getDiscountAmount() {
-    return discountAmount;
-  }
-
-  public void setDiscountAmount(BigDecimal discountAmount) {
-    this.discountAmount = discountAmount;
-  }
-
-  public String getDiscountCurrency() {
-    return discountCurrency;
-  }
-
-  public void setDiscountCurrency(String discountCurrency) {
-    this.discountCurrency = discountCurrency;
-  }
-
-  public BigDecimal getTotalAmount() {
-    return totalAmount;
-  }
-
-  public void setTotalAmount(BigDecimal totalAmount) {
-    this.totalAmount = totalAmount;
-  }
-
-  public String getTotalCurrency() {
-    return totalCurrency;
-  }
-
-  public void setTotalCurrency(String totalCurrency) {
-    this.totalCurrency = totalCurrency;
-  }
-
   public OrderJPAEntity() {}
 
   public OrderJPAEntity(
@@ -228,16 +164,11 @@ public class OrderJPAEntity implements Serializable {
     this.totalCurrency = totalCurrency;
   }
 
-  /**
-   * Converte a entidade JPA para a entidade de dominio
-   */
   public static OrderJPAEntity toJPAEntity(final Order order) {
-    // Converte o Domain Entity (OrderItem) para o JPA Entity (OrderItemJPAEntity)
     Set<OrderItemJPAEntity> orderItems = order.getItems().stream()
       .map(OrderItemJPAEntity::toJPAEntity)
       .collect(Collectors.toSet());
 
-    // Gera o objeto OrderJPA
     final var orderJpa = new OrderJPAEntity(
       order.getId().getValue(),
       order.getActive(),
@@ -260,15 +191,12 @@ public class OrderJPAEntity implements Serializable {
     return orderJpa;
   }
 
-  /**
-   * Converte a entidade de domínio para entidade JPA
-   */
   public static Order toAggregate(final OrderJPAEntity entity) {
     Set<OrderItem> orderItems = entity.items.stream()
-      .map((orderItem) -> OrderItemJPAEntity.toAggregate(orderItem))
+      .map(OrderItemJPAEntity::toAggregate)
       .collect(Collectors.toSet());
 
-    final var order = new Order(
+    return new Order(
       new OrderID(entity.id),
       entity.status,
       orderItems,
@@ -278,6 +206,5 @@ public class OrderJPAEntity implements Serializable {
       new Money(entity.discountAmount, entity.discountCurrency),
       new Money(entity.totalAmount, entity.totalCurrency)
     );
-    return order;
   }
 }

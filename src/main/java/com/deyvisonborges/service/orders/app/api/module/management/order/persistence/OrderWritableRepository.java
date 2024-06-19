@@ -41,6 +41,7 @@ public class OrderWritableRepository {
     }
   }
 
+  @Transactional
   public void saveAll(List<Order> orders) {
     try {
       List<OrderJPAEntity> entities = orders.stream()

@@ -7,6 +7,8 @@ import com.deyvisonborges.service.orders.core.domain.pagination.Pagination;
 import com.deyvisonborges.service.orders.core.modules.management.order.Order;
 import com.deyvisonborges.service.orders.core.modules.management.order.OrderPaginationQuery;
 
+import java.util.List;
+
 @Service
 public class ListOrdersQueryHandler {
   private final OrderReadableRepository repository;
@@ -15,7 +17,8 @@ public class ListOrdersQueryHandler {
     this.repository = repository;
   }
   
-  public Pagination<Order> handle(final OrderPaginationQuery query) {
-    return this.repository.findAll(query);
+  public List<ListOrdersQueryOutput> handle(final OrderPaginationQuery query) {
+    return this.repository.findAll(query)
+      .stream().map(ListOrdersQueryOutput::from).toList();
   }
 }

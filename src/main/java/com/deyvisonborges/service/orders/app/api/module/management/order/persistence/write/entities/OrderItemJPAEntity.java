@@ -65,22 +65,6 @@ public class OrderItemJPAEntity implements Serializable {
     return updatedAt;
   }
 
-  public String getProductId() {
-    return productId;
-  }
-
-  public BigDecimal getPriceAmount() {
-    return priceAmount;
-  }
-
-  public String getPriceCurrency() {
-    return priceCurrency;
-  }
-
-  public int getQuantity() {
-    return quantity;
-  }
-
   public OrderJPAEntity getOrder() {
     return order;
   }
@@ -130,7 +114,7 @@ public class OrderItemJPAEntity implements Serializable {
 
   public static Set<OrderItem> toAggregateSet(final Set<OrderItemJPAEntity> items) {
     return items.stream()
-      .map((orderItem) -> OrderItemJPAEntity.toAggregate(orderItem))
+      .map(OrderItemJPAEntity::toAggregate)
       .collect(Collectors.toSet());
   }
 
