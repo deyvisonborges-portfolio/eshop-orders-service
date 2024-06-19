@@ -1,10 +1,12 @@
 package com.deyvisonborges.service.orders.app.api.module.management.order.persistence;
 
+import java.util.List;
 import java.util.Optional;
 
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 
 import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.read.entities.OrderMongoEntity;
@@ -15,10 +17,14 @@ import com.deyvisonborges.service.orders.core.modules.management.order.OrderPagi
 
 @Component
 public class OrderReadableRepository {
+  private final MongoTemplate mongoTemplate;
   private final OrderMongoRepository repository;
+  private final OrderSpecification orderSpecification;
 
-  public OrderReadableRepository(final OrderMongoRepository repository) {
+  public OrderReadableRepository(MongoTemplate mongoTemplate, final OrderMongoRepository repository, final OrderSpecification orderSpecification) {
+    this.mongoTemplate = mongoTemplate;
     this.repository = repository;
+    this.orderSpecification = orderSpecification;
   }
 
   @Transactional
@@ -53,11 +59,18 @@ public class OrderReadableRepository {
         Sort.by(Sort.Direction.fromString(query.direction().name()), query.sort())
       );
 
-      final var pageResult = this.repository.findAll(pageRequest);
-      final var orders = pageResult.stream()
+      final var mongoQuery = orderSpecification.buildQuery(query.terms());
+      
+      mongoQuery.with(pageRequest);
+      
+      List<OrderMongoEntity> allEntities = mongoTemplate.find(mongoQuery, OrderMongoEntity.class);
+      long total = mongoTemplate.count(mongoQuery, OrderMongoEntity.class);
+
+      List<Order> orders = allEntities.stream()
         .map(OrderMongoEntity::toAggregate)
         .toList();
-      return new Pagination<>(query.page(), query.perPage(), pageResult.getTotalElements(), orders);
+
+      return new Pagination<>(query.page(), query.perPage(), total, orders);
     } catch (Exception e) {
       throw new RuntimeException(e.getMessage());
     }

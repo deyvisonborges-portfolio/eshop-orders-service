@@ -4,22 +4,17 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.Map;
 
 @Component
 public class OrderSpecification {
-  public Query buildQuery(final List<String> terms) {
+  public Query buildQuery(final Map<String, String> fieldTerms) {
     final var query = new Query();
-    if (terms != null && !terms.isEmpty()) {
-      for (String term : terms) {
-        if (term != null && !term.isBlank()) {
-          Criteria criteria = new Criteria();
-          criteria.orOperator(
-            Criteria.where("id").regex(term, "i"),
-            Criteria.where("status").regex(term, "i"),
-            Criteria.where("customerId").regex(term, "i")
-          );
-          query.addCriteria(criteria);
+    if (fieldTerms != null && !fieldTerms.isEmpty()) {
+      for (Map.Entry<String, String> entry : fieldTerms.entrySet()) {
+        if (entry.getKey() != null && !entry.getKey().isBlank() &&
+          entry.getValue() != null && !entry.getValue().isBlank()) {
+          query.addCriteria(Criteria.where(entry.getKey()).regex(entry.getValue(), "i"));
         }
       }
     }
