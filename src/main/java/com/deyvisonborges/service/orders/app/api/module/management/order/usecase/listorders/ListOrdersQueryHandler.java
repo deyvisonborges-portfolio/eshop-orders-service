@@ -17,8 +17,7 @@ public class ListOrdersQueryHandler {
     this.repository = repository;
   }
   
-  public List<ListOrdersQueryOutput> handle(final OrderPaginationQuery query) {
-    return this.repository.findAll(query)
-      .stream().map(ListOrdersQueryOutput::from).toList();
+  public Pagination<ListOrdersQueryOutput> handle(final OrderPaginationQuery query) {
+    return this.repository.findAll(query).map(ListOrdersQueryOutput::from);
   }
 }
