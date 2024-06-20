@@ -1,5 +1,6 @@
 package com.deyvisonborges.service.orders.app.api.module.management.order.controllers;
 
+import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.pagination.OrderFilterService;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.deyvisonborges.service.orders.app.api.module.management.order.usecase.createorder.CreateOrderCommand;
@@ -82,22 +83,16 @@ public class OrderController {
   }
 
   @GetMapping
-  public List<?> listOrders(
+  public List<?> listAllOrdersWithPaginationAndFilter(
     @RequestParam(name = "page", required = false, defaultValue = "0") final int page,
     @RequestParam(name = "size", required = false, defaultValue = "10") final int size,
-    @RequestParam(name = "direction", required = false, defaultValue = "ASCENDANT") final String direction,
-    @RequestParam Map<String, String> search,
-    @RequestParam(name = "sort", required = false, defaultValue = "id") final String sort
+    @RequestParam(name = "direction", required = false, defaultValue = "ASC") final String direction,
+    @RequestParam(name = "sort", required = false, defaultValue = "id") final String sort,
+    @RequestParam(name = "filters", required = false) String filters
   ) {
-    Map<String, String> terms = search.entrySet().stream()
-      .filter(entry -> entry.getKey().startsWith("search"))
-      .map(entry -> entry.getValue().split("="))
-      .collect(Collectors.toMap(parts -> parts[0], parts -> parts[1]));
-
+    final var mappedFilters = OrderFilterService.parseFilters(filters);
     return this.listOrdersQueryHandler.handle(
-      new OrderPaginationQuery(
-        page, size, terms, sort, SearchDirection.from(direction)
-      )
+      new OrderPaginationQuery(page, size, sort, SearchDirection.from(direction), mappedFilters)
     ).items();
   }
 }

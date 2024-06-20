@@ -1,5 +1,7 @@
 package com.deyvisonborges.service.orders.app.api.module.management.order.usecase.listorders;
 
+import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.pagination.OrderFilter;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.OrderReadableRepository;
@@ -18,7 +20,6 @@ public class ListOrdersQueryHandler {
   }
   
   public Pagination<ListOrdersQueryOutput> handle(final OrderPaginationQuery query) {
-//    return this.repository.findAll(query).map(ListOrdersQueryOutput::from);
     return this.repository.findAll(query).map(ListOrdersQueryOutput::from);
   }
 }

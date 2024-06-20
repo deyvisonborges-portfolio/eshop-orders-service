@@ -3,6 +3,7 @@ package com.deyvisonborges.service.orders.app.api.module.management.order.persis
 import java.util.List;
 import java.util.Optional;
 
+import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.pagination.OrderFilterService;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -59,13 +60,13 @@ public class OrderReadableRepository {
         Sort.by(Sort.Direction.fromString(query.direction().name()), query.sort())
       );
 
-      final var mongoQuery = orderSpecification.buildQuery(query.terms());
-      
-      mongoQuery.with(pageRequest);
-      
-      List<OrderMongoEntity> allEntities = mongoTemplate.find(mongoQuery, OrderMongoEntity.class);
+      final var mongoQuery = OrderFilterService
+        .buildQueryFilter(query.filter())
+        .with(pageRequest);
+
       long total = mongoTemplate.count(mongoQuery, OrderMongoEntity.class);
 
+      List<OrderMongoEntity> allEntities = mongoTemplate.find(mongoQuery, OrderMongoEntity.class);
       List<Order> orders = allEntities.stream()
         .map(OrderMongoEntity::toAggregate)
         .toList();
@@ -75,4 +76,5 @@ public class OrderReadableRepository {
       throw new RuntimeException(e.getMessage());
     }
   }
+
 }
