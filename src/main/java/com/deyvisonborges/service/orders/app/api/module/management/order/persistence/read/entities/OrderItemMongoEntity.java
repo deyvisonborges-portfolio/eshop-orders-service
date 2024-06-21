@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.deyvisonborges.service.orders.core.domain.primitives.Money;
 import com.deyvisonborges.service.orders.core.modules.management.order.OrderItem;
 import com.deyvisonborges.service.orders.core.modules.management.order.OrderItemID;
 
@@ -33,14 +32,11 @@ public class OrderItemMongoEntity {
   @Field(name = "product_id")
   private String productId;
 
-  @Field(name = "price_amount", targetType = FieldType.DECIMAL128)
-  private BigDecimal priceAmount;
-
-  @Field(name = "price_currency")
-  private String priceCurrency;
-
+  @Field(name = "price", targetType = FieldType.DECIMAL128)
+  private BigDecimal price;
+  
   private int quantity;
-
+  
   public OrderItemMongoEntity() {}
 
   public OrderItemMongoEntity(
@@ -49,8 +45,7 @@ public class OrderItemMongoEntity {
     final Instant createdAt, 
     final Instant updatedAt, 
     final String productId,
-    final BigDecimal priceAmount, 
-    final String priceCurrency, 
+    final BigDecimal price, 
     final int quantity
   ) {
     this.id = id;
@@ -58,8 +53,7 @@ public class OrderItemMongoEntity {
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
     this.productId = productId;
-    this.priceAmount = priceAmount;
-    this.priceCurrency = priceCurrency;
+    this.price = price;
     this.quantity = quantity;
   }
 
@@ -70,9 +64,9 @@ public class OrderItemMongoEntity {
       orderItem.getCreatedAt(),
       orderItem.getUpdatedAt(),
       orderItem.getProductId(),
-      orderItem.getPrice().getAmount(),
-      orderItem.getPrice().getCurrency(),
-      orderItem.getQuantity());
+      orderItem.getPrice(),
+      orderItem.getQuantity()
+    );
   }
 
   public static OrderItem toAggregate(final OrderItemMongoEntity entity) {
@@ -80,7 +74,7 @@ public class OrderItemMongoEntity {
       new OrderItemID(entity.id),
       entity.productId,
       entity.quantity,
-      new Money(entity.priceAmount, entity.priceCurrency)
+      entity.price
     );
   }
 

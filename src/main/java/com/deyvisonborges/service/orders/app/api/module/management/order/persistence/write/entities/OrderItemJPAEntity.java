@@ -6,7 +6,6 @@ import java.time.Instant;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.deyvisonborges.service.orders.core.domain.primitives.Money;
 import com.deyvisonborges.service.orders.core.modules.management.order.OrderItem;
 import com.deyvisonborges.service.orders.core.modules.management.order.OrderItemID;
 
@@ -36,11 +35,8 @@ public class OrderItemJPAEntity implements Serializable {
   @Column(name = "product_id", nullable = false)
   private String productId;
 
-  @Column(name = "price_amount", nullable = false)
-  private BigDecimal priceAmount;
-
-  @Column(name = "price_currency", nullable = false)
-  private String priceCurrency;
+  @Column(name = "price", nullable = false)
+  private BigDecimal price;
 
   @Column(nullable = false)
   private int quantity;
@@ -77,8 +73,7 @@ public class OrderItemJPAEntity implements Serializable {
     final Instant createdAt, 
     final Instant updatedAt,
     final String productId, 
-    final BigDecimal priceAmount,
-    final String priceCurrency,
+    final BigDecimal price,
     final int quantity
 ) {
     this.id = id;
@@ -86,8 +81,7 @@ public class OrderItemJPAEntity implements Serializable {
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
     this.productId = productId;
-    this.priceAmount = priceAmount;
-    this.priceCurrency = priceCurrency;
+    this.price = price;
     this.quantity = quantity;
   }
 
@@ -98,8 +92,7 @@ public class OrderItemJPAEntity implements Serializable {
       orderItem.getCreatedAt(),
       orderItem.getUpdatedAt(),
       orderItem.getProductId(),
-      orderItem.getPrice().getAmount(),
-      orderItem.getPrice().getCurrency(),
+      orderItem.getPrice(),
       orderItem.getQuantity());
   }
 
@@ -108,7 +101,7 @@ public class OrderItemJPAEntity implements Serializable {
       new OrderItemID(entity.id),
       entity.productId,
       entity.quantity,
-      new Money(entity.priceAmount, entity.priceCurrency)
+      entity.price
     );
   }
 
@@ -118,9 +111,6 @@ public class OrderItemJPAEntity implements Serializable {
       .collect(Collectors.toSet());
   }
 
-  /**
-   * Setters
-   */
   public void setOrder(OrderJPAEntity order) {
     this.order = order;
   }

@@ -1,11 +1,10 @@
 package com.deyvisonborges.service.orders.core.modules.management.order.dto;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.deyvisonborges.service.orders.core.domain.primitives.Money;
-import com.deyvisonborges.service.orders.core.domain.primitives.MoneyDTO;
 import com.deyvisonborges.service.orders.core.modules.management.order.OrderItem;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -17,13 +16,13 @@ public record OrderItemDTO(
   Instant updatedAt,
   String productId,
   int quantity,
-  MoneyDTO price
+  BigDecimal price
 ) {
   public OrderItem toAggregate() {
     return new OrderItem(
       this.productId(), 
       this.quantity(), 
-      new Money(this.price().amount(), this.price().currency())
+      this.price()
     );
   }
 
@@ -35,7 +34,7 @@ public record OrderItemDTO(
       item.getUpdatedAt(),
       item.getProductId(),
       item.getQuantity(),
-      new MoneyDTO(item.getPrice().getAmount(), item.getPrice().getCurrency())
+      item.getPrice()
     );
   }
 

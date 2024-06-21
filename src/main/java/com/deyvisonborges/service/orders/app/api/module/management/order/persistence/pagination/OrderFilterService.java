@@ -1,6 +1,5 @@
 package com.deyvisonborges.service.orders.app.api.module.management.order.persistence.pagination;
 
-import com.deyvisonborges.service.orders.core.modules.management.order.OrderStatus;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;

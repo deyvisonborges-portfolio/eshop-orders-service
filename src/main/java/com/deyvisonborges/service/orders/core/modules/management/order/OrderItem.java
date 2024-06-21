@@ -1,19 +1,19 @@
 package com.deyvisonborges.service.orders.core.modules.management.order;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 
 import com.deyvisonborges.service.orders.core.domain.Entity;
-import com.deyvisonborges.service.orders.core.domain.primitives.Money;
 
 public class OrderItem extends Entity<OrderItemID> {
   private String productId;
   private int quantity;
-  private Money price;
+  private BigDecimal price;
 
   public OrderItem(
     final String productId,
     final int quantity,
-    final Money price
+    final BigDecimal price
   ) {
     super(
       OrderItemID.generate(OrderItemID.class), 
@@ -31,7 +31,7 @@ public class OrderItem extends Entity<OrderItemID> {
     final OrderItemID id,
     final String productId,
     final int quantity,
-    final Money price
+    final BigDecimal price
   ) {
     super(
       new OrderItemID(id.getValue()), 
@@ -73,7 +73,7 @@ public class OrderItem extends Entity<OrderItemID> {
     return this.quantity;
   }
 
-  public Money getPrice() {
+  public BigDecimal getPrice() {
     return this.price;
   }
   

@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.deyvisonborges.service.orders.core.domain.primitives.Money;
+import com.deyvisonborges.service.orders.core.modules.management.order.Currency;
 import com.deyvisonborges.service.orders.core.modules.management.order.Order;
 import com.deyvisonborges.service.orders.core.modules.management.order.OrderID;
 import com.deyvisonborges.service.orders.core.modules.management.order.OrderItem;
@@ -48,29 +48,19 @@ public class OrderJPAEntity implements Serializable {
   @Column(name = "customer_id", nullable = false)
   private String customerId;
 
-  @Column(name = "shipping_fee_amount", nullable = false)
-  private BigDecimal shippingFeeAmount;
+  @Column(name = "shipping_fee", nullable = false)
+  private BigDecimal shippingFee;
 
-  @Column(name = "shipping_fee_currency", nullable = false)
-  private String shippingFeeCurrency;
+  @Column(name = "subtotal", nullable = false)
+  private BigDecimal subTotal;
 
-  @Column(name = "subtotal_amount", nullable = false)
-  private BigDecimal subTotalAmount;
+  @Column(name = "discount", nullable = false)
+  private BigDecimal discount;
 
-  @Column(name = "subtotal_currency", nullable = false)
-  private String subTotalCurrency;
+  @Column(name = "total", nullable = false)
+  private BigDecimal total;
 
-  @Column(name = "discount_amount", nullable = false)
-  private BigDecimal discountAmount;
-
-  @Column(name = "discount_currency", nullable = false)
-  private String discountCurrency;
-
-  @Column(name = "total_amount", nullable = false)
-  private BigDecimal totalAmount;
-
-  @Column(name = "total_currency", nullable = false)
-  private String totalCurrency;
+  private Currency currency;
 
   public String getId() {
     return id;
@@ -128,6 +118,14 @@ public class OrderJPAEntity implements Serializable {
     this.customerId = customerId;
   }
 
+  public Currency getCurrency() {
+    return this.currency;
+  }
+
+  public void setCurrency(Currency currency) {
+    this.currency = currency;
+  }
+
   public OrderJPAEntity() {}
 
   public OrderJPAEntity(
@@ -138,14 +136,11 @@ public class OrderJPAEntity implements Serializable {
     final OrderStatus status,
     final Set<OrderItemJPAEntity> items,
     final String customerId,
-    final BigDecimal subTotalAmount,
-    final String subTotalCurrency,
-    final BigDecimal shippingFeeAmount,
-    final String shippingFeeCurrency,
-    final BigDecimal discountAmount,
-    final String discountCurrency,
-    final BigDecimal totalAmount,
-    final String totalCurrency
+    final BigDecimal subTotal,
+    final BigDecimal shippingFee,
+    final BigDecimal discount,
+    final BigDecimal total,
+    final Currency currency
   ) {
     this.id = id;
     this.active = active;
@@ -154,14 +149,11 @@ public class OrderJPAEntity implements Serializable {
     this.status = status;
     this.items = items;
     this.customerId = customerId;
-    this.subTotalAmount = subTotalAmount;
-    this.subTotalCurrency = subTotalCurrency;
-    this.shippingFeeAmount = shippingFeeAmount;
-    this.shippingFeeCurrency = shippingFeeCurrency;
-    this.discountAmount = discountAmount;
-    this.discountCurrency = discountCurrency;
-    this.totalAmount = totalAmount;
-    this.totalCurrency = totalCurrency;
+    this.subTotal = subTotal;
+    this.shippingFee = shippingFee;
+    this.discount = discount;
+    this.total = total;
+    this.currency = currency;
   }
 
   public static OrderJPAEntity toJPAEntity(final Order order) {
@@ -177,14 +169,11 @@ public class OrderJPAEntity implements Serializable {
       order.getStatus(),
       orderItems,
       order.getCustomerId(),
-      order.getSubTotal().getAmount(),
-      order.getSubTotal().getCurrency(),
-      order.getShippingFee().getAmount(),
-      order.getShippingFee().getCurrency(),
-      order.getDiscount().getAmount(),
-      order.getDiscount().getCurrency(),
-      order.getTotal().getAmount(),
-      order.getTotal().getCurrency()
+      order.getSubTotal(),
+      order.getShippingFee(),
+      order.getDiscount(),
+      order.getTotal(),
+      order.getCurrency()
     );
 
     orderItems.forEach(item -> item.setOrder(orderJpa));
@@ -201,11 +190,12 @@ public class OrderJPAEntity implements Serializable {
       entity.status,
       orderItems,
       entity.customerId,
-      new Money(entity.subTotalAmount, entity.subTotalCurrency),
-      new Money(entity.shippingFeeAmount, entity.shippingFeeCurrency),
-      new Money(entity.discountAmount, entity.discountCurrency)
+      entity.shippingFee,
+      entity.discount,
+      entity.currency
     );
-    order.setTotal(new Money(entity.totalAmount, entity.totalCurrency));
+    order.setSubTotal(entity.subTotal);
+    order.setTotal(entity.total);
     return order;
   }
 }

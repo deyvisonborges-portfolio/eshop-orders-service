@@ -1,35 +1,36 @@
 package com.deyvisonborges.service.orders.core.modules.management.order;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Set;
 
 import com.deyvisonborges.service.orders.core.domain.AggregateRoot;
-import com.deyvisonborges.service.orders.core.domain.primitives.Money;
 
 public class Order extends AggregateRoot<OrderID> {
   private OrderStatus status;
   private Set<OrderItem> items;
   private String customerId;
-  private Money subTotal;
-  private Money shippingFee;
-  private Money discount;
-  private Money total;
+  private BigDecimal shippingFee;
+  private BigDecimal discount;
+  private BigDecimal subTotal;
+  private BigDecimal total;
+  private Currency currency;
 
   public Order(
     final OrderStatus status,
     final Set<OrderItem> items,
     final String customerId,
-    final Money subTotal,
-    final Money shippingFee,
-    final Money discount
+    final BigDecimal shippingFee,
+    final BigDecimal discount,
+    final Currency currency
   ) {
     super(OrderID.generate(OrderID.class), true, Instant.now(), Instant.now());
     this.status = status;
     this.items = items;
     this.customerId = customerId;
-    this.subTotal = subTotal;
     this.shippingFee = shippingFee;
     this.discount = discount;
+    this.currency = currency;
   }
 
   public Order(
@@ -37,34 +38,35 @@ public class Order extends AggregateRoot<OrderID> {
     final OrderStatus status,
     final Set<OrderItem> items,
     final String customerId,
-    final Money subTotal,
-    final Money shippingFee,
-    final Money discount
+    final BigDecimal shippingFee,
+    final BigDecimal discount,
+    final Currency currency
   ) {
     super(id, true, Instant.now(), Instant.now());
     this.status = status;
     this.items = items;
     this.customerId = customerId;
-    this.subTotal = subTotal;
     this.shippingFee = shippingFee;
     this.discount = discount;
+    this.currency = currency;
   }
 
   public static Order factory(
     final OrderStatus status,
     final Set<OrderItem> items,
     final String customerId,
-    final Money subTotal,
-    final Money shippingFee,
-    final Money discount
+    final BigDecimal subTotal,
+    final BigDecimal shippingFee,
+    final BigDecimal discount,
+    final Currency currency
   ){
     return new Order(
       status, 
       items, 
       customerId, 
-      subTotal, 
       shippingFee, 
-      discount
+      discount,
+      currency
     );
   }
 
@@ -100,20 +102,26 @@ public class Order extends AggregateRoot<OrderID> {
     return customerId;
   }
 
-  public Money getSubTotal() {
+  public BigDecimal getSubTotal() {
+    calculateSubTotal();
     return subTotal;
   }
 
-  public Money getShippingFee() {
+  public BigDecimal getShippingFee() {
     return shippingFee;
   }
 
-  public Money getDiscount() {
+  public BigDecimal getDiscount() {
     return discount;
   }
 
-  public Money getTotal() {
+  public BigDecimal getTotal() {
+    calculateTotal();
     return total;
+  }
+
+  public Currency getCurrency() {
+    return this.currency;
   }
 
   public void setStatus(OrderStatus status) {
@@ -128,19 +136,36 @@ public class Order extends AggregateRoot<OrderID> {
     this.customerId = customerId;
   }
 
-  public void setSubTotal(Money subTotal) {
+  public void setSubTotal(BigDecimal subTotal) {
     this.subTotal = subTotal;
   }
 
-  public void setShippingFee(Money shippingFee) {
+  public void setShippingFee(BigDecimal shippingFee) {
     this.shippingFee = shippingFee;
   }
 
-  public void setDiscount(Money discount) {
+  public void setDiscount(BigDecimal discount) {
     this.discount = discount;
   }
 
-  public void setTotal(Money total) {
+  public void setTotal(BigDecimal total) {
     this.total = total;
+  }
+
+  public void setCurrency(final Currency currency) {
+    this.currency = currency;
+  }
+
+  public void calculateSubTotal() {
+    this.subTotal = items.stream()
+      .map(item -> item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
+      .reduce(BigDecimal.ZERO, BigDecimal::add);
+  }
+
+  public void calculateTotal() {
+    if (subTotal == null) {
+      calculateSubTotal();
+    }
+    this.total = subTotal.add(shippingFee).subtract(discount);
   }
 }

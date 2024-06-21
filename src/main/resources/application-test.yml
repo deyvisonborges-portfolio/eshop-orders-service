@@ -9,6 +9,14 @@ h2:
   url: jdbc:h2:mem:orders_db;MODE=MYSQL;DATABASE_TO_LOWER=TRUE
 
 spring:
+  jpa:
+      properties:
+        hibernate:
+          dialect: org.hibernate.dialect.PostgreSQLDialect
+      open-in-view: false
+      show-sql: false
+      hibernate:
+        ddl-auto: create-drop
   datasource:
     url: ${h2.url}
     username: test
@@ -21,7 +29,7 @@ spring:
   application:
     name: eshop-orders-service
   flyway:
-    enabled: true
+    enabled: false
   rabbitmq:
     host: localhost
     port: 5672

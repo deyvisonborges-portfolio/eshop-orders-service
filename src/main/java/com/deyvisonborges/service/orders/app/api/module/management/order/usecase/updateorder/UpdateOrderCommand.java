@@ -1,8 +1,9 @@
 package com.deyvisonborges.service.orders.app.api.module.management.order.usecase.updateorder;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
-import com.deyvisonborges.service.orders.core.domain.primitives.MoneyDTO;
+import com.deyvisonborges.service.orders.core.modules.management.order.Currency;
 import com.deyvisonborges.service.orders.core.modules.management.order.OrderStatus;
 import com.deyvisonborges.service.orders.core.modules.management.order.dto.OrderItemDTO;
 
@@ -11,8 +12,9 @@ public record UpdateOrderCommand(
   Set<OrderItemDTO> items,
   String customerId,
   Set<String> paymentsIds,
-  MoneyDTO subTotal,
-  MoneyDTO shippingFee,
-  MoneyDTO discount,
-  MoneyDTO total
+  BigDecimal subTotal,
+  BigDecimal shippingFee,
+  BigDecimal discount,
+  BigDecimal total,
+  Currency currency
 ) {}

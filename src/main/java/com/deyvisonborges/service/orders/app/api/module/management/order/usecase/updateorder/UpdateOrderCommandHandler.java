@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.OrderWritableRepository;
 import com.deyvisonborges.service.orders.app.exception.NotFoundException;
-import com.deyvisonborges.service.orders.core.domain.primitives.Money;
 import com.deyvisonborges.service.orders.core.modules.management.order.Order;
 import com.deyvisonborges.service.orders.core.modules.management.order.dto.OrderItemDTO;
 
@@ -32,12 +31,12 @@ public class UpdateOrderCommandHandler {
     if (command.customerId() != null)
       order.setCustomerId(command.customerId());
     if (command.subTotal() != null)
-      order.setSubTotal(new Money(command.subTotal().amount(), command.subTotal().currency()));
+      order.setSubTotal(command.subTotal());
     if (command.shippingFee() != null)
-      order.setShippingFee(new Money(command.shippingFee().amount(), command.shippingFee().currency()));
+      order.setShippingFee(command.shippingFee());
     if (command.discount() != null)
-      order.setDiscount(new Money(command.discount().amount(), command.discount().currency()));
+      order.setDiscount(command.discount());
     if (command.total() != null)
-      order.setTotal(new Money(command.total().amount(), command.total().currency()));
+      order.setTotal(command.total());
   }
 }

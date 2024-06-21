@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.deyvisonborges.service.orders.core.domain.primitives.Money;
+import com.deyvisonborges.service.orders.core.modules.management.order.Currency;
 import com.deyvisonborges.service.orders.core.modules.management.order.Order;
 import com.deyvisonborges.service.orders.core.modules.management.order.OrderID;
 import com.deyvisonborges.service.orders.core.modules.management.order.OrderStatus;
@@ -22,6 +22,7 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 public class OrderMongoEntity implements Serializable{
   @MongoId
   private String id;
+  
   private Boolean active;
 
   @Field(name = "created_at")
@@ -37,29 +38,19 @@ public class OrderMongoEntity implements Serializable{
   @Field(name = "customer_id")
   private String customerId;
 
-  @Field(name = "shipping_fee_amount")
-  private BigDecimal shippingFeeAmount;
+  @Field(name = "shipping_fee")
+  private BigDecimal shippingFee;
 
-  @Field(name = "shipping_fee_currency")
-  private String shippingFeeCurrency;
+  @Field(name = "subtotal", targetType = FieldType.DECIMAL128)
+  private BigDecimal subTotal;
 
-  @Field(name = "subtotal_amount", targetType = FieldType.DECIMAL128)
-  private BigDecimal subTotalAmount;
+  @Field(name = "discount", targetType = FieldType.DECIMAL128)
+  private BigDecimal discount;
 
-  @Field(name = "subtotal_currency")
-  private String subTotalCurrency;
+  @Field(name = "total", targetType = FieldType.DECIMAL128)
+  private BigDecimal total;
 
-  @Field(name = "discount_amount", targetType = FieldType.DECIMAL128)
-  private BigDecimal discountAmount;
-
-  @Field(name = "discount_currency")
-  private String discountCurrency;
-
-  @Field(name = "total_amount", targetType = FieldType.DECIMAL128)
-  private BigDecimal totalAmount;
-
-  @Field(name = "total_currency")
-  private String totalCurrency;
+  private Currency currency;
 
   public OrderMongoEntity() {}
 
@@ -71,14 +62,11 @@ public class OrderMongoEntity implements Serializable{
     final OrderStatus status,
     final Set<OrderItemMongoEntity> items, 
     final String customerId, 
-    final BigDecimal shippingFeeAmount, 
-    final String shippingFeeCurrency,
-    final BigDecimal subTotalAmount, 
-    final String subTotalCurrency, 
-    final BigDecimal discountAmount, 
-    final String discountCurrency,
-    final BigDecimal totalAmount, 
-    final String totalCurrency
+    final BigDecimal shippingFee, 
+    final BigDecimal subTotal, 
+    final BigDecimal discount, 
+    final BigDecimal total, 
+    final Currency currency
   ) {
     this.id = id;
     this.active = active;
@@ -87,14 +75,11 @@ public class OrderMongoEntity implements Serializable{
     this.status = status;
     this.items = items;
     this.customerId = customerId;
-    this.shippingFeeAmount = shippingFeeAmount;
-    this.shippingFeeCurrency = shippingFeeCurrency;
-    this.subTotalAmount = subTotalAmount;
-    this.subTotalCurrency = subTotalCurrency;
-    this.discountAmount = discountAmount;
-    this.discountCurrency = discountCurrency;
-    this.totalAmount = totalAmount;
-    this.totalCurrency = totalCurrency;
+    this.shippingFee = shippingFee;
+    this.subTotal = subTotal;
+    this.discount = discount;
+    this.total = total;
+    this.currency = currency;
   }
 
   public static Order toAggregate(final OrderMongoEntity entity) {
@@ -103,11 +88,12 @@ public class OrderMongoEntity implements Serializable{
       entity.status,
       OrderItemMongoEntity.toAggregateSet(entity.items),
       entity.customerId,
-      new Money(entity.subTotalAmount, entity.subTotalCurrency),
-      new Money(entity.shippingFeeAmount, entity.shippingFeeCurrency),
-      new Money(entity.discountAmount, entity.discountCurrency)
+      entity.shippingFee,
+      entity.discount,
+      entity.currency
     );
-    order.setTotal(new Money(entity.totalAmount, entity.totalCurrency));
+    order.setSubTotal(entity.subTotal);
+    order.setTotal(entity.total);
     return order;
   }
 
@@ -124,14 +110,11 @@ public class OrderMongoEntity implements Serializable{
       order.getStatus(),
       orderItems,
       order.getCustomerId(),
-      order.getSubTotal().getAmount(),
-      order.getSubTotal().getCurrency(),
-      order.getShippingFee().getAmount(),
-      order.getShippingFee().getCurrency(),
-      order.getDiscount().getAmount(),
-      order.getDiscount().getCurrency(),
-      order.getTotal().getAmount(),
-      order.getTotal().getCurrency()
+      order.getShippingFee(),
+      order.getSubTotal(),
+      order.getDiscount(),
+      order.getTotal(),
+      order.getCurrency()
     );
   }
 

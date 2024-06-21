@@ -1,9 +1,10 @@
 package com.deyvisonborges.service.orders.core.modules.management.order.dto;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Set;
 
-import com.deyvisonborges.service.orders.core.domain.primitives.MoneyDTO;
+import com.deyvisonborges.service.orders.core.modules.management.order.Currency;
 import com.deyvisonborges.service.orders.core.modules.management.order.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -16,8 +17,9 @@ public record OrderDTO(
   OrderStatus status,
   Set<OrderItemDTO> items,
   String customerId,
-  MoneyDTO subTotal,
-  MoneyDTO shippingFee,
-  MoneyDTO discount,
-  MoneyDTO total
+  BigDecimal shippingFee,
+  BigDecimal discount,
+  BigDecimal subTotal,
+  BigDecimal total,
+  Currency currency
 ) {}
