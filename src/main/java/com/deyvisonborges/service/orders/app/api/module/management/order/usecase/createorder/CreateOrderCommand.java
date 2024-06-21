@@ -33,8 +33,6 @@ public record CreateOrderCommand(
       command.discount(),
       command.currency()
     );
-    order.setTotal(order.getTotal());
-    order.setSubTotal(order.getSubTotal());
     return order;
   }
 }
