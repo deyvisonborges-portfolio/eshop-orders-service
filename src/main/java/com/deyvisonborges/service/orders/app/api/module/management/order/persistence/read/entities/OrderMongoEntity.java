@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.deyvisonborges.service.orders.core.domain.primitives.Money;
@@ -15,12 +14,13 @@ import com.deyvisonborges.service.orders.core.modules.management.order.Order;
 import com.deyvisonborges.service.orders.core.modules.management.order.OrderID;
 import com.deyvisonborges.service.orders.core.modules.management.order.OrderStatus;
 
-import jakarta.persistence.Id;
 import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.FieldType;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
 @Document(collection = "orders")
 public class OrderMongoEntity implements Serializable{
-  @Id
+  @MongoId
   private String id;
   private Boolean active;
 
@@ -43,19 +43,19 @@ public class OrderMongoEntity implements Serializable{
   @Field(name = "shipping_fee_currency")
   private String shippingFeeCurrency;
 
-  @Field(name = "subtotal_amount")
+  @Field(name = "subtotal_amount", targetType = FieldType.DECIMAL128)
   private BigDecimal subTotalAmount;
 
   @Field(name = "subtotal_currency")
   private String subTotalCurrency;
 
-  @Field(name = "discount_amount")
+  @Field(name = "discount_amount", targetType = FieldType.DECIMAL128)
   private BigDecimal discountAmount;
 
   @Field(name = "discount_currency")
   private String discountCurrency;
 
-  @Field(name = "total_amount")
+  @Field(name = "total_amount", targetType = FieldType.DECIMAL128)
   private BigDecimal totalAmount;
 
   @Field(name = "total_currency")
@@ -98,16 +98,17 @@ public class OrderMongoEntity implements Serializable{
   }
 
   public static Order toAggregate(final OrderMongoEntity entity) {
-    return new Order(
+    final var order =  new Order(
       new OrderID(entity.id),
       entity.status,
       OrderItemMongoEntity.toAggregateSet(entity.items),
       entity.customerId,
       new Money(entity.subTotalAmount, entity.subTotalCurrency),
       new Money(entity.shippingFeeAmount, entity.shippingFeeCurrency),
-      new Money(entity.discountAmount, entity.discountCurrency),
-      new Money(entity.totalAmount, entity.totalCurrency)
+      new Money(entity.discountAmount, entity.discountCurrency)
     );
+    order.setTotal(new Money(entity.totalAmount, entity.totalCurrency));
+    return order;
   }
 
   public static OrderMongoEntity toMongoEntity(final Order order) {

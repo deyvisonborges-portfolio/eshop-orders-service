@@ -1,3 +1,4 @@
+package com.deyvisonborges.service.orders.app.api.module.management.order.events.order.publishers;
 // package com.deyvisonborges.service.orders.app.messaging.events.order.publishers;
 
 // import org.springframework.stereotype.Component;

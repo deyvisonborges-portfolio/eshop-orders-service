@@ -3,9 +3,9 @@ package com.deyvisonborges.service.orders.app.api.module.management.order.saga.l
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
+import com.deyvisonborges.service.orders.app.api.module.management.order.events.order.OrderEventConstants;
+import com.deyvisonborges.service.orders.app.api.module.management.order.events.order.OrderEventMessage;
 import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.OrderWritableRepository;
-import com.deyvisonborges.service.orders.app.messaging.events.order.OrderEventConstants;
-import com.deyvisonborges.service.orders.app.messaging.events.order.OrderEventMessage;
 
 @Component
 public class OrderCompensationEventListener {

@@ -196,15 +196,16 @@ public class OrderJPAEntity implements Serializable {
       .map(OrderItemJPAEntity::toAggregate)
       .collect(Collectors.toSet());
 
-    return new Order(
+    final var order = new Order(
       new OrderID(entity.id),
       entity.status,
       orderItems,
       entity.customerId,
       new Money(entity.subTotalAmount, entity.subTotalCurrency),
       new Money(entity.shippingFeeAmount, entity.shippingFeeCurrency),
-      new Money(entity.discountAmount, entity.discountCurrency),
-      new Money(entity.totalAmount, entity.totalCurrency)
+      new Money(entity.discountAmount, entity.discountCurrency)
     );
+    order.setTotal(new Money(entity.totalAmount, entity.totalCurrency));
+    return order;
   }
 }

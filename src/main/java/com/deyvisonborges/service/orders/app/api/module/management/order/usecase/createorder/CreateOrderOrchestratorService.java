@@ -2,10 +2,10 @@ package com.deyvisonborges.service.orders.app.api.module.management.order.usecas
 
 import org.springframework.stereotype.Service;
 
+import com.deyvisonborges.service.orders.app.api.module.management.order.events.order.OrderEvent;
+import com.deyvisonborges.service.orders.app.api.module.management.order.events.order.OrderEventConstants;
+import com.deyvisonborges.service.orders.app.api.module.management.order.events.order.OrderEventMessage;
 import com.deyvisonborges.service.orders.app.messaging.client.rabbitmq.RabbitmqEventEmitter;
-import com.deyvisonborges.service.orders.app.messaging.events.order.OrderEvent;
-import com.deyvisonborges.service.orders.app.messaging.events.order.OrderEventConstants;
-import com.deyvisonborges.service.orders.app.messaging.events.order.OrderEventMessage;
 
 @Service
 public class CreateOrderOrchestratorService {

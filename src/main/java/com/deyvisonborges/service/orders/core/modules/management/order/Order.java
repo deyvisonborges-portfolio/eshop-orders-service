@@ -21,8 +21,7 @@ public class Order extends AggregateRoot<OrderID> {
     final String customerId,
     final Money subTotal,
     final Money shippingFee,
-    final Money discount,
-    final Money total
+    final Money discount
   ) {
     super(OrderID.generate(OrderID.class), true, Instant.now(), Instant.now());
     this.status = status;
@@ -31,7 +30,6 @@ public class Order extends AggregateRoot<OrderID> {
     this.subTotal = subTotal;
     this.shippingFee = shippingFee;
     this.discount = discount;
-    this.total = total;
   }
 
   public Order(
@@ -41,8 +39,7 @@ public class Order extends AggregateRoot<OrderID> {
     final String customerId,
     final Money subTotal,
     final Money shippingFee,
-    final Money discount,
-    final Money total
+    final Money discount
   ) {
     super(id, true, Instant.now(), Instant.now());
     this.status = status;
@@ -51,7 +48,6 @@ public class Order extends AggregateRoot<OrderID> {
     this.subTotal = subTotal;
     this.shippingFee = shippingFee;
     this.discount = discount;
-    this.total = total;
   }
 
   public static Order factory(
@@ -60,8 +56,7 @@ public class Order extends AggregateRoot<OrderID> {
     final String customerId,
     final Money subTotal,
     final Money shippingFee,
-    final Money discount,
-    final Money total
+    final Money discount
   ){
     return new Order(
       status, 
@@ -69,8 +64,7 @@ public class Order extends AggregateRoot<OrderID> {
       customerId, 
       subTotal, 
       shippingFee, 
-      discount, 
-      total
+      discount
     );
   }
 

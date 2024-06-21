@@ -5,18 +5,21 @@ import java.time.Instant;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.deyvisonborges.service.orders.core.domain.primitives.Money;
 import com.deyvisonborges.service.orders.core.modules.management.order.OrderItem;
 import com.deyvisonborges.service.orders.core.modules.management.order.OrderItemID;
 
-import jakarta.persistence.Id;
 import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.FieldType;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
 @Document(collection = "order_items")
 public class OrderItemMongoEntity {
-  @Id
+  @MongoId
+  @Indexed(name = "id")
   private String id;  
 
   private Boolean active;
@@ -30,7 +33,7 @@ public class OrderItemMongoEntity {
   @Field(name = "product_id")
   private String productId;
 
-  @Field(name = "price_amount")
+  @Field(name = "price_amount", targetType = FieldType.DECIMAL128)
   private BigDecimal priceAmount;
 
   @Field(name = "price_currency")

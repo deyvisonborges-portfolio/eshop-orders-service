@@ -1,3 +1,4 @@
+package com.deyvisonborges.service.orders.app.api.module.management.order.events.order.listeners;
 // package com.deyvisonborges.service.orders.app.messaging.events.order.listeners;
 
 // import org.springframework.amqp.rabbit.annotation.Exchange;

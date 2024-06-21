@@ -1,4 +1,4 @@
-package com.deyvisonborges.service.orders.app.api.module.management.order.controllers;
+package com.deyvisonborges.service.orders.app.api.module.management.order;
 
 import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.pagination.OrderFilterService;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,14 +9,12 @@ import com.deyvisonborges.service.orders.app.api.module.management.order.usecase
 import com.deyvisonborges.service.orders.app.api.module.management.order.usecase.getorderbyid.GetOrderByIdOutput;
 import com.deyvisonborges.service.orders.app.api.module.management.order.usecase.getorderbyid.GetOrderByIdQueryHandler;
 import com.deyvisonborges.service.orders.app.api.module.management.order.usecase.listorders.ListOrdersQueryHandler;
+import com.deyvisonborges.service.orders.app.api.module.management.order.usecase.listorders.ListOrdersQueryOutput;
 import com.deyvisonborges.service.orders.app.api.module.management.order.usecase.updateorder.UpdateOrderCommand;
 import com.deyvisonborges.service.orders.app.api.module.management.order.usecase.updateorder.UpdateOrderCommandHandler;
+import com.deyvisonborges.service.orders.core.domain.pagination.Pagination;
 import com.deyvisonborges.service.orders.core.domain.pagination.SearchDirection;
 import com.deyvisonborges.service.orders.core.modules.management.order.OrderPaginationQuery;
-
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -83,16 +81,16 @@ public class OrderController {
   }
 
   @GetMapping
-  public List<?> listAllOrdersWithPaginationAndFilter(
+  public Pagination<ListOrdersQueryOutput>  listAllOrdersWithPaginationAndFilter(
     @RequestParam(name = "page", required = false, defaultValue = "0") final int page,
     @RequestParam(name = "size", required = false, defaultValue = "10") final int size,
     @RequestParam(name = "direction", required = false, defaultValue = "ASC") final String direction,
     @RequestParam(name = "sort", required = false, defaultValue = "id") final String sort,
-    @RequestParam(name = "filters", required = false) String filters
+    @RequestParam(name = "filters", required = false) final String filters
   ) {
     final var mappedFilters = OrderFilterService.parseFilters(filters);
     return this.listOrdersQueryHandler.handle(
       new OrderPaginationQuery(page, size, sort, SearchDirection.from(direction), mappedFilters)
-    ).items();
+    );
   }
 }

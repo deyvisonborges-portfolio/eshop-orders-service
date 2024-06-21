@@ -1,11 +1,18 @@
 package com.deyvisonborges.service.orders.app.api.module.management.order.usecase.createorder;
 
+import java.math.BigDecimal;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 
+import com.deyvisonborges.service.orders.app.api.module.management.order.events.order.OrderEvent;
+import com.deyvisonborges.service.orders.app.api.module.management.order.events.order.OrderEventMessage;
 import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.OrderWritableRepository;
-import com.deyvisonborges.service.orders.app.messaging.events.order.OrderEvent;
-import com.deyvisonborges.service.orders.app.messaging.events.order.OrderEventMessage;
 import com.deyvisonborges.service.orders.core.domain.cqrs.CommandHandler;
+import com.deyvisonborges.service.orders.core.modules.management.order.dto.OrderItemDTO;
 
 import jakarta.transaction.Transactional;
 
