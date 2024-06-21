@@ -55,12 +55,12 @@ public class Order extends AggregateRoot<OrderID> {
     final OrderStatus status,
     final Set<OrderItem> items,
     final String customerId,
-    final BigDecimal subTotal,
     final BigDecimal shippingFee,
     final BigDecimal discount,
     final Currency currency
   ){
-    return new Order(
+    
+    final var order = new Order(
       status, 
       items, 
       customerId, 
@@ -68,6 +68,18 @@ public class Order extends AggregateRoot<OrderID> {
       discount,
       currency
     );
+
+    final var calculatedSubTotal = items.stream()
+      .map(item -> item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
+      .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+    final var calculatedTotal = calculatedSubTotal
+      .add(shippingFee)
+      .subtract(discount);
+
+    order.setSubTotal(calculatedSubTotal);
+    order.setTotal(calculatedTotal);
+    return order;
   }
 
   @Override
@@ -130,6 +142,8 @@ public class Order extends AggregateRoot<OrderID> {
 
   public void setItems(Set<OrderItem> items) {
     this.items = items;
+    calculateSubTotal();
+    calculateTotal();
   }
 
   public void setCustomerId(String customerId) {
@@ -142,10 +156,12 @@ public class Order extends AggregateRoot<OrderID> {
 
   public void setShippingFee(BigDecimal shippingFee) {
     this.shippingFee = shippingFee;
+    calculateTotal();
   }
 
   public void setDiscount(BigDecimal discount) {
     this.discount = discount;
+    calculateTotal();
   }
 
   public void setTotal(BigDecimal total) {

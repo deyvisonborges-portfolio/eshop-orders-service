@@ -20,12 +20,10 @@ import com.deyvisonborges.service.orders.core.modules.management.order.OrderPagi
 public class OrderReadableRepository {
   private final MongoTemplate mongoTemplate;
   private final OrderMongoRepository repository;
-  private final OrderSpecification orderSpecification;
 
-  public OrderReadableRepository(MongoTemplate mongoTemplate, final OrderMongoRepository repository, final OrderSpecification orderSpecification) {
+  public OrderReadableRepository(MongoTemplate mongoTemplate, final OrderMongoRepository repository) {
     this.mongoTemplate = mongoTemplate;
     this.repository = repository;
-    this.orderSpecification = orderSpecification;
   }
 
   @Transactional

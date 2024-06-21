@@ -14,7 +14,6 @@ public record CreateOrderCommand(
   OrderStatus status,
   Set<OrderItemDTO> items,
   String customerId,
-  BigDecimal subTotal,
   BigDecimal shippingFee,
   BigDecimal discount,
   Currency currency
@@ -28,7 +27,6 @@ public record CreateOrderCommand(
       command.status(), 
       orderItems, 
       command.customerId(), 
-      command.subTotal(), 
       command.shippingFee(), 
       command.discount(),
       command.currency()
