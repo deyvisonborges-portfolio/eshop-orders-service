@@ -1,15 +1,13 @@
 package com.deyvisonborges.service.orders.app.api.module.management.order.saga.listerners;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
-import com.deyvisonborges.service.orders.app.api.module.management.order.events.order.OrderEventConstants;
-import com.deyvisonborges.service.orders.app.api.module.management.order.events.order.OrderEventMessage;
+import com.deyvisonborges.service.orders.app.api.module.management.order.events.OrderEventConstants;
+import com.deyvisonborges.service.orders.app.api.module.management.order.events.OrderEventMessage;
 import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.OrderReadableRepository;
 import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.OrderWritableRepository;
 import com.deyvisonborges.service.orders.app.api.module.management.order.usecase.createorder.CreateOrderOrchestratorService;
@@ -17,8 +15,6 @@ import com.deyvisonborges.service.orders.app.exception.NotFoundException;
 
 @Component
 public class OrderCreatedEventHandler {
-  private final Logger logger = LoggerFactory.getLogger(OrderCreatedEventHandler.class);
-
   private final OrderReadableRepository orderReadableService;
   private final OrderWritableRepository orderWritableRepository;
   private final CreateOrderOrchestratorService createOrderOrchestratorService;
@@ -48,8 +44,6 @@ public class OrderCreatedEventHandler {
         .orElseThrow(() -> new NotFoundException("Order not found in writable repository"));
         
       this.orderReadableService.save(order);
-
-      logger.info("Message consumed: {}", orderEventMessage);
     } catch (Exception e) {
       this.createOrderOrchestratorService.onOrderCreationFailed(orderEventMessage);
     }

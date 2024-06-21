@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.pagination.OrderFilterService;
 import jakarta.transaction.Transactional;
+
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -68,11 +69,20 @@ public class OrderReadableRepository {
       List<Order> orders = allEntities.stream()
         .map(OrderMongoEntity::toAggregate)
         .toList();
-
       return new Pagination<>(query.page(), query.perPage(), total, orders);
     } catch (Exception e) {
       throw new RuntimeException(e.getMessage());
     }
   }
 
+  // TODO: add criteria to return all orders total
+  // public BigDecimal findTotalAllOrdersByCustomerId(final String customerId) {
+  //   final var aggregations = Aggregation.newAggregation(
+  //     Aggregation.match(Criteria.where("customerId").is(customerId)),
+  //     Aggregation.group().sum("total").as("total")
+  //   );
+
+  //   final var result = mongoTemplate.aggregate(aggregations, "orders", Document.class);
+  //   return new BigDecimal(result.getUniqueMappedResult().get("total").toString());
+  // }
 }

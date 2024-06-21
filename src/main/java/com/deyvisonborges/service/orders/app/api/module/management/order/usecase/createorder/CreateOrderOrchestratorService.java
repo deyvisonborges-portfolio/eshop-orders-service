@@ -2,9 +2,9 @@ package com.deyvisonborges.service.orders.app.api.module.management.order.usecas
 
 import org.springframework.stereotype.Service;
 
-import com.deyvisonborges.service.orders.app.api.module.management.order.events.order.OrderEvent;
-import com.deyvisonborges.service.orders.app.api.module.management.order.events.order.OrderEventConstants;
-import com.deyvisonborges.service.orders.app.api.module.management.order.events.order.OrderEventMessage;
+import com.deyvisonborges.service.orders.app.api.module.management.order.events.OrderEvent;
+import com.deyvisonborges.service.orders.app.api.module.management.order.events.OrderEventConstants;
+import com.deyvisonborges.service.orders.app.api.module.management.order.events.OrderEventMessage;
 import com.deyvisonborges.service.orders.app.messaging.client.rabbitmq.RabbitmqEventEmitter;
 
 @Service
@@ -15,8 +15,7 @@ public class CreateOrderOrchestratorService {
     this.eventEmitter = eventEmitter;
   }
 
-  public void initiateOrderCreation(OrderEventMessage orderEventMessage) {
-    // Emite o evento de criação de pedido
+  public void createOrderEvent(OrderEventMessage orderEventMessage) {
     eventEmitter.emit(
       OrderEventConstants.ORDER_EXCHANGE_NAME, 
       OrderEventConstants.ORDER_CREATED_EVENT_ROUTING_KEY,
@@ -25,7 +24,6 @@ public class CreateOrderOrchestratorService {
   }
 
   public void onOrderCreationFailed(OrderEventMessage orderEventMessage) {
-    // Emite um evento de compensação para desfazer a operação de criação na base de escrita
     eventEmitter.emit(
       OrderEventConstants.ORDER_EXCHANGE_NAME, 
       OrderEventConstants.ORDER_COMPENSATION_ROUTING_KEY,

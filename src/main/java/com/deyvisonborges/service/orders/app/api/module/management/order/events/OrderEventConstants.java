@@ -1,4 +1,4 @@
-package com.deyvisonborges.service.orders.app.api.module.management.order.events.order;
+package com.deyvisonborges.service.orders.app.api.module.management.order.events;
 
 public final class OrderEventConstants {
   public static final String ORDER_EXCHANGE_NAME = "order.v1.direct";

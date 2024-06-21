@@ -1,4 +1,4 @@
-package com.deyvisonborges.service.orders.app.api.module.management.order.events.order;
+package com.deyvisonborges.service.orders.app.api.module.management.order.events;
 
 import java.time.Instant;
 import java.util.UUID;

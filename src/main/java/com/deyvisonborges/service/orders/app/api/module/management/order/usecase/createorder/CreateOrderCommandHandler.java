@@ -2,8 +2,8 @@ package com.deyvisonborges.service.orders.app.api.module.management.order.usecas
 
 import org.springframework.stereotype.Service;
 
-import com.deyvisonborges.service.orders.app.api.module.management.order.events.order.OrderEvent;
-import com.deyvisonborges.service.orders.app.api.module.management.order.events.order.OrderEventMessage;
+import com.deyvisonborges.service.orders.app.api.module.management.order.events.OrderEvent;
+import com.deyvisonborges.service.orders.app.api.module.management.order.events.OrderEventMessage;
 import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.OrderWritableRepository;
 import com.deyvisonborges.service.orders.core.domain.cqrs.CommandHandler;
 
@@ -36,7 +36,7 @@ public class CreateOrderCommandHandler implements CommandHandler<Void, CreateOrd
       orderAggregate.getStatus()
     );
 
-    this.createOrderOrchestratorService.initiateOrderCreation(eventMessage);
+    this.createOrderOrchestratorService.createOrderEvent(eventMessage);
     return null;
   }
 }
