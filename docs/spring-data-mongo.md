@@ -18,3 +18,13 @@ A anotação Field é usada para representar um campo em uma coleção. É semel
 A anotação de ID não pertence ao módulo spring-data-mongodb , ela pertence aos dados do spring para amplamente 
 utilizados tanto para spring-data-jpa quanto para spring-data-mongodb . No termo MongoDB, esta anotação indica que um 
 campo deve ser usado como identificador para cada documento.
+
+
+## Criteria
+#### andOperator
+
+- `Como Funciona o andOperator`
+O andOperator permite agrupar vários objetos Criteria de forma que todos os critérios especificados devem ser atendidos. É equivalente à cláusula AND em uma consulta SQL.
+
+- `Exemplo de Uso`
+Vamos considerar um exemplo onde você deseja consultar documentos em uma coleção onde o status é "SHIPPED" e a data do pedido está entre duas datas específicas.
