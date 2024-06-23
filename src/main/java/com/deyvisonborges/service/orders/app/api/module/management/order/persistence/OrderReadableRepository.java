@@ -9,6 +9,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
+// import org.springframework.data.mongodb.core.query.Criteria;
+// import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
 import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.read.entities.OrderMongoEntity;
@@ -74,6 +76,22 @@ public class OrderReadableRepository {
       throw new RuntimeException(e.getMessage());
     }
   }
+
+  // public List<Order> delayedOrders() {
+  //   public List<Order> delayedOrders() {
+  //       Query query = new Query(isDelayed());
+  //       query.with(Sort.by(Sort.Direction.ASC, "createDate"));
+  //       return orders.findAll(query);
+  //   }
+
+  //   public static Criteria isDelayed() {
+  //       Instant date = Instant.now().minus(14, ChronoUnit.DAYS);
+  //       return new Criteria().andOperator(
+  //           Criteria.where("state").is(Status.OPEN),
+  //           Criteria.where("createDate").lt(date)
+  //       );
+  //   }
+  // }
 
   // TODO: add criteria to return all orders total
   // public BigDecimal findTotalAllOrdersByCustomerId(final String customerId) {

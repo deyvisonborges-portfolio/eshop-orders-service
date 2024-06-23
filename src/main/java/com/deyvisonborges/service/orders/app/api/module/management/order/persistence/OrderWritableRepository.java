@@ -29,12 +29,13 @@ public class OrderWritableRepository {
       }
 
       final var orderToSave = OrderJPAEntity.toJPAEntity(order);
-      final var savedOrder = this.jpaRepository.save(orderToSave);
 
+      final var savedOrder = this.jpaRepository.save(orderToSave);
+      
       for (OrderItemJPAEntity item : savedOrder.getItems()) {
         item.setOrder(savedOrder);
       }
-      
+
       this.jpaRepository.save(savedOrder);
     } catch (Exception e) {
       throw new RuntimeException("Fail to save Order on JPA Repository: " + e.getMessage());

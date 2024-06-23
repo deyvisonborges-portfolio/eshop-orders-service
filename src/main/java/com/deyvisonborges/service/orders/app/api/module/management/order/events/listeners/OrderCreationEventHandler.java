@@ -1,4 +1,4 @@
-package com.deyvisonborges.service.orders.app.api.module.management.order.saga.listerners;
+package com.deyvisonborges.service.orders.app.api.module.management.order.events.listeners;
 
 import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
@@ -14,12 +14,12 @@ import com.deyvisonborges.service.orders.app.api.module.management.order.usecase
 import com.deyvisonborges.service.orders.app.exception.NotFoundException;
 
 @Component
-public class OrderCreatedEventHandler {
+public class OrderCreationEventHandler {
   private final OrderReadableRepository orderReadableService;
   private final OrderWritableRepository orderWritableRepository;
   private final CreateOrderOrchestratorService createOrderOrchestratorService;
 
-  public OrderCreatedEventHandler(
+  public OrderCreationEventHandler(
     final OrderReadableRepository orderReadableRepository,
     final OrderWritableRepository orderWritableRepository,
     final CreateOrderOrchestratorService createOrderOrchestratorService
