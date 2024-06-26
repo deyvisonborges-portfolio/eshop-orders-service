@@ -1,51 +1,35 @@
 package com.deyvisonborges.service.orders.app.api.module.management.order.usecase.createorder;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.support.TransactionSynchronization;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 
-import com.deyvisonborges.service.orders.app.api.module.management.order.events.OrderEvent;
-import com.deyvisonborges.service.orders.app.api.module.management.order.events.OrderEventMessage;
+import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.OrderReadableRepository;
 import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.OrderWritableRepository;
 import com.deyvisonborges.service.orders.core.domain.cqrs.CommandHandler;
+import com.deyvisonborges.service.orders.core.modules.management.order.Order;
+
 import jakarta.transaction.Transactional;
 
 @Service
-public class CreateOrderCommandHandler implements CommandHandler<Void, CreateOrderCommand> {
-  private final OrderWritableRepository orderRepository;
-  private final CreateOrderOrchestratorService createOrderOrchestratorService;
+public class CreateOrderCommandHandler implements CommandHandler<Order, CreateOrderCommand> {
+  private final OrderReadableRepository orderReadableRepository;
+  private final OrderWritableRepository orderWritableRepository;
 
   public CreateOrderCommandHandler(
-    final OrderWritableRepository orderRepository,
-    final CreateOrderOrchestratorService createOrderOrchestratorService
+    final OrderWritableRepository orderWritableRepository,
+    final OrderReadableRepository orderReadableRepository
   ) {
-    this.orderRepository = orderRepository;
-    this.createOrderOrchestratorService = createOrderOrchestratorService;
+    this.orderReadableRepository = orderReadableRepository;
+    this.orderWritableRepository = orderWritableRepository;
   }
 
   @Override
   @Transactional
-  public Void handle(final CreateOrderCommand command) {
+  public Order handle(final CreateOrderCommand command) {
     final var createOrderCommandValidation = new CreateOrderValidation();
     createOrderCommandValidation.validate(command);
-
-    final var orderAggregate = CreateOrderCommand.toAggregate(command);
-    try {
-      this.orderRepository.save(orderAggregate);
-        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
-          @Override
-          public void afterCommit() {
-            OrderEventMessage eventMessage = OrderEvent.produce(
-              orderAggregate.getId().getValue(),
-              orderAggregate.getStatus()
-            );
-            createOrderOrchestratorService.createOrderEvent(eventMessage);
-          }
-        });
-        
-    } catch (Exception e) {
-      throw new RuntimeException("Falha ao salvar o pedido: " + e.getMessage(), e);
-    }
-    return null;
+    final var order = CreateOrderCommand.toAggregate(command);
+    this.orderWritableRepository.save(order);
+    this.orderReadableRepository.save(order);
+    return order;
   }
 }

@@ -4,7 +4,7 @@ import com.deyvisonborges.service.orders.app.api.module.management.order.persist
 import org.springframework.web.bind.annotation.RestController;
 
 import com.deyvisonborges.service.orders.app.api.module.management.order.usecase.createorder.CreateOrderCommand;
-import com.deyvisonborges.service.orders.app.api.module.management.order.usecase.createorder.CreateOrderCommandHandler;
+import com.deyvisonborges.service.orders.app.api.module.management.order.usecase.createorder.CreateOrderLocalOrchestratorService;
 import com.deyvisonborges.service.orders.app.api.module.management.order.usecase.deleteorder.DeleteOrderCommandHandler;
 import com.deyvisonborges.service.orders.app.api.module.management.order.usecase.getorderbyid.GetOrderByIdOutput;
 import com.deyvisonborges.service.orders.app.api.module.management.order.usecase.getorderbyid.GetOrderByIdQueryHandler;
@@ -32,20 +32,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 @RestController
 @RequestMapping("/orders")
 public class OrderController {
-  private final CreateOrderCommandHandler createOrderCommandHandler;
+  private final CreateOrderLocalOrchestratorService createOrderOrchestrator;
   private final UpdateOrderCommandHandler updateOrderCommandHandler;
   private final DeleteOrderCommandHandler deleteOrderCommandHandler;
   private final GetOrderByIdQueryHandler getOrderByIdQueryHandler;
   private final ListOrdersQueryHandler listOrdersQueryHandler;
 
   public OrderController(
-    final CreateOrderCommandHandler createOrderCommandHandler,
+    final CreateOrderLocalOrchestratorService createOrderOrchestrator,
     final UpdateOrderCommandHandler updateOrderCommandHandler,
     final DeleteOrderCommandHandler deleteOrderCommandHandler,
     final GetOrderByIdQueryHandler getOrderByIdQueryHandler,
     final ListOrdersQueryHandler listOrdersQueryHandler
   ) {
-    this.createOrderCommandHandler = createOrderCommandHandler;
+    this.createOrderOrchestrator = createOrderOrchestrator;
     this.updateOrderCommandHandler = updateOrderCommandHandler;
     this.deleteOrderCommandHandler = deleteOrderCommandHandler;
     this.getOrderByIdQueryHandler = getOrderByIdQueryHandler;
@@ -59,7 +59,7 @@ public class OrderController {
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public void createOrder(@RequestBody CreateOrderCommand command) {
-    this.createOrderCommandHandler.handle(command);
+    this.createOrderOrchestrator.execute(command);
   }
 
   @ResponseStatus(HttpStatus.NO_CONTENT)

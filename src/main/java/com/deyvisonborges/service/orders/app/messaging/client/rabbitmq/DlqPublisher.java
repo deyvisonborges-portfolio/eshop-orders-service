@@ -14,6 +14,7 @@ public class DlqPublisher {
 
   public <T> void publishToDlq(String exchange, String routingKey, T message) {
     // Convert the generic object to a message
+    @SuppressWarnings("null")
     Message amqpMessage = rabbitTemplate.getMessageConverter().toMessage(message, null);
     // Publish the message to DLQ
     rabbitTemplate.send(exchange, routingKey, amqpMessage);

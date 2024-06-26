@@ -18,6 +18,7 @@ Nessee projeto sigo uma arquitetura modular e levianamente purista, separando a 
 
 ## Tópicos abordados nesse projeto
 - Domain Driven Design (DDD)
+  - Validation Pattern
 - Test Driven Development (TDD)
 - CQRS
 - Sagas
