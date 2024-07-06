@@ -9,6 +9,10 @@ import com.deyvisonborges.service.orders.core.modules.management.order.Order;
 
 import jakarta.transaction.Transactional;
 
+/**
+ * Para esse projeto, resolvi não separar as configurações de emissão de evento,
+ * devido o projeto ser simples e o mesmo serviço pode enviar o que for necessário
+ */
 @Service
 public class CreateOrderCommandHandler implements CommandHandler<Order, CreateOrderCommand> {
   private final OrderReadableRepository orderReadableRepository;
