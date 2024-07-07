@@ -52,25 +52,21 @@ public class OrderController {
     this.listOrdersQueryHandler = listOrdersQueryHandler;
   }
 
-  public ResponseEntity<?> health() {
-    return ResponseEntity.ok().body("Health check");
-  }
-
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public void createOrder(@RequestBody CreateOrderCommand command) {
+  public void create(@RequestBody CreateOrderCommand command) {
     this.createOrderOrchestrator.execute(command);
   }
 
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PutMapping(value = "{id}")
-  public void updateOrder(@PathVariable("id") String orderId, @RequestBody UpdateOrderCommand command) {
+  public void update(@PathVariable("id") String orderId, @RequestBody UpdateOrderCommand command) {
     this.updateOrderCommandHandler.handle(orderId, command);
   }
 
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @DeleteMapping
-  public void deleteOrder(@PathVariable("id") String orderId) {
+  public void delete(@PathVariable("id") String orderId) {
     this.deleteOrderCommandHandler.handle(orderId);
   }
 
@@ -81,7 +77,7 @@ public class OrderController {
   }
 
   @GetMapping
-  public Pagination<ListOrdersQueryOutput>  listAllOrdersWithPaginationAndFilter(
+  public Pagination<ListOrdersQueryOutput>  findAllWithPagination(
     @RequestParam(name = "page", required = false, defaultValue = "0") final int page,
     @RequestParam(name = "size", required = false, defaultValue = "10") final int size,
     @RequestParam(name = "direction", required = false, defaultValue = "ASC") final String direction,

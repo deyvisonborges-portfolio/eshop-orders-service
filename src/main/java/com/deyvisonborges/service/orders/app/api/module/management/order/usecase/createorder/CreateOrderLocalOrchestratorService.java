@@ -44,7 +44,7 @@ public class CreateOrderLocalOrchestratorService {
         }
       });
     } catch (Exception e) {
-      throw new RuntimeException("Falha ao salvar o pedido: " + e.getMessage(), e);
+      throw new RuntimeException("Fail to save order: " + e.getMessage(), e);
     }
   }
 

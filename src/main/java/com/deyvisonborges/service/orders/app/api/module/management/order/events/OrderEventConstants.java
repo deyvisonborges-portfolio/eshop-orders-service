@@ -14,7 +14,6 @@ public final class OrderEventConstants {
 
   // Routing keys for specific events
   public static final String ORDER_CREATION_EVENT_ROUTING_KEY = "order.v1.event.order-created";
-  public static final String ORDER_UPDATED_EVENT_ROUTING_KEY = "order.v1.event.order-updated";
 
   // Dead letter queue
   public static final String ORDER_DQL_QUEUE = "order.dlq.queue";

@@ -23,7 +23,7 @@ public record CreateOrderCommand(
       .map(OrderItemDTO::toAggregate)
       .collect(Collectors.toSet());
 
-    final var order = Order.factory(
+    return Order.factory(
       command.status(), 
       orderItems, 
       command.customerId(), 
@@ -31,6 +31,5 @@ public record CreateOrderCommand(
       command.discount(),
       command.currency()
     );
-    return order;
   }
 }

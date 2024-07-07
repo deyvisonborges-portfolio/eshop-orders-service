@@ -8,10 +8,10 @@ import com.deyvisonborges.service.orders.app.api.module.management.order.events.
 import com.deyvisonborges.service.orders.app.api.module.management.order.usecase.deleteorder.DeleteOrderCommandHandler;
 
 @Service
-public class OrderUpsertCompensationEventListener {
+public class OrderCreationCompensationEventListener {
   private final DeleteOrderCommandHandler deleteOrderCommandHandler;
 
-  public OrderUpsertCompensationEventListener(final DeleteOrderCommandHandler deleteOrderCommandHandler) {
+  public OrderCreationCompensationEventListener(final DeleteOrderCommandHandler deleteOrderCommandHandler) {
     this.deleteOrderCommandHandler = deleteOrderCommandHandler;
   }
 

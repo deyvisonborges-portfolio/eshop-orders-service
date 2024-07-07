@@ -17,10 +17,7 @@ public class OrderCreationRmqConfig {
 
   @Bean
   Binding orderCreationBinding() {
-    return BindingBuilder
-      .bind(orderCreationQueue())
-      .to(OrderExchangeConfig.orderDirectExchange())
-      .with(OrderEventConstants.ORDER_CREATION_EVENT_ROUTING_KEY);
+    return BindingBuilder.bind(orderCreationQueue()).to(OrderExchangeConfig.orderDirectExchange()).with(OrderEventConstants.ORDER_CREATION_EVENT_ROUTING_KEY);
   }
 
   @Bean
@@ -30,9 +27,6 @@ public class OrderCreationRmqConfig {
 
   @Bean
   Binding orderCreationCompensationBinding() {
-    return BindingBuilder
-      .bind(orderCreationCompensationQueue())
-      .to(OrderExchangeConfig.orderDirectExchange())
-      .with(OrderEventConstants.ORDER_CREATION_COMPENSATION_QUEUE);
+    return BindingBuilder.bind(orderCreationCompensationQueue()).to(OrderExchangeConfig.orderDirectExchange()).with(OrderEventConstants.ORDER_CREATION_COMPENSATION_QUEUE);
   }
 }
