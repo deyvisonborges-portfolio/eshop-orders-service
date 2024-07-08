@@ -1,5 +1,6 @@
 package com.deyvisonborges.service.orders.app.api.module.management.order.usecase.listorders;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.OrderReadableRepository;

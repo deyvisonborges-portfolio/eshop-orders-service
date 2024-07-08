@@ -1,12 +1,18 @@
 package com.deyvisonborges.service.orders.core.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.InstantSerializer;
+
 import java.time.Instant;
 import java.util.Objects;
 
 public abstract class Entity<ID extends Identifier<ID>> {
   protected ID id;
   protected Boolean active;
+
+  @JsonSerialize(using = InstantSerializer.class)
   protected Instant createdAt;
+  @JsonSerialize(using = InstantSerializer.class)
   protected Instant updatedAt;
 
   protected Entity(final ID id, final Boolean active, final Instant createdAt, final Instant updatedAt) {

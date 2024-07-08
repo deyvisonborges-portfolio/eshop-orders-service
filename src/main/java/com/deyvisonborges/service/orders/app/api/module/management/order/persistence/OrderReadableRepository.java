@@ -6,6 +6,8 @@ import java.util.Optional;
 import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.pagination.OrderFilterService;
 import jakarta.transaction.Transactional;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -29,6 +31,7 @@ public class OrderReadableRepository {
     this.repository = repository;
   }
 
+  @CacheEvict(value = "orders", allEntries = true)
   @Transactional
   public void save(final Order order) {
     try {
@@ -40,11 +43,13 @@ public class OrderReadableRepository {
     }
   }
 
+  @Cacheable("order")
   public Optional<Order> findById(String id) {
     return this.repository.findById(id)
       .map(OrderMongoEntity::toAggregate);
   }
 
+  @Cacheable(value = "order", key = "#id")
   public void deleteById(String id) {
     try {
       this.repository.deleteById(id);
@@ -52,7 +57,8 @@ public class OrderReadableRepository {
       throw new RuntimeException("Fail to DELETE ORDER BY ID in Redis Repository");
     }
   }
-
+  
+  @Cacheable(value = "orders")
   public Pagination<Order> findAll(final OrderPaginationQuery query) {
     try {
       final var pageRequest = PageRequest.of(
