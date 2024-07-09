@@ -43,13 +43,13 @@ public class OrderReadableRepository {
     }
   }
 
-  @Cacheable("order")
+  @Cacheable("orders")
   public Optional<Order> findById(String id) {
     return this.repository.findById(id)
       .map(OrderMongoEntity::toAggregate);
   }
 
-  @Cacheable(value = "order", key = "#id")
+  @CacheEvict(value = "orders", key = "#id", allEntries = true)
   public void deleteById(String id) {
     try {
       this.repository.deleteById(id);

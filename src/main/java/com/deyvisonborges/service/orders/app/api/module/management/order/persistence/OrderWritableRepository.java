@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.hibernate.annotations.Cache;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
@@ -58,7 +58,7 @@ public class OrderWritableRepository {
     }
   }
 
-  @Cacheable(value = "orders", key = "#id")
+  @CacheEvict(value = "orders", allEntries = true)
   public void deleteById(String id) {
     try {
       this.jpaRepository.deleteById(id);
@@ -67,13 +67,14 @@ public class OrderWritableRepository {
     }
   }
 
-  @Cacheable("order")
+  @Cacheable(value = "orders")
   @Transactional
   public Optional<Order> findById(String id) {
     return this.jpaRepository.findById(id)
       .map(OrderJPAEntity::toAggregate);
   }
 
+  @CachePut(value = "orders", key = "#order.id")
   public void update(Order order) {
     try {
       this.jpaRepository.saveAndFlush(OrderJPAEntity.toJPAEntity(order));

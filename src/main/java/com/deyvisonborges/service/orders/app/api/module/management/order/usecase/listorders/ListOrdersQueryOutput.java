@@ -11,13 +11,12 @@ import com.deyvisonborges.service.orders.core.modules.management.order.dto.Order
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.InstantSerializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
 public record ListOrdersQueryOutput(
   String id,
   boolean active,
-  @JsonSerialize(using = InstantSerializer.class)
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
+  // @JsonSerialize(using = InstantSerializer.class)
+  // @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
   Instant createdAt,
   OrderStatus status,
   Set<OrderItemDTO> items,

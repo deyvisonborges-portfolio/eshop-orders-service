@@ -1,7 +1,6 @@
 package com.deyvisonborges.service.orders.app.api.module.management.order;
 
 import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.pagination.OrderFilterService;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.deyvisonborges.service.orders.app.api.module.management.order.usecase.createorder.CreateOrderCommand;
@@ -77,7 +76,6 @@ public class OrderController {
     return ResponseEntity.status(HttpStatus.OK).body(result);
   }
 
-//  @Cacheable(value = "Orders")
   @GetMapping
   public Pagination<ListOrdersQueryOutput>  findAllWithPagination(
     @RequestParam(name = "page", required = false, defaultValue = "0") final int page,
