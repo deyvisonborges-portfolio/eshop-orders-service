@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
 import com.deyvisonborges.service.orders.app.api.module.management.order.persistence.write.entities.OrderItemJPAEntity;
@@ -21,6 +24,7 @@ public class OrderWritableRepository {
     this.jpaRepository = jpaRepository;
   }
 
+  @CacheEvict(value = "orders", allEntries = true)
   @Transactional
   public void save(Order order) {
     try {
@@ -54,6 +58,7 @@ public class OrderWritableRepository {
     }
   }
 
+  @CacheEvict(value = "orders", allEntries = true)
   public void deleteById(String id) {
     try {
       this.jpaRepository.deleteById(id);
@@ -62,12 +67,14 @@ public class OrderWritableRepository {
     }
   }
 
+  @Cacheable(value = "orders")
   @Transactional
   public Optional<Order> findById(String id) {
     return this.jpaRepository.findById(id)
       .map(OrderJPAEntity::toAggregate);
   }
 
+  @CachePut(value = "orders", key = "#order.id")
   public void update(Order order) {
     try {
       this.jpaRepository.saveAndFlush(OrderJPAEntity.toJPAEntity(order));

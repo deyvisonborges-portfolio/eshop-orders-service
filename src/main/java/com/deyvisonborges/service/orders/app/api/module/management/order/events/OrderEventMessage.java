@@ -3,6 +3,8 @@ package com.deyvisonborges.service.orders.app.api.module.management.order.events
 import java.time.Instant;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
 public class OrderEventMessage {
   @JsonProperty("id")
@@ -12,7 +14,9 @@ public class OrderEventMessage {
   @JsonProperty("title")
   private String title;
   @JsonProperty("start")
+  @JsonSerialize(using = LocalDateSerializer.class)
   private Instant start;
+  @JsonSerialize(using = LocalDateSerializer.class)
   @JsonProperty("end")
   private Instant end;
   @JsonProperty("orderId")
