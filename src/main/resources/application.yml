@@ -8,6 +8,19 @@ persistence:
 h2:
   url: jdbc:h2:mem:orders_db;MODE=MYSQL;DATABASE_TO_LOWER=TRUE
 
+springdoc:
+  api-docs:
+    path: /docs
+  swagger-ui:
+    tryItOutEnabled: true
+    path: /docs
+    operationsSorter: method
+    tagsSorter: alpha
+    filter: true
+openapi:
+  dev-url: http://localhost:8080
+  prod-url: http://localhost:8080
+
 spring:
   main:
     allow-bean-definition-overriding: true

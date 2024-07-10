@@ -7,12 +7,15 @@ import java.util.stream.Collectors;
 import com.deyvisonborges.service.orders.core.modules.management.order.OrderItem;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Schema(description = "Data Transfer Object for order items")
 public record OrderItemDTO(
-  String id,
-  String productId,
-  int quantity,
-  BigDecimal price
+  @Schema(description = "ID of the order item") String id,
+  @Schema(description = "ID of the product") String productId,
+  @Schema(description = "Quantity of the product") int quantity,
+  @Schema(description = "Price of the product") BigDecimal price
 ) {
   public OrderItem toAggregate() {
     return new OrderItem(
