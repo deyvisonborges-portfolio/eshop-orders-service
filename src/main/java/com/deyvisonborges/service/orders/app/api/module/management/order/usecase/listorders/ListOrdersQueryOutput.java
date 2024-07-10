@@ -9,18 +9,21 @@ import com.deyvisonborges.service.orders.core.modules.management.order.Order;
 import com.deyvisonborges.service.orders.core.modules.management.order.OrderStatus;
 import com.deyvisonborges.service.orders.core.modules.management.order.dto.OrderItemDTO;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "Output data for listing orders with pagination")
 public record ListOrdersQueryOutput(
-  String id,
-  boolean active,
-  Instant createdAt,
-  OrderStatus status,
-  Set<OrderItemDTO> items,
-  String customerId,
-  BigDecimal subTotal,
-  BigDecimal shippingFee,
-  BigDecimal discount,
-  BigDecimal total,
-  Currency currency
+  @Schema(description = "ID of the order") String id,
+  @Schema(description = "Whether the order is active") boolean active,
+  @Schema(description = "Creation timestamp of the order") Instant createdAt,
+  @Schema(description = "Status of the order") OrderStatus status,
+  @Schema(description = "Items of the order") Set<OrderItemDTO> items,
+  @Schema(description = "ID of the customer") String customerId,
+  @Schema(description = "Subtotal of the order") BigDecimal subTotal,
+  @Schema(description = "Shipping fee for the order") BigDecimal shippingFee,
+  @Schema(description = "Discount applied to the order") BigDecimal discount,
+  @Schema(description = "Total amount of the order") BigDecimal total,
+  @Schema(description = "Currency of the order") Currency currency
 ) {
   public static ListOrdersQueryOutput from(final Order order) {
     return new ListOrdersQueryOutput(
@@ -38,3 +41,4 @@ public record ListOrdersQueryOutput(
      );
   }
 }
+  
