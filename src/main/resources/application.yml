@@ -1,3 +1,6 @@
+server:
+  port: 8081
+
 persistence:
   order:
     readable-datasource: 
@@ -71,3 +74,8 @@ spring:
           max-attempts: '3'
           initial-interval: 2s
           multiplier: '2'
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8181
