@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: 8082
 
 persistence:
   order:
@@ -10,12 +10,6 @@ persistence:
 
 h2:
   url: jdbc:h2:mem:orders_db;MODE=MYSQL;DATABASE_TO_LOWER=TRUE
-
-jwt:
-  public:
-    key: classpath:app.pub
-  private:
-    key: classpath:app.key
 
 springdoc:
   api-docs:
@@ -35,8 +29,8 @@ spring:
     allow-bean-definition-overriding: true
   application:
     name: eshop-orders-service
-  flyway:
-    enabled: true
+  config:
+    import: configserver:http://localhost:8080
   cache:
     type: redis
   data:
@@ -47,6 +41,13 @@ spring:
     redis:
       host: localhost
       port: 6379
+  datasource:
+    url: ${persistence.order.writable-datasource}
+    username: ${postgres.username}
+    password: ${postgres.password}
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    enabled: true
   jpa:
     properties:
       hibernate:
@@ -55,11 +56,6 @@ spring:
     show-sql: false
     hibernate:
       ddl-auto: none
-  datasource:
-    url: ${persistence.order.writable-datasource}
-    username: ${postgres.username}
-    password: ${postgres.password}
-    driver-class-name: org.postgresql.Driver
   rabbitmq:
     host: localhost
     port: 5672
